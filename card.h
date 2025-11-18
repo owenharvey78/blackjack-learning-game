@@ -45,14 +45,14 @@ public:
     /// @brief Gets the value of this card according to the Hi-Lo card counting system.
     /// @return 1 if this card's rank is 2-6, 0 if this card's rank is 7-9, or -1 if this
     /// card's rank is jack-ace.
-    int getValue();
+    int getValue() const;
 
 private:
     /// @brief The card's suit.
-    Suit suit;
+    const Suit suit;
 
     /// @brief The card's rank.
-    Rank rank;
+    const Rank rank;
 };
 
 #endif // CARD_H
