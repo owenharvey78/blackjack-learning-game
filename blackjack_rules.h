@@ -84,10 +84,6 @@ public:
 private:
     /// @brief hold the ruleset.
     Ruleset _rules;
-
-    /// @brief helper to get numerical value of card.
-    /// @return card numerical value.
-    int getCardValue(Card card); // may not need depending on card struct implementation
 };
 
 #endif // BLACKJACKRULES_H
