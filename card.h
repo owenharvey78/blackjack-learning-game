@@ -48,11 +48,11 @@ public:
     int getValue() const;
 
 private:
-    /// @brief The card's suit.
-    const Suit suit_;
-
     /// @brief The card's rank.
     const Rank rank_;
+
+    /// @brief The card's suit.
+    const Suit suit_;
 };
 
 #endif // CARD_H
