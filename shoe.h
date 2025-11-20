@@ -20,7 +20,7 @@ public:
 
     /// @brief Draws a card from the shoe.
     /// @return The card drawn from the shoe.
-    Card* draw();
+    Card draw();
 
     /// @brief Gets the number of cards remaining in the shoe.
     /// @return The number of cards remaining in the shoe.
@@ -40,7 +40,7 @@ private:
     const float penetration_;
 
     /// @brief The cards in the shoe.
-    QVector<Card*> cards_;
+    QVector<Card> cards_;
 
     /// @brief The random number generator for shuffling cards.
     QRandomGenerator rng_;
@@ -48,7 +48,7 @@ private:
     /// @brief Randomizes the order of all cards in the given list.
     /// @param list The list of cards to randomize.
     /// @param rng The random number generator for randomizing the cards.
-    static void randomize(QVector<Card*>& list, QRandomGenerator& rng);
+    static void randomize(QVector<Card>& list, QRandomGenerator& rng);
 
     /// @brief Adds a single deck to the shoe's cards. The cards are sorted in order of rank,
     /// then in order of suit.
