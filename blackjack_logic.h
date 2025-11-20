@@ -1,17 +1,17 @@
-#ifndef BLACKJACKRULES_H
-#define BLACKJACKRULES_H
+#ifndef BLACKJACK_LOGIC_H
+#define BLACKJACK_LOGIC_H
 
-#include <vector>
 #include "card.h"
 #include "ruleset.h"
+#include <QObject>
 
-class BlackjackRules {
+class BlackJackLogic : public QObject {
+    Q_OBJECT
+
 public:
-    /// @brief constructor to import ruleset.
-    /// @param ruleset of the blackjack game.
-    explicit BlackjackRules(Ruleset rules);
 
-    // Static methods
+    /// @brief
+    explicit BlackJackLogic(QObject *parent = nullptr);
 
     /// @brief defines an enum for the different possible results of a hand.
     enum class GameResult {
@@ -27,23 +27,23 @@ public:
     /// Handles logic of ace being 1 or 11.
     /// @param hand vector holding the cards.
     /// @return reports aces as 11 unless that results in a bust.
-    static int getHandValue(std::vector<Card>& hand);
+    int getHandValue(std::vector<Card>& hand);
 
     /// @brief determines if the current hand is a.
     /// @param hand vector holding the cards.
     /// @param hand vector holding the cards.
     /// @return true if the hand is a bust
-    static bool isBust(std::vector<Card>& hand);
+    bool isBust(std::vector<Card>& hand);
 
     /// @brief determines if the current hand is a blackjack.
     /// @param hand vector holding the cards.
     /// @return true if is blackjack.
-    static bool isBlackjack(const std::vector<Card>& hand);
+    bool isBlackjack(const std::vector<Card>& hand);
 
     /// @brief determines if the current hand is contains an ace.
     /// @param hand vector holding the cards.
     /// @return true if is soft hand.
-    static bool isSoftHand(const std::vector<Card>& hand);
+    bool isSoftHand(const std::vector<Card>& hand);
 
     // Instance methods
 
@@ -83,6 +83,8 @@ public:
 private:
     /// @brief hold the ruleset.
     Ruleset _rules;
+
+signals:
 };
 
-#endif // BLACKJACKRULES_H
+#endif // BLACKJACK_LOGIC_H
