@@ -43,8 +43,8 @@ public:
     explicit Card(Rank rank, Suit suit, QObject *parent = nullptr);
 
     /// @brief Gets the value of this card according to the Hi-Lo card counting system.
-    /// @return 1 if this card's rank is 2-6, 0 if this card's rank is 7-9, or -1 if this
-    /// card's rank is jack-ace.
+    /// @return 1 if this card's rank is 2-6, -1 if this card's rank is jack-ace, or 0
+    /// otherwise.
     int getValue() const;
 
 private:
