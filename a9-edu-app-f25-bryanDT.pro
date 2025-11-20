@@ -11,12 +11,14 @@ CONFIG += c++17
 SOURCES += \
     blackjack_rules.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    practicegame.cpp
 
 HEADERS += \
     blackjack_rules.h \
     card.h \
     mainwindow.h \
+    practicegame.h \
     ruleset.h
 
 FORMS += \
