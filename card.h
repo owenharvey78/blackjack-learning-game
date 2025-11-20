@@ -1,8 +1,7 @@
 #ifndef CARD_H
 #define CARD_H
 
-struct Card
-{
+struct Card {
 public:
     /// @brief The possible suits for a playing card. "Cut" represents the cut card,
     /// which tells the dealer when to shuffle the shoe.
