@@ -1,7 +1,7 @@
 #include "card.h"
 
-Card::Card(Rank rank, Suit suit, QObject *parent)
-    : QObject{parent}, rank_(rank), suit_(suit)
+Card::Card(Rank rank, Suit suit)
+    : rank_(rank), suit_(suit)
 {}
 
 int Card::getValue() const {
