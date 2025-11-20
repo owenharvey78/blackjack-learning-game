@@ -49,10 +49,10 @@ public:
 
 private:
     /// @brief The card's suit.
-    const Suit suit;
+    const Suit suit_;
 
     /// @brief The card's rank.
-    const Rank rank;
+    const Rank rank_;
 };
 
 #endif // CARD_H
