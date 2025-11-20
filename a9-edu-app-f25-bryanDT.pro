@@ -11,13 +11,16 @@ CONFIG += c++17
 SOURCES += \
     blackjack_logic.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    card.cpp \
+    shoe.cpp
 
 HEADERS += \
     blackjack_logic.h \
-    card.h \
     mainwindow.h \
-    ruleset.h
+    ruleset.h \
+    card.h \
+    shoe.h
 
 FORMS += \
     mainwindow.ui
