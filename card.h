@@ -1,11 +1,8 @@
 #ifndef CARD_H
 #define CARD_H
 
-#include <QObject>
-
-class Card : public QObject
+struct Card
 {
-    Q_OBJECT
 public:
     /// @brief The possible suits for a playing card. "Cut" represents the cut card,
     /// which tells the dealer when to shuffle the shoe.
@@ -39,8 +36,7 @@ public:
     /// @brief Creates a new Card object.
     /// @param rank The rank of the card.
     /// @param suit The suit of the card.
-    /// @param parent The parent of this Card object.
-    explicit Card(Rank rank, Suit suit, QObject *parent = nullptr);
+    explicit Card(Rank rank, Suit suit);
 
     /// @brief Gets the value of this card according to the Hi-Lo card counting system.
     /// @return 1 if this card's rank is 2-6, -1 if this card's rank is jack-ace, or 0
