@@ -5,24 +5,23 @@
 #include "card.h"
 #include "ruleset.h"
 
-/// @brief defines an enum for the different possible results of a hand.
-enum class GameResult {
-    PlayerWin,
-    PlayerBlackjack,
-    DealerWin,
-    Push,
-    PlayerBust,
-    DealerBust
-};
-
-class BlackjackRules
-{
+class BlackjackRules {
 public:
     /// @brief constructor to import ruleset.
     /// @param ruleset of the blackjack game.
     explicit BlackjackRules(Ruleset rules);
 
     // Static methods
+
+    /// @brief defines an enum for the different possible results of a hand.
+    enum class GameResult {
+        PlayerWin,
+        PlayerBlackjack,
+        DealerWin,
+        Push,
+        PlayerBust,
+        DealerBust
+    };
 
     /// @brief gets the total value of the hand.
     /// Handles logic of ace being 1 or 11.
