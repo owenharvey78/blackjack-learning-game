@@ -3,6 +3,7 @@
 
 #include "card.h"
 #include "ruleset.h"
+#include "shoe.h"
 #include <QObject>
 
 class BlackJackLogic : public QObject {
@@ -107,18 +108,22 @@ private:
     /// @return true if player can split.
     bool canSplit(const std::vector<Card>& hand, int currentSplitCount) const;
 
+    // Member variables.
 
     /// @brief hold the ruleset.
     Ruleset rules_;
 
     /// @brief
-    // Shoe* shoe_;
+    Shoe* shoe_;
 
     /// @brief Holds the player's current hand.
-    std::vector<Card>* playerHand_;
+    std::vector<Card> playerHand_;
 
     /// @brief Holds the dealer's current hand.
-    std::vector<Card>* dealerHand_;
+    std::vector<Card> dealerHand_;
+
+    /// @brief Holds the total chip amount.
+    int totalChipAmount;
 
 signals:
 
