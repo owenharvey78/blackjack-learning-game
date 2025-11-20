@@ -23,6 +23,41 @@ public:
         DealerBust
     };
 
+    // Utility methods
+
+    /// @brief change the ruleset of the game.
+    /// @param rules new ruleset.
+    void updateRules(Ruleset rules);
+
+private slots:
+
+    /// @brief
+    void gameStart();
+
+    /// @brief
+    void nextDeal();
+
+    /// @brief
+    void playerHit();
+
+    /// @brief
+    void playerStand();
+
+    /// @brief
+    void playerSplit();
+
+private:
+
+    // Game Logic Methods
+
+    /// @brief
+    void dealerHit();
+
+    /// @brief
+    void dealerStand();
+
+    // Game state methods.
+
     /// @brief gets the total value of the hand.
     /// Handles logic of ace being 1 or 11.
     /// @param hand vector holding the cards.
@@ -44,8 +79,6 @@ public:
     /// @param hand vector holding the cards.
     /// @return true if is soft hand.
     bool isSoftHand(const std::vector<Card>& hand);
-
-    // Instance methods
 
     /// @brief determines the winner of the hand.
     /// @param playerHand vector holding player's hand.
@@ -74,17 +107,21 @@ public:
     /// @return true if player can split.
     bool canSplit(const std::vector<Card>& hand, int currentSplitCount) const;
 
-    // Utility methods
 
-    /// @brief change the ruleset of the game.
-    /// @param rules new ruleset.
-    void updateRules(Ruleset rules);
-
-private:
     /// @brief hold the ruleset.
-    Ruleset _rules;
+    Ruleset rules_;
+
+    /// @brief
+    // Shoe* shoe_;
+
+    /// @brief Holds the player's current hand.
+    std::vector<Card>* playerHand_;
+
+    /// @brief Holds the dealer's current hand.
+    std::vector<Card>* dealerHand_;
 
 signals:
+
 };
 
 #endif // BLACKJACK_LOGIC_H
