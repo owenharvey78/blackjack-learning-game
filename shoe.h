@@ -46,8 +46,9 @@ private:
     QRandomGenerator rng_;
 
     /// @brief Randomizes the order of all cards in the given list.
-    /// @brief list The list of cards to randomize.
-    static void randomize(const QVector<Card*>& list);
+    /// @param list The list of cards to randomize.
+    /// @param rng The random number generator for randomizing the cards.
+    static void randomize(const QVector<Card*>& list, QRandomGenerator& rng);
 
     /// @brief Adds a single deck to the shoe's cards. The cards are sorted in order of rank,
     /// then in order of suit.
