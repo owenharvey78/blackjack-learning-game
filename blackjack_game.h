@@ -1,18 +1,18 @@
-#ifndef BLACKJACK_LOGIC_H
-#define BLACKJACK_LOGIC_H
+#ifndef BLACKJACK_GAME_H
+#define BLACKJACK_GAME_H
 
 #include "card.h"
 #include "ruleset.h"
 #include "shoe.h"
 #include <QObject>
 
-class BlackJackLogic : public QObject {
+class BlackJackGame : public QObject {
     Q_OBJECT
 
 public:
 
     /// @brief
-    explicit BlackJackLogic(QObject *parent = nullptr);
+    explicit BlackJackGame(QObject *parent = nullptr);
 
     /// @brief defines an enum for the different possible results of a hand.
     enum class GameResult {
@@ -129,4 +129,4 @@ signals:
 
 };
 
-#endif // BLACKJACK_LOGIC_H
+#endif // BLACKJACK_GAME_H
