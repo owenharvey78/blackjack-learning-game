@@ -6,43 +6,98 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>536</width>
+    <height>324</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="animated">
+   <bool>true</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(70, 130, 61);</string>
+    <string notr="true"/>
    </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="2" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="styleSheet">
+       <string notr="true">QPushButton{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #2b1f0e
+		stop:1 #8c6c26
+	);
+
+	color: white;
+	font-weight: bold;
+	border: 3px solid #d4af37;
+	border-radius: 15px;
+	padding: 10px;
+}
+
+QPushButton:hover{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #3b2f1c,
+		stop:1 #ad8c32
+	);
+}</string>
+      </property>
+      <property name="text">
+       <string>Practice</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
+     <widget class="QPushButton" name="pushButton">
+      <property name="styleSheet">
+       <string notr="true">QPushButton{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #2b1f0e
+		stop:1 #8c6c26
+	);
+
+	color: white;
+	font-weight: bold;
+	border: 3px solid #d4af37;
+	border-radius: 15px;
+	padding: 10px;
+}
+
+QPushButton:hover{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #3b2f1c,
+		stop:1 #ad8c32
+	);
+}</string>
+      </property>
+      <property name="text">
+       <string>Learn</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>18</height>
+     <width>536</width>
+     <height>29</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>LeftToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-   <addaction name="actionhome"/>
-   <addaction name="actionlearn"/>
-   <addaction name="actionpractice"/>
-  </widget>
   <action name="actionhome">
    <property name="icon">
     <iconset theme="QIcon::ThemeIcon::GoHome"/>
