@@ -6,6 +6,7 @@ BlackJackGame::BlackJackGame(QObject *parent) : QObject{parent}{
 
     rules_ = Ruleset();
     shoe_ = new Shoe(rules_.numDecks, 0.75f, this);
+    needsShuffling_ = true;
     playerHand_ = std::vector<Card>();
     dealerHand_ = std::vector<Card>();
 
@@ -134,5 +135,24 @@ void BlackJackGame::dealerStand() {
 }
 
 // Game Progression
+
+void BlackJackGame::nextDeal(){
+    if(needsShuffling_){
+        shoe_->shuffle();
+        needsShuffling_ = false;
+    }
+    playerHand_.clear();
+    dealerHand_.clear();
+
+    // Player is dealt two cards.
+    playerHand_.push_back(shoe_->draw());
+    playerHand_.push_back(shoe_->draw());
+
+    // Dealer draws two cards.
+    dealerHand_.push_back(shoe_->draw());
+    dealerHand_.push_back(shoe_->draw());
+
+    
+}
 
 // TODO

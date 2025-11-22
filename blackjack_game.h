@@ -130,6 +130,9 @@ private:
     /// @brief Holds the total chip amount.
     int totalChipAmount;
 
+    /// @brief
+    bool needsShuffling_;
+
 signals:
 
 };
