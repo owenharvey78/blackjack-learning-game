@@ -13,3 +13,7 @@ int Card::getValue() const {
     }
     return 0;
 }
+
+bool Card::isAce() const  {
+    return rank_ == Rank::Ace;
+}
