@@ -134,25 +134,49 @@ void BlackJackGame::dealerStand() {
     // TODO
 }
 
+void BlackJackGame::dealCards(){
+    for(int i = 0; i < 4; i++){
+        Card drawnCard = shoe_->draw();
+
+        // Player is dealt two cards.
+        if(playerHand_.size() < 2){
+            if(drawnCard.getRank() == Card::Rank::Cut){
+                playerHand_.push_back(shoe_->draw());
+                needsShuffling_ = true;
+            }
+            else{
+                playerHand_.push_back(drawnCard);
+            }
+        }
+        // Dealer draws two cards.
+        else{
+            if(drawnCard.getRank() == Card::Rank::Cut){
+                dealerHand_.push_back(shoe_->draw());
+                needsShuffling_ = true;
+            }
+            else{
+                dealerHand_.push_back(drawnCard);
+            }
+        }
+    }
+}
+
 // Game Progression
+
+void BlackJackGame::gameStart(){
+    nextDeal();
+}
 
 void BlackJackGame::nextDeal(){
     if(needsShuffling_){
         shoe_->shuffle();
         needsShuffling_ = false;
     }
+
     playerHand_.clear();
     dealerHand_.clear();
 
-    // Player is dealt two cards.
-    playerHand_.push_back(shoe_->draw());
-    playerHand_.push_back(shoe_->draw());
-
-    // Dealer draws two cards.
-    dealerHand_.push_back(shoe_->draw());
-    dealerHand_.push_back(shoe_->draw());
-
-    
+    dealCards();
 }
 
 // TODO

@@ -39,6 +39,9 @@ private slots:
     void nextDeal();
 
     /// @brief
+    void dealCards();
+
+    /// @brief
     void playerHit();
 
     /// @brief
