@@ -6,55 +6,32 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>536</width>
-    <height>324</height>
+    <width>524</width>
+    <height>257</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
   <property name="animated">
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true">#centralwidget{
+border-image: url(:/images/BJbackground.png) 
+0 0 0 0 fill stretch;
+}</string>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
-     <widget class="QPushButton" name="pushButton_2">
-      <property name="styleSheet">
-       <string notr="true">QPushButton{
-	background-color: qlineargradient(
-		spread:pad,
-		x1:0, y1:0, x2:0, y2:1,
-		stop:0 #2b1f0e
-		stop:1 #8c6c26
-	);
-
-	color: white;
-	font-weight: bold;
-	border: 3px solid #d4af37;
-	border-radius: 15px;
-	padding: 10px;
-}
-
-QPushButton:hover{
-	background-color: qlineargradient(
-		spread:pad,
-		x1:0, y1:0, x2:0, y2:1,
-		stop:0 #3b2f1c,
-		stop:1 #ad8c32
-	);
-}</string>
-      </property>
-      <property name="text">
-       <string>Practice</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignHCenter">
-     <widget class="QPushButton" name="pushButton">
+    <item row="6" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignBottom">
+     <widget class="QPushButton" name="learnButton">
       <property name="styleSheet">
        <string notr="true">QPushButton{
 	background-color: qlineargradient(
@@ -85,6 +62,38 @@ QPushButton:hover{
       </property>
      </widget>
     </item>
+    <item row="7" column="0" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
+     <widget class="QPushButton" name="practiceButton">
+      <property name="styleSheet">
+       <string notr="true">QPushButton{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #2b1f0e
+		stop:1 #8c6c26
+	);
+
+	color: white;
+	font-weight: bold;
+	border: 3px solid #d4af37;
+	border-radius: 15px;
+	padding: 10px;
+}
+
+QPushButton:hover{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #3b2f1c,
+		stop:1 #ad8c32
+	);
+}</string>
+      </property>
+      <property name="text">
+       <string>Practice</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -92,7 +101,7 @@ QPushButton:hover{
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>536</width>
+     <width>524</width>
      <height>29</height>
     </rect>
    </property>
