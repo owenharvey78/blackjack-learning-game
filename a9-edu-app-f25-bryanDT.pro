@@ -9,11 +9,18 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    blackjack_logic.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    card.cpp \
+    shoe.cpp
 
 HEADERS += \
-    mainwindow.h
+    blackjack_logic.h \
+    mainwindow.h \
+    ruleset.h \
+    card.h \
+    shoe.h
 
 FORMS += \
     mainwindow.ui
