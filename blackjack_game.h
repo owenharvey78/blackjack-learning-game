@@ -41,26 +41,26 @@ private slots:
     /// @brief Deals cards to player and dealer.
     void dealCards();
 
-    /// @brief
+    /// @brief Player hits to draw another card.
     void playerHit();
 
-    /// @brief
+    /// @brief Player stands to not draw another card.
     void playerStand();
 
-    /// @brief
+    /// @brief Player splits bet and hand.
     void playerSplit();
 
-    /// @brief
+    /// @brief Checks game state.
     void checkCardsAndRound();
 
 private:
 
     // Game Logic Methods
 
-    /// @brief
+    /// @brief Dealer hits to draw another card.
     void dealerHit();
 
-    /// @brief
+    /// @brief Dealer stands, round/deal ends.
     void dealerStand();
 
     // Game state methods.
@@ -121,10 +121,10 @@ private:
 
     // Member variables.
 
-    /// @brief hold the ruleset.
+    /// @brief Holds the ruleset.
     Ruleset rules_;
 
-    /// @brief
+    /// @brief The shoe of the blackjack game.
     Shoe* shoe_;
 
     /// @brief Holds the player's current hand.
@@ -136,7 +136,8 @@ private:
     /// @brief Holds the total chip amount.
     int totalChipAmount;
 
-    /// @brief
+    /// @brief Checks if the shoe needs shuffling.
+    /// @return bool True if shuffling is needed, false otherwise.
     bool needsShuffling_;
 
 signals:
