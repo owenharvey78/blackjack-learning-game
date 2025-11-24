@@ -25,8 +25,8 @@ int BlackJackGame::getHandValue(std::vector<Card>& hand) const {
     int aceCount = 0;
 
     for (const auto& card : hand) {
-        value += card.getValue();
-        if (card.isAce()) {
+        value += card.getBlackjackValue();
+        if (card.rank == Card::Rank::Ace) {
             aceCount++;
         }
     }
@@ -56,8 +56,8 @@ bool BlackJackGame::isSoftHand(const std::vector<Card>& hand) const {
     bool hasAce = false;
 
     for (const auto& card : hand) {
-        value += card.getValue();
-        if (card.isAce()) {
+        value += card.getBlackjackValue();
+        if (card.rank == Card::Rank::Ace) {
             hasAce = true;
         }
     }
@@ -65,8 +65,8 @@ bool BlackJackGame::isSoftHand(const std::vector<Card>& hand) const {
     return hasAce && (value + 10) <= 21;
 }
 
-bool BlackJackGame::canDouble(const std::vector<Card>& hand) const {
-    return hand.size() == 2;
+bool BlackJackGame::canDouble(const std::vector<Card>& hand, int currentSplitCount) const {
+    return hand.size() == 2 && (rules_.doubleAfterSplit || currentSplitCount == 0);
 }
 
 bool BlackJackGame::canSurrender(const std::vector<Card>& hand) const {
@@ -77,10 +77,10 @@ bool BlackJackGame::canSplit(const std::vector<Card>& hand, int currentSplitCoun
     if (hand.size() != 2) {
         return false;
     }
-    if (hand[0].getRank() != hand[1].getRank()) {
+    if (hand[0].getBlackjackValue() != hand[1].getBlackjackValue()) {
         return false;
     }
-    if (hand[0].isAce() && !rules_.resplitAces && currentSplitCount > 0) {
+    if (hand[0].rank == Card::Rank::Ace && !rules_.resplitAces && currentSplitCount > 0) {
         return false;
     }
     return true;
@@ -142,7 +142,7 @@ void BlackJackGame::dealCards(){
         // Player is dealt one card.
         // Dealer draws one card.
         // Then it's done again.
-        if(drawnCard.getRank() == Card::Rank::Cut){
+        if(drawnCard.rank == Card::Rank::Cut){
             playerHand_.push_back(shoe_->draw());
             needsShuffling_ = true;
         }
@@ -150,7 +150,7 @@ void BlackJackGame::dealCards(){
             playerHand_.push_back(drawnCard);
         }
 
-        if(drawnCard.getRank() == Card::Rank::Cut){
+        if(drawnCard.rank == Card::Rank::Cut){
             dealerHand_.push_back(shoe_->draw());
             needsShuffling_ = true;
         }

@@ -105,8 +105,9 @@ private:
 
     /// @brief determines if the player can double.
     /// @param hand vector holding the cards.
+    /// @param currentSplitCount The number of times the player has split this round.
     /// @return true if player can double.
-    bool canDouble(const std::vector<Card>& hand) const;
+    bool canDouble(const std::vector<Card>& hand, int currentSplitCount) const;
 
     /// @brief determines if the player can surrender.
     /// @param hand vector holding the cards.
