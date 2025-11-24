@@ -51,7 +51,7 @@ private slots:
     void playerSplit();
 
     /// @brief Checks game state.
-    void checkCardsAndRound();
+    void checkCardsAndRound(GameResult currentState);
 
 private:
 
@@ -136,9 +136,11 @@ private:
     /// @brief Holds the total chip amount.
     int totalChipAmount;
 
-    /// @brief Checks if the shoe needs shuffling.
-    /// @return bool True if shuffling is needed, false otherwise.
+    /// @brief True if the shoe needs shuffling. False otherwise.
     bool needsShuffling_;
+
+    /// @brief True if the current round/deal has started. False otherwise.
+    bool hasRoundStarted_;
 
 signals:
 

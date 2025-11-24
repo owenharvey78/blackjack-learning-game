@@ -7,6 +7,7 @@ BlackJackGame::BlackJackGame(QObject *parent) : QObject{parent}{
     rules_ = Ruleset();
     shoe_ = new Shoe(rules_.numDecks, 0.75f, this);
     needsShuffling_ = true;
+    hasRoundStarted_ = false;
     playerHand_ = std::vector<Card>();
     dealerHand_ = std::vector<Card>();
 
@@ -86,6 +87,9 @@ bool BlackJackGame::canSplit(const std::vector<Card>& hand, int currentSplitCoun
 }
 
 BlackJackGame::GameResult BlackJackGame::determineWinner(std::vector<Card>& playerHand, std::vector<Card>& dealerHand) const {
+    int playerValue = getHandValue(playerHand);
+    int dealerValue = getHandValue(dealerHand);
+
     if (isBust(playerHand)) {
         return GameResult::PlayerBust;
     }
@@ -98,9 +102,6 @@ BlackJackGame::GameResult BlackJackGame::determineWinner(std::vector<Card>& play
     if (isBlackjack(dealerHand) && !isBlackjack(playerHand)) {
         return GameResult::DealerWin;
     }
-
-    int playerValue = getHandValue(playerHand);
-    int dealerValue = getHandValue(dealerHand);
 
     if (playerValue > dealerValue) {
         return GameResult::PlayerWin;
@@ -131,7 +132,7 @@ void BlackJackGame::dealerHit() {
 }
 
 void BlackJackGame::dealerStand() {
-    // TODO
+    checkCardsAndRound(determineWinner(playerHand_, dealerHand_));
 }
 
 void BlackJackGame::dealCards(){
@@ -166,6 +167,7 @@ void BlackJackGame::gameStart(){
 }
 
 void BlackJackGame::nextDeal(){
+
     if(needsShuffling_){
         shoe_->shuffle();
         needsShuffling_ = false;
@@ -175,11 +177,35 @@ void BlackJackGame::nextDeal(){
     dealerHand_.clear();
 
     dealCards();
-    checkCardsAndRound();
+    checkCardsAndRound(determineWinner(playerHand_, dealerHand_));
 }
 
-void BlackJackGame::checkCardsAndRound(){
+void BlackJackGame::checkCardsAndRound(GameResult currentState){
+    switch (currentState) {
+        case GameResult::PlayerWin:
+            //Emit signal
+            break;
 
+        case GameResult::DealerWin:
+            //Emit signal
+            break;
+
+        case GameResult::PlayerBlackjack:
+            //Emit signal
+            break;
+
+        case GameResult::PlayerBust:
+            //Emit signal
+            break;
+
+        case GameResult::DealerBust:
+            //Emit signal
+            break;
+
+        case GameResult::Push:
+            //Emit signal
+            break;
+    }
 }
 
 // TODO
