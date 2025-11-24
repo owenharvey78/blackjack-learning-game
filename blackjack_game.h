@@ -50,6 +50,9 @@ private slots:
     /// @brief Player splits bet and hand.
     void playerSplit();
 
+    /// @brief Emits that teh dealer's turn has started.
+    void dealerTurn();
+
     /// @brief Checks game state.
     void checkCardsAndRound(GameResult currentState);
 

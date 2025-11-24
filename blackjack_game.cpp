@@ -127,12 +127,36 @@ bool BlackJackGame::dealerShouldHit(std::vector<Card>& hand) const {
     return false;
 }
 
+void BlackJackGame::dealerTurn(){
+    while(dealerShouldHit(dealerHand_)){
+        dealerHit();
+        // Emit Signal
+    }
+
+    if(rules_.dealerHitsSoft17){
+        if(isSoftHand(dealerHand_) && getHandValue(dealerHand_) == 17){
+            dealerHit();
+            // Emit Signal
+        }
+    }
+    dealerStand();
+}
+
 void BlackJackGame::dealerHit() {
     dealerHand_.push_back(shoe_->draw());
 }
 
 void BlackJackGame::dealerStand() {
     checkCardsAndRound(determineWinner(playerHand_, dealerHand_));
+}
+
+void BlackJackGame::playerHit(){
+    playerHand_.push_back(shoe_->draw());
+    // Emit signal
+}
+
+void BlackJackGame::playerStand(){
+    dealerTurn();
 }
 
 void BlackJackGame::dealCards(){
