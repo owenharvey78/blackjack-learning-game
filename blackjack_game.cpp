@@ -128,7 +128,7 @@ bool BlackJackGame::dealerShouldHit(std::vector<Card>& hand) const {
 }
 
 void BlackJackGame::dealerHit() {
-    // TODO
+    dealerHand_.push_back(shoe_->draw());
 }
 
 void BlackJackGame::dealerStand() {
