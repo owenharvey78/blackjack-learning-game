@@ -26,19 +26,19 @@ public:
 
     // Utility methods
 
-    /// @brief change the ruleset of the game.
-    /// @param rules new ruleset.
-    void updateRules(Ruleset rules);
+    /// @brief Change the ruleset of the game.
+    /// @param rules The new ruleset.
+    void setRuleset(Ruleset rules);
 
 private slots:
 
-    /// @brief
+    /// @brief Starts the game.
     void gameStart();
 
-    /// @brief
+    /// @brief Starts the next round/deal.
     void nextDeal();
 
-    /// @brief
+    /// @brief Deals cards to player and dealer.
     void dealCards();
 
     /// @brief

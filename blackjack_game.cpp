@@ -13,7 +13,7 @@ BlackJackGame::BlackJackGame(QObject *parent) : QObject{parent}{
     // Add necessary connects here.
 }
 
-void BlackJackGame::updateRules(Ruleset rules) {
+void BlackJackGame::setRuleset(Ruleset rules) {
     rules_ = rules;
 }
 
