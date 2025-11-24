@@ -135,28 +135,26 @@ void BlackJackGame::dealerStand() {
 }
 
 void BlackJackGame::dealCards(){
-    for(int i = 0; i < 4; i++){
+    for(int i = 0; i < 2; i++){
         Card drawnCard = shoe_->draw();
 
-        // Player is dealt two cards.
-        if(playerHand_.size() < 2){
-            if(drawnCard.getRank() == Card::Rank::Cut){
-                playerHand_.push_back(shoe_->draw());
-                needsShuffling_ = true;
-            }
-            else{
-                playerHand_.push_back(drawnCard);
-            }
+        // Player is dealt one card.
+        // Dealer draws one card.
+        // Then it's done again.
+        if(drawnCard.getRank() == Card::Rank::Cut){
+            playerHand_.push_back(shoe_->draw());
+            needsShuffling_ = true;
         }
-        // Dealer draws two cards.
         else{
-            if(drawnCard.getRank() == Card::Rank::Cut){
-                dealerHand_.push_back(shoe_->draw());
-                needsShuffling_ = true;
-            }
-            else{
-                dealerHand_.push_back(drawnCard);
-            }
+            playerHand_.push_back(drawnCard);
+        }
+
+        if(drawnCard.getRank() == Card::Rank::Cut){
+            dealerHand_.push_back(shoe_->draw());
+            needsShuffling_ = true;
+        }
+        else{
+            dealerHand_.push_back(drawnCard);
         }
     }
 }
@@ -177,6 +175,11 @@ void BlackJackGame::nextDeal(){
     dealerHand_.clear();
 
     dealCards();
+    checkCardsAndRound();
+}
+
+void BlackJackGame::checkCardsAndRound(){
+
 }
 
 // TODO

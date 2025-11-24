@@ -50,6 +50,9 @@ private slots:
     /// @brief
     void playerSplit();
 
+    /// @brief
+    void checkCardsAndRound();
+
 private:
 
     // Game Logic Methods
