@@ -33,6 +33,15 @@ public:
         King
     };
 
+    // Code style note: the rank and suit members are not marked with a trailing underscore
+    // because they are public.
+
+    /// @brief The card's rank.
+    Rank rank;
+
+    /// @brief The card's suit.
+    Suit suit;
+
     /// @brief Creates a new Card object.
     /// @param rank The rank of the card.
     /// @param suit The suit of the card.
@@ -42,13 +51,6 @@ public:
     /// @return 1 if this card's rank is 2-6, -1 if this card's rank is jack-ace, or 0
     /// otherwise.
     int getValue() const;
-
-private:
-    /// @brief The card's rank.
-    Rank rank_;     // Cannot be 'const' because it will prevent the compiler from generating a copy constructor
-
-    /// @brief The card's suit.
-    Suit suit_;     // Cannot be 'const' because it will prevent the compiler from generating a copy constructor
 };
 
 #endif // CARD_H
