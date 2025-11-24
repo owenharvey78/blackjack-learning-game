@@ -45,10 +45,10 @@ public:
 
 private:
     /// @brief The card's rank.
-    const Rank rank_;
+    Rank rank_;     // Cannot be 'const' because it will prevent the compiler from generating a copy constructor
 
     /// @brief The card's suit.
-    const Suit suit_;
+    Suit suit_;     // Cannot be 'const' because it will prevent the compiler from generating a copy constructor
 };
 
 #endif // CARD_H
