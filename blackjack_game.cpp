@@ -186,10 +186,6 @@ void BlackJackGame::playerSplit(){
     // emit signal
 }
 
-void BlackJackGame::playerSplit(){
-    // fill in
-}
-
 void BlackJackGame::dealCards(){
     for(int i = 0; i < 2; i++){
         // Deal to player's hand.
