@@ -32,6 +32,9 @@ public:
         King
     };
 
+    // Code style note: the rank and suit members are not marked with a trailing underscore
+    // because they are public.
+
     /// @brief The card's rank.
     Rank rank;
 
@@ -53,6 +56,7 @@ public:
     /// @return 1 if this card's rank is 2-6, -1 if this card's rank is jack-ace, or 0
     /// otherwise.
     int getHiLoValue() const;
+    int getValue() const;
 };
 
 #endif // CARD_H

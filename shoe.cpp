@@ -2,7 +2,7 @@
 
 Shoe::Shoe(int decks, float penetration, QObject* parent) :
     QObject{parent}, decks_(decks), penetration_(penetration),
-    cards_(decks * 52 + 1), rng_()
+    cards_(), rng_()
 {
     shuffle();
 }
