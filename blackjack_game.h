@@ -31,7 +31,6 @@ public:
     void setRuleset(Ruleset rules);
 
 public slots:
-
     /// @brief Starts the next round/deal.
     void dealNewHand();
 
@@ -44,24 +43,20 @@ public slots:
     /// @brief Player splits bet and hand.
     void playerSplit();
 
+    /// @brief Player doubles bet and recieves one more card and can no longer hit.
+    void playerDoubleDown();
+
     /// @brief Checks game state.
-    void checkCardsAndRound(GameResult currentState);
+    void checkCardsAndRound(int handIndex, GameResult currentState);
 
     /// @brief Starts the round.
     void startRound();
-
-<<<<<<< HEAD
-=======
 
 private slots:
     /// @brief Recursive helper for dealer's turn.
     void continueDealerTurn();
 
->>>>>>> 911dab15d53891492122a98eb6959582bae77684
 private:
-
-    // Game Logic Methods.
-
     /// @brief Dealer hits to draw another card.
     void dealerHit();
 
@@ -74,7 +69,7 @@ private:
     /// @brief Emits that the dealer's turn has started.
     void dealerTurn();
 
-    // Static game state methods.
+    // Static helper methods.
 
     /// @brief gets the total value of the hand.
     /// Handles logic of ace being 1 or 11.
@@ -168,9 +163,11 @@ signals:
 
     void dealDealerCard(Card card);
 
-    void roundOver(GameResult result);
+    void roundOver(int handIndex, GameResult result);
 
     void splitHand(int handCount);
+
+    void turnChanged(bool isPlayerTurn, int handIndex);
 };
 
 #endif // BLACKJACK_GAME_H

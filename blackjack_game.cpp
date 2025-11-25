@@ -1,6 +1,7 @@
 #include "blackjack_game.h"
 #include "shoe.h"
 #include "card.h"
+#include <QTimer>
 
 BlackJackGame::BlackJackGame(QObject *parent) : QObject{parent}{
 
@@ -92,27 +93,38 @@ BlackJackGame::GameResult BlackJackGame::determineWinner(QVector<Card>& playerHa
     int playerValue = getHandValue(playerHand);
     int dealerValue = getHandValue(dealerHand);
 
-    if (isBust(playerHand)) {
+    // Check Busts
+    if (playerValue > 21) {
         return GameResult::PlayerBust;
     }
-    if (isBust(dealerHand)) {
+    if (dealerValue > 21) {
         return GameResult::DealerBust;
     }
-    if (isBlackJack(playerHand) && !isBlackJack(dealerHand)) {
+
+    // Check Blackjacks (BJ beats non-BJ 21)
+    bool pBJ = isBlackJack(playerHand);
+    bool dBJ = isBlackJack(dealerHand);
+
+    if (pBJ && !dBJ) {
         return GameResult::PlayerBlackjack;
     }
-    if (isBlackJack(dealerHand) && !isBlackJack(playerHand)) {
+    if (dBJ && !pBJ) {
         return GameResult::DealerWin;
     }
+    if (pBJ && dBJ) {
+        return GameResult::Push;
+    }
+
+    // Compare Values
     if (playerValue > dealerValue) {
         return GameResult::PlayerWin;
     }
-    else if (playerValue < dealerValue) {
+    if (playerValue < dealerValue) {
         return GameResult::DealerWin;
     }
-    else {
-        return GameResult::Push;
-    }
+
+    // Otherwise a push
+    return GameResult::Push;
 }
 
 // Game logic methods.
@@ -122,6 +134,8 @@ bool BlackJackGame::dealerShouldHit(QVector<Card>& hand) const {
     if (value < 17) {
         return true;
     }
+
+    // Soft 17 rule
     if (value == 17 && rules_.dealerHitsSoft17 && isSoftHand(hand)) {
         return true;
     }
@@ -129,12 +143,22 @@ bool BlackJackGame::dealerShouldHit(QVector<Card>& hand) const {
 }
 
 void BlackJackGame::dealerTurn(){
-    while(dealerShouldHit(dealerHand_)){
-        dealerHit();
-            }
-    dealerStand();
+    emit turnChanged(false, -1);
+
+    // Start the recursive loop
+    continueDealerTurn();
 }
 
+void BlackJackGame::continueDealerTurn() {
+    if (dealerShouldHit(dealerHand_)) {
+        dealerHit();
+        // Recursively call this function after a delay
+        QTimer::singleShot(1500, this, &BlackJackGame::continueDealerTurn);
+    } else {
+        // Stop hitting and resolve game
+        dealerStand();
+    }
+}
 void BlackJackGame::dealerHit() {
     Card c = drawCardFromShoe();
     dealerHand_.append(c);
@@ -145,8 +169,9 @@ void BlackJackGame::dealerStand() {
     // Compare dealer hand to ALL player hands.
     for (int i = 0; i < playerHands_.size(); i++) {
         GameResult result = determineWinner(playerHands_[i], dealerHand_);
-        checkCardsAndRound(result);
-    }}
+        checkCardsAndRound(i, result);
+    }
+}
 
 void BlackJackGame::playerHit(){
     // Hit the active hand
@@ -154,6 +179,24 @@ void BlackJackGame::playerHit(){
     Card c = drawCardFromShoe();
     playerHands_[currentHandIndex_].append(c);
     emit dealPlayerCard(currentHandIndex_, c);
+
+    // Check if player busted immediately
+    if (isBust(playerHands_[currentHandIndex_])) {
+        playerStand();
+    }
+}
+
+void BlackJackGame::playerDoubleDown() {
+    if (currentHandIndex_ >= playerHands_.size()) return;
+    if (!canDouble(playerHands_[currentHandIndex_], playerHands_.size() - 1)) return;
+
+    // 1 Card only then forced stand.
+    Card c = drawCardFromShoe();
+    playerHands_[currentHandIndex_].append(c);
+    emit dealPlayerCard(currentHandIndex_, c);
+
+    // Forced stand after double
+    playerStand();
 }
 
 void BlackJackGame::playerStand(){
@@ -167,8 +210,10 @@ void BlackJackGame::playerStand(){
 }
 
 void BlackJackGame::playerSplit(){
-    // ASSUMES PLAYER CAN SPLIT
     // BET WILL BE DOUBLED
+
+    // Ensure player can split
+    if (!canSplit(playerHands_[currentHandIndex_], playerHands_.size() - 1)) return;
 
     // Create new hand and move card to new hand.
     Card splitCard = playerHands_[currentHandIndex_].takeLast(); // Takes the second card from the hand
@@ -177,18 +222,35 @@ void BlackJackGame::playerSplit(){
     playerHands_.insert(currentHandIndex_ + 1, newHand); // add the new hand to player hands
 
     // Deal a new card to both hands.
-    Card c = drawCardFromShoe();
-    playerHands_[currentHandIndex_].append(c);
-    emit dealPlayerCard(currentHandIndex_, c);
+    Card c1 = drawCardFromShoe();
+    playerHands_[currentHandIndex_].append(c1);
+    emit dealPlayerCard(currentHandIndex_, c1);
 
-    c = drawCardFromShoe();
-    playerHands_[currentHandIndex_ + 1].append(drawCardFromShoe());
-    emit dealPlayerCard(currentHandIndex_ + 1, c);
+    Card c2 = drawCardFromShoe();
+    playerHands_[currentHandIndex_ + 1].append(c2);
+    emit dealPlayerCard(currentHandIndex_ + 1, c2);
 
     emit splitHand(playerHands_.size());
+
+    // logic for split aces
+    if (splitCard.rank == Card::Rank::Ace && !rules_.hitSplitAces) {
+        // Force stand on current hand
+        playerStand();
+
+        // Automating the second ace stand:
+        if (currentHandIndex_ < playerHands_.size() &&
+            playerHands_[currentHandIndex_].first().rank == Card::Rank::Ace) {
+            playerStand(); // Stand on the second ace too
+        }
+    }
 }
 
 // Game Progression
+
+void BlackJackGame::startRound() {
+    // Wrapper to ensure clean state
+    dealNewHand();
+}
 
 void BlackJackGame::dealNewHand(){
     // Check shuffling status.
@@ -208,7 +270,7 @@ void BlackJackGame::dealNewHand(){
         // Deal to player's hand.
         Card c = drawCardFromShoe();
         playerHands_[0].append(c);
-        emit dealPlayerCard(currentHandIndex_, c);
+        emit dealPlayerCard(0, c);
 
         // Deal to dealer.
         c = drawCardFromShoe();
@@ -216,38 +278,20 @@ void BlackJackGame::dealNewHand(){
         emit dealDealerCard(c);
     }
 
-    // Immediately check for dealer or player blackjack.
-    if (isBlackJack(playerHands_[0]) || isBlackJack(dealerHand_)) {
-        checkCardsAndRound(determineWinner(playerHands_[0], dealerHand_));
+    // Check Immediate Blackjack
+    bool playerHasBJ = isBlackJack(playerHands_[0]);
+    bool dealerHasBJ = isBlackJack(dealerHand_);
+
+    if (playerHasBJ || dealerHasBJ) {
+        // Game is over immediately
+        checkCardsAndRound(0, determineWinner(playerHands_[0], dealerHand_));
+    } else {
+        emit turnChanged(true, 0); // Start player turn
     }
 }
 
-void BlackJackGame::checkCardsAndRound(GameResult currentState){
-    switch (currentState) {
-        case GameResult::PlayerWin:
-        emit GameResult()
-            break;
-
-        case GameResult::DealerWin:
-            //Emit signal
-            break;
-
-        case GameResult::PlayerBlackjack:
-            //Emit signal
-            break;
-
-        case GameResult::PlayerBust:
-            //Emit signal
-            break;
-
-        case GameResult::DealerBust:
-            //Emit signal
-            break;
-
-        case GameResult::Push:
-            //Emit signal
-            break;
-    }
+void BlackJackGame::checkCardsAndRound(int handIndex, GameResult currentState){
+    emit roundOver(handIndex, currentState);
 }
 
 Card BlackJackGame::drawCardFromShoe() {
