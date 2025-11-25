@@ -7,16 +7,21 @@ namespace Ui {
 class GameWidget;
 }
 
+/// @brief The widget defining the view for the main blackjack gameplay.
 class GameWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit GameWidget(QWidget *parent = nullptr);
+    /// @brief Constructs a new GameWidget.
+    /// @param parent The parent widget of this widget.
+    explicit GameWidget(QWidget* parent = nullptr);
+
+    /// @brief Frees any resources associated with this GameWidget.
     ~GameWidget();
 
 private:
-    Ui::GameWidget *ui;
+    Ui::GameWidget* ui;
 };
 
 #endif // GAME_WIDGET_H
