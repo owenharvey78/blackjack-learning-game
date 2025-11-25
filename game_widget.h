@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include <QVector>
-#include <QMap>
 #include "blackjack_game.h"
 #include "card.h"
 
@@ -20,7 +19,7 @@ public:
     /// @brief Constructs a new GameWidget.
     /// @param game The game to be played.
     /// @param parent The parent widget of this widget.
-    explicit GameWidget(BlackjackGame* game, QWidget* parent = nullptr);
+    explicit GameWidget(BlackjackGame game, QWidget* parent = nullptr);
 
     /// @brief Frees any resources associated with this GameWidget.
     ~GameWidget();
@@ -39,11 +38,7 @@ private:
     Ui::GameWidget* ui_;
 
     /// @brief The game currently being played.
-    BlackjackGame* game_;
-
-    /// @brief The player's balance (necessary to ensure the player doesn't
-    /// bet more than they have).
-    int balance_;
+    BlackjackGame game_;
 
     /// @brief The cards the dealer currently has.
     QVector<Card> dealerHand_;
@@ -51,20 +46,29 @@ private:
     /// @brief The cards the player currently has.
     QVector<QVector<Card>> playerHands_;
 
-    /// @brief During the betting stage, represents the player's current bet.
-    /// The keys represent the chip values (1, 5, 10, 25, 50, and 100). The
-    /// values represent the number of chips the player has bet for each of
-    /// those values.
-    QMap<int, int> currentBet_;
+    /// @brief During the betting stage, this represents the number of $1-valued
+    /// chips the player has placed on the table.
+    int current1Chips_;
 
-    /// @brief During the betting stage, represents the total of the chips the
-    /// player has bet.
-    int currentBetTotal_;
+    /// @brief During the betting stage, this represents the number of $5-valued
+    /// chips the player has placed on the table.
+    int current5Chips_;
 
-    /// @brief Determines whether the chip buttons should be enabled based on the
-    /// player's balance and current bet to prevent the player from betting more
-    /// than they have.
-    void setChipButtonsEnabled();
+    /// @brief During the betting stage, this represents the number of $10-valued
+    /// chips the player has placed on the table.
+    int current10Chips_;
+
+    /// @brief During the betting stage, this represents the number of $25-valued
+    /// chips the player has placed on the table.
+    int current25Chips_;
+
+    /// @brief During the betting stage, this represents the number of $50-valued
+    /// chips the player has placed on the table.
+    int current50Chips_;
+
+    /// @brief During the betting stage, this represents the number of $100-valued
+    /// chips the player has placed on the table.
+    int current100Chips_;
 };
 
 #endif // GAME_WIDGET_H
