@@ -50,6 +50,14 @@ public slots:
     /// @brief Starts the round.
     void startRound();
 
+<<<<<<< HEAD
+=======
+
+private slots:
+    /// @brief Recursive helper for dealer's turn.
+    void continueDealerTurn();
+
+>>>>>>> 911dab15d53891492122a98eb6959582bae77684
 private:
 
     // Game Logic Methods.
