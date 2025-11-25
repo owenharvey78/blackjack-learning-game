@@ -66,6 +66,9 @@ private:
     /// @brief Dealer stands, round/deal ends.
     void dealerStand();
 
+    /// @brief Helper to draw card from shoe.
+    Card drawCardFromShoe();
+
     // Static game state methods.
 
     /// @brief gets the total value of the hand.
