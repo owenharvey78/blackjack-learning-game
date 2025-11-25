@@ -20,7 +20,7 @@ void BlackJackGame::setRuleset(Ruleset rules) {
 
 // Game state methods.
 
-int BlackJackGame::getHandValue(std::vector<Card>& hand) const {
+int BlackJackGame::getHandValue(std::vector<Card>& hand) {
     int value = 0;
     int aceCount = 0;
 
@@ -32,26 +32,26 @@ int BlackJackGame::getHandValue(std::vector<Card>& hand) const {
     }
 
     while (value > 21 && aceCount > 0) {
-        value -= 10; // Count ace as 1 instead of 11 to not bust. hehe.
+        value -= 10; // Count ace as 1 instead of 11 to not bust.
         aceCount--;
     }
 
     return value;
 }
 
-bool BlackJackGame::isBust(std::vector<Card>& hand) const {
+bool BlackJackGame::isBust(std::vector<Card>& hand) {
     return getHandValue(hand) > 21;
 }
 
-bool BlackJackGame::isBlackjack(const std::vector<Card>& hand)  const {
+bool BlackJackGame::isBlackJack(const std::vector<Card>& hand) {
     return hand.size() == 2 && getHandValue(const_cast<std::vector<Card>&>(hand)) == 21;
 }
 
-bool BlackJackGame::is21(const std::vector<Card> &hand) const  {
+bool BlackJackGame::is21(const std::vector<Card> &hand) {
     return getHandValue(const_cast<std::vector<Card>&>(hand)) == 21;
 }
 
-bool BlackJackGame::isSoftHand(const std::vector<Card>& hand) const {
+bool BlackJackGame::isSoftHand(const std::vector<Card>& hand) {
     int value = 0;
     bool hasAce = false;
 
@@ -86,7 +86,7 @@ bool BlackJackGame::canSplit(const std::vector<Card>& hand, int currentSplitCoun
     return true;
 }
 
-BlackJackGame::GameResult BlackJackGame::determineWinner(std::vector<Card>& playerHand, std::vector<Card>& dealerHand) const {
+BlackJackGame::GameResult BlackJackGame::determineWinner(std::vector<Card>& playerHand, std::vector<Card>& dealerHand) {
     int playerValue = getHandValue(playerHand);
     int dealerValue = getHandValue(dealerHand);
 
@@ -96,10 +96,10 @@ BlackJackGame::GameResult BlackJackGame::determineWinner(std::vector<Card>& play
     if (isBust(dealerHand)) {
         return GameResult::DealerBust;
     }
-    if (isBlackjack(playerHand) && !isBlackjack(dealerHand)) {
+    if (isBlackJack(playerHand) && !isBlackJack(dealerHand)) {
         return GameResult::PlayerBlackjack;
     }
-    if (isBlackjack(dealerHand) && !isBlackjack(playerHand)) {
+    if (isBlackJack(dealerHand) && !isBlackJack(playerHand)) {
         return GameResult::DealerWin;
     }
 
@@ -157,6 +157,10 @@ void BlackJackGame::playerHit(){
 
 void BlackJackGame::playerStand(){
     dealerTurn();
+}
+
+void BlackJackGame::playerSplit(){
+    // fill in
 }
 
 void BlackJackGame::dealCards(){

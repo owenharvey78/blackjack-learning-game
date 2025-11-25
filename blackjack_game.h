@@ -58,7 +58,7 @@ private slots:
 
 private:
 
-    // Game Logic Methods
+    // Game Logic Methods.
 
     /// @brief Dealer hits to draw another card.
     void dealerHit();
@@ -66,40 +66,42 @@ private:
     /// @brief Dealer stands, round/deal ends.
     void dealerStand();
 
-    // Game state methods.
+    // Static game state methods.
 
     /// @brief gets the total value of the hand.
     /// Handles logic of ace being 1 or 11.
     /// @param hand vector holding the cards.
     /// @return reports aces as 11 unless that results in a bust.
-    int getHandValue(std::vector<Card>& hand) const;
+    static int getHandValue(std::vector<Card>& hand);
 
     /// @brief determines if the current hand is a.
     /// @param hand vector holding the cards.
     /// @param hand vector holding the cards.
     /// @return true if the hand is a bust
-    bool isBust(std::vector<Card>& hand) const;
+    static bool isBust(std::vector<Card>& hand);
 
     /// @brief determines if the current hand is a blackjack.
     /// @param hand vector holding the cards.
     /// @return true if is blackjack.
-    bool isBlackjack(const std::vector<Card>& hand) const;
+    static bool isBlackJack(const std::vector<Card>& hand);
 
     /// @brief determines if the current hand is 21.
     /// @param hand vector holding the cards.
     /// @return true if is 21.
-    bool is21(const std::vector<Card>& hand) const;
+    static bool is21(const std::vector<Card>& hand);
 
     /// @brief determines if the current hand is contains an ace.
     /// @param hand vector holding the cards.
     /// @return true if is soft hand.
-    bool isSoftHand(const std::vector<Card>& hand) const;
+    static bool isSoftHand(const std::vector<Card>& hand);
 
     /// @brief determines the winner of the hand.
     /// @param playerHand vector holding player's hand.
     /// @param dealerHand vector holding dealer's hand.
     /// @return game result.
-    GameResult determineWinner(std::vector<Card>& playerHand, std::vector<Card>& dealerHand) const;
+    static GameResult determineWinner(std::vector<Card>& playerHand, std::vector<Card>& dealerHand);
+
+    // Non-static game state methods.
 
     /// @brief determines if the dealer should hit.
     /// @param hand vector holding the cards.
