@@ -8,7 +8,6 @@ struct Ruleset {
     bool dealerHitsSoft17 = true;     // true = dealer hits on soft 17.
     bool dealerPeeks = true;          // true = dealer peeks when first card is ace.
     bool pushOnDealer22 = false;      // true = Free bet style.
-    bool fiveCardCharlie = false;     // true = 5 cards is instant win for player.
 
     // Payouts/Decks
     double blackjackPayout = 1.5;     // determines payout when player hits a blackjack.
