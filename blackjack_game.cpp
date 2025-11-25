@@ -159,6 +159,10 @@ void BlackJackGame::playerStand(){
     dealerTurn();
 }
 
+void BlackJackGame::playerSplit(){
+    // fill in
+}
+
 void BlackJackGame::dealCards(){
     for(int i = 0; i < 2; i++){
         Card drawnCard = shoe_->draw();
