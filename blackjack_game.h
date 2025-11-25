@@ -52,26 +52,10 @@ public slots:
     /// @brief Starts the round.
     void startRound();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-=======
->>>>>>> parent of 8393471 (Revert "Add signals to blackjack game logic")
-=======
->>>>>>> 79c7c7bbc97254e6319ff7d5f20bb3c0afb10bc1
 private slots:
     /// @brief Recursive helper for dealer's turn.
     void continueDealerTurn();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 911dab15d53891492122a98eb6959582bae77684
-=======
->>>>>>> parent of 8393471 (Revert "Add signals to blackjack game logic")
-=======
->>>>>>> 79c7c7bbc97254e6319ff7d5f20bb3c0afb10bc1
 private:
     /// @brief Dealer hits to draw another card.
     void dealerHit();
