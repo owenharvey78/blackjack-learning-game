@@ -24,9 +24,14 @@ public:
     /// @brief Frees any resources associated with this GameWidget.
     ~GameWidget();
 
-public slots:
-    /// @brief Displays the card that was dealt to the dealer.
-    void dealerCardDealt(Card card);
+private slots:
+    /// @brief Triggers the betting stage, displaying the buttons for the user
+    /// to place their bet and start the round.
+    void beginBetStage();
+
+    /// @brief During the betting stage, adds a chip of the given value to the
+    /// current bet.
+    void addChip(int value);
 
 private:
     /// @brief The UI form associated with this widget.
@@ -41,9 +46,29 @@ private:
     /// @brief The cards the player currently has.
     QVector<QVector<Card>> playerHands_;
 
-    /// @brief During the betting stage, this represents the bet the player will make
-    /// once they click the "start" button.
-    int betToPlace_;
+    /// @brief During the betting stage, this represents the number of $1-valued
+    /// chips the player has placed on the table.
+    int current1Chips_;
+
+    /// @brief During the betting stage, this represents the number of $5-valued
+    /// chips the player has placed on the table.
+    int current5Chips_;
+
+    /// @brief During the betting stage, this represents the number of $10-valued
+    /// chips the player has placed on the table.
+    int current10Chips_;
+
+    /// @brief During the betting stage, this represents the number of $25-valued
+    /// chips the player has placed on the table.
+    int current25Chips_;
+
+    /// @brief During the betting stage, this represents the number of $50-valued
+    /// chips the player has placed on the table.
+    int current50Chips_;
+
+    /// @brief During the betting stage, this represents the number of $100-valued
+    /// chips the player has placed on the table.
+    int current100Chips_;
 };
 
 #endif // GAME_WIDGET_H
