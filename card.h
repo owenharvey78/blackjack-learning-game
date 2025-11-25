@@ -56,7 +56,6 @@ public:
     /// @return 1 if this card's rank is 2-6, -1 if this card's rank is jack-ace, or 0
     /// otherwise.
     int getHiLoValue() const;
-    int getValue() const;
 };
 
 #endif // CARD_H

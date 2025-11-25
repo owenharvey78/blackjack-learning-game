@@ -30,16 +30,10 @@ public:
     /// @param rules The new ruleset.
     void setRuleset(Ruleset rules);
 
-private slots:
-
-    /// @brief Starts the game.
-    void gameStart();
+public slots:
 
     /// @brief Starts the next round/deal.
-    void nextDeal();
-
-    /// @brief Deals cards to player and dealer.
-    void dealCards();
+    void dealNewHand();
 
     /// @brief Player hits to draw another card.
     void playerHit();
@@ -50,11 +44,11 @@ private slots:
     /// @brief Player splits bet and hand.
     void playerSplit();
 
-    /// @brief Emits that teh dealer's turn has started.
-    void dealerTurn();
-
     /// @brief Checks game state.
     void checkCardsAndRound(GameResult currentState);
+
+    /// @brief Starts the round.
+    void startRound();
 
 private:
 
@@ -68,6 +62,9 @@ private:
 
     /// @brief Helper to draw card from shoe.
     Card drawCardFromShoe();
+
+    /// @brief Emits that the dealer's turn has started.
+    void dealerTurn();
 
     // Static game state methods.
 
@@ -155,7 +152,17 @@ private:
     int currentHandIndex_;
 
 signals:
+    void startNewHand();
 
+    void shuffleCards();
+
+    void dealPlayerCard(int handIndex, Card card);
+
+    void dealDealerCard(Card card);
+
+    void roundOver(GameResult result);
+
+    void splitHand(int handCount);
 };
 
 #endif // BLACKJACK_GAME_H
