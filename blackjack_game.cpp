@@ -32,9 +32,10 @@ int BlackJackGame::getHandValue(QVector<Card>& hand) {
         }
     }
 
+    // Account for aces
     while (value > 21 && aceCount > 0) {
         value -= 10; // Count ace as 1 instead of 11 to not bust.
-        aceCount--;
+        aceCount--; // Player still has ace but it is locked as a 1 now.
     }
 
     return value;
@@ -131,34 +132,27 @@ bool BlackJackGame::dealerShouldHit(QVector<Card>& hand) const {
 void BlackJackGame::dealerTurn(){
     while(dealerShouldHit(dealerHand_)){
         dealerHit();
-        // Emit Signal
-    }
-
-    if(rules_.dealerHitsSoft17){
-        if(isSoftHand(dealerHand_) && getHandValue(dealerHand_) == 17){
-            dealerHit();
-            // Emit Signal
-        }
+        // Emit signal
     }
     dealerStand();
 }
 
 void BlackJackGame::dealerHit() {
-    dealerHand_.push_back(shoe_->draw());
+    dealerHand_.push_back(drawCardFromShoe());
 }
 
 void BlackJackGame::dealerStand() {
-    checkCardsAndRound(determineWinner(playerHands_[currentHandIndex_], dealerHand_));
-}
+    // Compare dealer hand to ALL player hands.
+    for (int i = 0; i < playerHands_.size(); i++) {
+        GameResult result = determineWinner(playerHands_[i], dealerHand_);
+        checkCardsAndRound(result);
+        // emit signal - must indicate WHICH hand won
+    }}
 
 void BlackJackGame::playerHit(){
-    // Draw card for current hand
-    Card c = shoe_->draw();
-    if(c.rank == Card::Rank::Cut) {
-        needsShuffling_ = true;
-        c = shoe_->draw();
-    }
-    playerHands_[currentHandIndex_].append(c);
+    // Hit the active hand
+    if (currentHandIndex_ >= playerHands_.size()) return; // safety check
+    playerHands_[currentHandIndex_].append(drawCardFromShoe());
 
     // Emit signal
 }
@@ -179,43 +173,26 @@ void BlackJackGame::playerSplit(){
     // ASSUMES PLAYER CAN SPLIT
     // BET WILL BE DOUBLED
 
-    // add a new hand
-    // - first card in hand stays
-    // - second card in hand switched to new hand
-    // deal a new card to the first hand THEN the second hand
+    // Create new hand and move card to new hand.
+    Card splitCard = playerHands_[currentHandIndex_].takeLast(); // Takes the second card from the hand
+    QVector<Card> newHand;
+    newHand.append(splitCard);
+    playerHands_.insert(currentHandIndex_ + 1, newHand); // add the new hand to player hands
 
-    Card c = playerHands_[currentHandIndex_][1]; // gets the second card from hand
-    playerHands_[currentHandIndex_].removeLast(); // remove that card from the list
-    playerHands_.append(QVector<Card>()); // add a new hand
-    playerHands_[currentHandIndex_ + 1].append(c); // move card to new hand
+    // Deal a new card to both hands.
+    playerHands_[currentHandIndex_].append(drawCardFromShoe());
+    playerHands_[currentHandIndex_ + 1].append(drawCardFromShoe());
 
-
-
+    // emit signal
 }
 
 void BlackJackGame::dealCards(){
-    // reset necessary elements
-    playerHands_.clear();
-    playerHands_.append(QVector<Card>());
-    dealerHand_.clear();
-    currentHandIndex_ = 0;
-
     for(int i = 0; i < 2; i++){
-        // Deal to player first
-        Card playerCard = shoe_->draw();
-        if(playerCard.rank == Card::Rank::Cut) {
-            needsShuffling_ = true;
-            playerCard = shoe_->draw();
-        }
-        playerHands_[0].append(playerCard);
+        // Deal to player's hand.
+        playerHands_[0].append(drawCardFromShoe());
 
-        // Deal to Dealer
-        Card dealerCard = shoe_->draw();
-        if(dealerCard.rank == Card::Rank::Cut) {
-            needsShuffling_ = true;
-            dealerCard = shoe_->draw();
-        }
-        dealerHand_.append(dealerCard);
+        // Deal to dealer.
+        dealerHand_.append(drawCardFromShoe());
     }
 }
 
@@ -226,18 +203,23 @@ void BlackJackGame::gameStart(){
 }
 
 void BlackJackGame::nextDeal(){
-
+    // Check shuffling status.
     if(needsShuffling_){
         shoe_->shuffle();
         needsShuffling_ = false;
     }
 
+    // reset necessary elements.
     playerHands_.clear();
+    playerHands_.append(QVector<Card>());
     dealerHand_.clear();
+    currentHandIndex_ = 0;
 
     dealCards();
-    for (int i = 0; i < playerHands_.length(); i++) {
-        checkCardsAndRound(determineWinner(playerHands_[i], dealerHand_));
+
+    // Immediately check for dealer or player blackjack.
+    if (isBlackJack(playerHands_[0]) || isBlackJack(dealerHand_)) {
+        checkCardsAndRound(determineWinner(playerHands_[0], dealerHand_));
     }
 }
 
