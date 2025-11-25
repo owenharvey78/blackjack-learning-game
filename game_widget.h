@@ -2,6 +2,7 @@
 #define GAME_WIDGET_H
 
 #include <QWidget>
+#include "blackjack_game.h"
 
 namespace Ui {
 class GameWidget;
@@ -14,14 +15,19 @@ class GameWidget : public QWidget
 
 public:
     /// @brief Constructs a new GameWidget.
+    /// @param game The game to be played.
     /// @param parent The parent widget of this widget.
-    explicit GameWidget(QWidget* parent = nullptr);
+    explicit GameWidget(BlackjackGame game, QWidget* parent = nullptr);
 
     /// @brief Frees any resources associated with this GameWidget.
     ~GameWidget();
 
 private:
-    Ui::GameWidget* ui;
+    /// @brief The UI form associated with this widget.
+    Ui::GameWidget* ui_;
+
+    /// @brief The game currently being played.
+    BlackjackGame game_;
 };
 
 #endif // GAME_WIDGET_H
