@@ -58,7 +58,7 @@ private slots:
 
 private:
 
-    // Game Logic Methods
+    // Game Logic Methods.
 
     /// @brief Dealer hits to draw another card.
     void dealerHit();
@@ -66,62 +66,64 @@ private:
     /// @brief Dealer stands, round/deal ends.
     void dealerStand();
 
-    // Game state methods.
+    // Static game state methods.
 
     /// @brief gets the total value of the hand.
     /// Handles logic of ace being 1 or 11.
     /// @param hand vector holding the cards.
     /// @return reports aces as 11 unless that results in a bust.
-    int getHandValue(std::vector<Card>& hand) const;
+    static int getHandValue(QVector<Card>& hand);
 
     /// @brief determines if the current hand is a.
     /// @param hand vector holding the cards.
     /// @param hand vector holding the cards.
     /// @return true if the hand is a bust
-    bool isBust(std::vector<Card>& hand) const;
+    static bool isBust(QVector<Card>& hand);
 
     /// @brief determines if the current hand is a blackjack.
     /// @param hand vector holding the cards.
     /// @return true if is blackjack.
-    bool isBlackjack(const std::vector<Card>& hand) const;
+    static bool isBlackJack(const QVector<Card>& hand);
 
     /// @brief determines if the current hand is 21.
     /// @param hand vector holding the cards.
     /// @return true if is 21.
-    bool is21(const std::vector<Card>& hand) const;
+    static bool is21(const QVector<Card>& hand);
 
     /// @brief determines if the current hand is contains an ace.
     /// @param hand vector holding the cards.
     /// @return true if is soft hand.
-    bool isSoftHand(const std::vector<Card>& hand) const;
+    static bool isSoftHand(const QVector<Card>& hand);
 
     /// @brief determines the winner of the hand.
     /// @param playerHand vector holding player's hand.
     /// @param dealerHand vector holding dealer's hand.
     /// @return game result.
-    GameResult determineWinner(std::vector<Card>& playerHand, std::vector<Card>& dealerHand) const;
+    static GameResult determineWinner(QVector<Card>& playerHand, QVector<Card>& dealerHand);
+
+    // Non-static game state methods.
 
     /// @brief determines if the dealer should hit.
     /// @param hand vector holding the cards.
     /// @return true if dealer should hit.
-    bool dealerShouldHit(std::vector<Card>& hand) const;
+    bool dealerShouldHit(QVector<Card>& hand) const;
 
     /// @brief determines if the player can double.
     /// @param hand vector holding the cards.
     /// @param currentSplitCount The number of times the player has split this round.
     /// @return true if player can double.
-    bool canDouble(const std::vector<Card>& hand, int currentSplitCount) const;
+    bool canDouble(const QVector<Card>& hand, int currentSplitCount) const;
 
     /// @brief determines if the player can surrender.
     /// @param hand vector holding the cards.
     /// @return true if player can surrender.
-    bool canSurrender(const std::vector<Card>& hand) const;
+    bool canSurrender(const QVector<Card>& hand) const;
 
     /// @brief determines if the player can split.
     /// @param hand vector holding the cards.
     /// @param currentSplitCount amount of times already split.
     /// @return true if player can split.
-    bool canSplit(const std::vector<Card>& hand, int currentSplitCount) const;
+    bool canSplit(const QVector<Card>& hand, int currentSplitCount) const;
 
     // Member variables.
 
@@ -132,10 +134,10 @@ private:
     Shoe* shoe_;
 
     /// @brief Holds the player's current hand.
-    std::vector<Card> playerHand_;
+    QVector<QVector<Card>> playerHands_;
 
     /// @brief Holds the dealer's current hand.
-    std::vector<Card> dealerHand_;
+    QVector<Card> dealerHand_;
 
     /// @brief Holds the total chip amount.
     int totalChipAmount;
@@ -145,6 +147,9 @@ private:
 
     /// @brief True if the current round/deal has started. False otherwise.
     bool hasRoundStarted_;
+
+    /// @brief Tracks which hand is currently active to account for split hands.
+    int currentHandIndex_;
 
 signals:
 
