@@ -138,7 +138,7 @@ void BlackJackGame::dealerTurn(){
 }
 
 void BlackJackGame::dealerHit() {
-    dealerHand_.push_back(drawCardFromShoe());
+    dealerHand_.append(drawCardFromShoe());
 }
 
 void BlackJackGame::dealerStand() {
