@@ -8,8 +8,9 @@ BlackJackGame::BlackJackGame(QObject *parent) : QObject{parent}{
     shoe_ = new Shoe(rules_.numDecks, 0.75f, this);
     needsShuffling_ = true;
     hasRoundStarted_ = false;
-    playerHand_ = std::vector<Card>();
-    dealerHand_ = std::vector<Card>();
+    playerHands_ = QVector<QVector<Card>>();
+    dealerHand_ = QVector<Card>();
+    currentHandIndex_ = 0;
 
     // Add necessary connects here.
 }
@@ -20,7 +21,7 @@ void BlackJackGame::setRuleset(Ruleset rules) {
 
 // Game state methods.
 
-int BlackJackGame::getHandValue(std::vector<Card>& hand) {
+int BlackJackGame::getHandValue(QVector<Card>& hand) {
     int value = 0;
     int aceCount = 0;
 
@@ -39,19 +40,19 @@ int BlackJackGame::getHandValue(std::vector<Card>& hand) {
     return value;
 }
 
-bool BlackJackGame::isBust(std::vector<Card>& hand) {
+bool BlackJackGame::isBust(QVector<Card>& hand) {
     return getHandValue(hand) > 21;
 }
 
-bool BlackJackGame::isBlackJack(const std::vector<Card>& hand) {
-    return hand.size() == 2 && getHandValue(const_cast<std::vector<Card>&>(hand)) == 21;
+bool BlackJackGame::isBlackJack(const QVector<Card>& hand) {
+    return hand.size() == 2 && getHandValue(const_cast<QVector<Card>&>(hand)) == 21;
 }
 
-bool BlackJackGame::is21(const std::vector<Card> &hand) {
-    return getHandValue(const_cast<std::vector<Card>&>(hand)) == 21;
+bool BlackJackGame::is21(const QVector<Card> &hand) {
+    return getHandValue(const_cast<QVector<Card>&>(hand)) == 21;
 }
 
-bool BlackJackGame::isSoftHand(const std::vector<Card>& hand) {
+bool BlackJackGame::isSoftHand(const QVector<Card>& hand) {
     int value = 0;
     bool hasAce = false;
 
@@ -65,15 +66,15 @@ bool BlackJackGame::isSoftHand(const std::vector<Card>& hand) {
     return hasAce && (value + 10) <= 21;
 }
 
-bool BlackJackGame::canDouble(const std::vector<Card>& hand, int currentSplitCount) const {
+bool BlackJackGame::canDouble(const QVector<Card>& hand, int currentSplitCount) const {
     return hand.size() == 2 && (rules_.doubleAfterSplit || currentSplitCount == 0);
 }
 
-bool BlackJackGame::canSurrender(const std::vector<Card>& hand) const {
+bool BlackJackGame::canSurrender(const QVector<Card>& hand) const {
     return rules_.surrenderAllowed && hand.size() == 2;
 }
 
-bool BlackJackGame::canSplit(const std::vector<Card>& hand, int currentSplitCount) const {
+bool BlackJackGame::canSplit(const QVector<Card>& hand, int currentSplitCount) const {
     if (hand.size() != 2) {
         return false;
     }
@@ -86,7 +87,7 @@ bool BlackJackGame::canSplit(const std::vector<Card>& hand, int currentSplitCoun
     return true;
 }
 
-BlackJackGame::GameResult BlackJackGame::determineWinner(std::vector<Card>& playerHand, std::vector<Card>& dealerHand) {
+BlackJackGame::GameResult BlackJackGame::determineWinner(QVector<Card>& playerHand, QVector<Card>& dealerHand) {
     int playerValue = getHandValue(playerHand);
     int dealerValue = getHandValue(dealerHand);
 
@@ -116,7 +117,7 @@ BlackJackGame::GameResult BlackJackGame::determineWinner(std::vector<Card>& play
 
 // Game logic methods.
 
-bool BlackJackGame::dealerShouldHit(std::vector<Card>& hand) const {
+bool BlackJackGame::dealerShouldHit(QVector<Card>& hand) const {
     int value = getHandValue(hand);
     if (value < 17) {
         return true;
@@ -147,44 +148,74 @@ void BlackJackGame::dealerHit() {
 }
 
 void BlackJackGame::dealerStand() {
-    checkCardsAndRound(determineWinner(playerHand_, dealerHand_));
+    checkCardsAndRound(determineWinner(playerHands_[currentHandIndex_], dealerHand_));
 }
 
 void BlackJackGame::playerHit(){
-    playerHand_.push_back(shoe_->draw());
+    // Draw card for current hand
+    Card c = shoe_->draw();
+    if(c.rank == Card::Rank::Cut) {
+        needsShuffling_ = true;
+        c = shoe_->draw();
+    }
+    playerHands_[currentHandIndex_].append(c);
+
     // Emit signal
 }
 
 void BlackJackGame::playerStand(){
-    dealerTurn();
+    // Check if the player has other hands
+    if (currentHandIndex_ < playerHands_.size() - 1) {
+        currentHandIndex_++;
+        // Emit signal that active hand changed
+
+    }
+    else {
+        dealerTurn();
+    }
 }
 
 void BlackJackGame::playerSplit(){
-    // fill in
+    // ASSUMES PLAYER CAN SPLIT
+    // BET WILL BE DOUBLED
+
+    // add a new hand
+    // - first card in hand stays
+    // - second card in hand switched to new hand
+    // deal a new card to the first hand THEN the second hand
+
+    Card c = playerHands_[currentHandIndex_][1]; // gets the second card from hand
+    playerHands_[currentHandIndex_].removeLast(); // remove that card from the list
+    playerHands_.append(QVector<Card>()); // add a new hand
+    playerHands_[currentHandIndex_ + 1].append(c); // move card to new hand
+
+
+
 }
 
 void BlackJackGame::dealCards(){
+    // reset necessary elements
+    playerHands_.clear();
+    playerHands_.append(QVector<Card>());
+    dealerHand_.clear();
+    currentHandIndex_ = 0;
+
     for(int i = 0; i < 2; i++){
-        Card drawnCard = shoe_->draw();
-
-        // Player is dealt one card.
-        // Dealer draws one card.
-        // Then it's done again.
-        if(drawnCard.rank == Card::Rank::Cut){
-            playerHand_.push_back(shoe_->draw());
+        // Deal to player first
+        Card playerCard = shoe_->draw();
+        if(playerCard.rank == Card::Rank::Cut) {
             needsShuffling_ = true;
+            playerCard = shoe_->draw();
         }
-        else{
-            playerHand_.push_back(drawnCard);
-        }
+        playerHands_[0].append(playerCard);
 
-        if(drawnCard.rank == Card::Rank::Cut){
-            dealerHand_.push_back(shoe_->draw());
+        // Deal to Dealer
+        Card dealerCard = shoe_->draw();
+        if(dealerCard.rank == Card::Rank::Cut) {
             needsShuffling_ = true;
+            dealerCard = shoe_->draw();
         }
-        else{
-            dealerHand_.push_back(drawnCard);
-        }
+        dealerHand_.append(dealerCard);
     }
 }
 
@@ -201,11 +232,13 @@ void BlackJackGame::nextDeal(){
         needsShuffling_ = false;
     }
 
-    playerHand_.clear();
+    playerHands_.clear();
     dealerHand_.clear();
 
     dealCards();
-    checkCardsAndRound(determineWinner(playerHand_, dealerHand_));
+    for (int i = 0; i < playerHands_.length(); i++) {
+        checkCardsAndRound(determineWinner(playerHands_[i], dealerHand_));
+    }
 }
 
 void BlackJackGame::checkCardsAndRound(GameResult currentState){
@@ -234,6 +267,16 @@ void BlackJackGame::checkCardsAndRound(GameResult currentState){
             //Emit signal
             break;
     }
+}
+
+Card BlackJackGame::drawCardFromShoe() {
+    Card c = shoe_->draw();
+    // Check if we hit the cut card
+    if (c.rank == Card::Rank::Cut) {
+        needsShuffling_ = true;
+        c = shoe_->draw();
+    }
+    return c;
 }
 
 // TODO
