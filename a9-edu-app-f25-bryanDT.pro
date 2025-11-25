@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     blackjack_logic.cpp \
+    game_widget.cpp \
     main.cpp \
     mainwindow.cpp \
     card.cpp \
@@ -17,12 +18,14 @@ SOURCES += \
 
 HEADERS += \
     blackjack_logic.h \
+    game_widget.h \
     mainwindow.h \
     ruleset.h \
     card.h \
     shoe.h
 
 FORMS += \
+    game_widget.ui \
     mainwindow.ui
 
 # Default rules for deployment.
