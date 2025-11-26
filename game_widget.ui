@@ -80,10 +80,23 @@
     </spacer>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="betDisplayLayout" stretch="0,0,0,0,0,0,0">
+    <layout class="QHBoxLayout" name="betDisplayLayout" stretch="0,0,0,0,0,0,0,0">
      <property name="spacing">
       <number>10</number>
      </property>
+     <item>
+      <spacer name="displayChipsLeftSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
      <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
       <widget class="QPushButton" name="betDisplay1Button">
        <property name="minimumSize">
@@ -98,14 +111,14 @@
          <height>80</height>
         </size>
        </property>
+       <property name="visible">
+        <bool>false</bool>
+       </property>
        <property name="styleSheet">
         <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
        </property>
        <property name="text">
         <string>$1</string>
-       </property>
-       <property name="visible">
-        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -123,14 +136,14 @@
          <height>80</height>
         </size>
        </property>
+       <property name="visible">
+        <bool>false</bool>
+       </property>
        <property name="styleSheet">
         <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
        </property>
        <property name="text">
         <string>$5</string>
-       </property>
-       <property name="visible">
-        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -148,14 +161,14 @@
          <height>80</height>
         </size>
        </property>
+       <property name="visible">
+        <bool>false</bool>
+       </property>
        <property name="styleSheet">
         <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
        </property>
        <property name="text">
         <string>$10</string>
-       </property>
-       <property name="visible">
-        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -173,14 +186,14 @@
          <height>80</height>
         </size>
        </property>
+       <property name="visible">
+        <bool>false</bool>
+       </property>
        <property name="styleSheet">
         <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
        </property>
        <property name="text">
         <string>$25</string>
-       </property>
-       <property name="visible">
-        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -198,14 +211,14 @@
          <height>80</height>
         </size>
        </property>
+       <property name="visible">
+        <bool>false</bool>
+       </property>
        <property name="styleSheet">
         <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
        </property>
        <property name="text">
         <string>$50</string>
-       </property>
-       <property name="visible">
-        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -223,16 +236,29 @@
          <height>80</height>
         </size>
        </property>
+       <property name="visible">
+        <bool>false</bool>
+       </property>
        <property name="styleSheet">
         <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
        </property>
        <property name="text">
         <string>$100</string>
        </property>
-       <property name="visible">
-        <bool>false</bool>
-       </property>
       </widget>
+     </item>
+     <item>
+      <spacer name="displayChipsRightSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>
