@@ -5,6 +5,7 @@
 #include "ruleset.h"
 #include "shoe.h"
 #include <QObject>
+#include <QTimer>
 
 class BlackjackGame : public QObject {
     Q_OBJECT
@@ -30,10 +31,10 @@ public:
     /// @param rules The new ruleset.
     void setRuleset(Ruleset rules);
 
-private slots:
-
     /// @brief Starts the game.
     void gameStart();
+
+private slots:
 
     /// @brief Starts the next round/deal.
     void nextDeal();
@@ -130,6 +131,8 @@ private:
 
     // Member variables.
 
+    QTimer timer_;
+
     /// @brief Holds the ruleset.
     Ruleset rules_;
 
@@ -156,6 +159,11 @@ private:
 
 signals:
 
+    /// @brief Signals that a player card has been dealt.
+    void playerCardDealt(Card card);
+
+    /// @brief Signals that a dealer card has been dealt.
+    void dealerCardDealt(Card card);
 };
 
 #endif // BLACKJACK_GAME_H

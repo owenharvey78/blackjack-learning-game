@@ -2,23 +2,19 @@
 #include "ui_game_widget.h"
 
 GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
-    : QWidget(parent),
-    ui_(new Ui::GameWidget),
-    game_(game),
+    : QWidget(parent), ui_(new Ui::GameWidget), game_(game),
+    cardSprites_(":/images/cards.png"),
     balance_(1000),
     currentBetTotal_(0)
 {
     ui_->setupUi(this);
-    // ui_->mainVerticalLayout->
 
     scene_ = new QGraphicsScene(this);
     ui_->graphicsView->setScene(scene_);
 
-    scene_->addText("Test");
-    scene_->addText("Test2");
-    scene_->addText("Test3");
-    scene_->addText("Test4");
-    scene_->addText("Test5");
+    // Place "deck"
+    deckItem_ = scene_->addPixmap(cardSprites_.back());
+    deckItem_->setPos(QPointF(600, 80));
 
     view_ = ui_->graphicsView;
 
@@ -44,6 +40,9 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(ui_->betDisplay25Button, &QPushButton::clicked, this, [this]() { removeChip(25); });
     connect(ui_->betDisplay50Button, &QPushButton::clicked, this, [this]() { removeChip(50); });
     connect(ui_->betDisplay100Button, &QPushButton::clicked, this, [this]() { removeChip(100); });
+
+    // Starting game.
+    connect(ui_->startRoundButton, &QPushButton::clicked, this, &GameWidget::onStartButtonClicked);
 }
 
 GameWidget::~GameWidget()
@@ -171,4 +170,10 @@ void GameWidget::setChipButtonsEnabled() {
     ui_->chip25Button->setEnabled(newBalance >= 25);
     ui_->chip50Button->setEnabled(newBalance >= 50);
     ui_->chip100Button->setEnabled(newBalance >= 100);
+}
+
+void GameWidget::onStartButtonClicked() {
+    game_->gameStart();
+    // timer_.singleShot(5000, this, [this](){
+    // });
 }

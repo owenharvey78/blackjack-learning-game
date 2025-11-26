@@ -149,7 +149,7 @@ void BlackjackGame::dealerStand() {
         // emit signal - must indicate WHICH hand won
     }}
 
-void BlackjackGame::playerHit(){
+void BlackjackGame::playerHit() {
     // Hit the active hand
     if (currentHandIndex_ >= playerHands_.size()) return; // safety check
     playerHands_[currentHandIndex_].append(drawCardFromShoe());
@@ -157,7 +157,7 @@ void BlackjackGame::playerHit(){
     // Emit signal
 }
 
-void BlackjackGame::playerStand(){
+void BlackjackGame::playerStand() {
     // Check if the player has other hands
     if (currentHandIndex_ < playerHands_.size() - 1) {
         currentHandIndex_++;
@@ -169,7 +169,7 @@ void BlackjackGame::playerStand(){
     }
 }
 
-void BlackjackGame::playerSplit(){
+void BlackjackGame::playerSplit() {
     // ASSUMES PLAYER CAN SPLIT
     // BET WILL BE DOUBLED
 
@@ -186,13 +186,21 @@ void BlackjackGame::playerSplit(){
     // emit signal
 }
 
-void BlackjackGame::dealCards(){
+void BlackjackGame::dealCards() {
     for(int i = 0; i < 2; i++){
         // Deal to player's hand.
-        playerHands_[0].append(drawCardFromShoe());
+        Card drawnCard = drawCardFromShoe();
+        timer_.singleShot(2000, this, [this, &drawnCard](){
+            playerHands_[0].append(drawnCard);
+            emit playerCardDealt(drawnCard);
+        });
 
         // Deal to dealer.
-        dealerHand_.append(drawCardFromShoe());
+        drawnCard = drawCardFromShoe();
+        timer_.singleShot(2000, this, [this, &drawnCard](){
+            dealerHand_.append(drawnCard);
+            emit dealerCardDealt(drawnCard);
+        });
     }
 }
 
@@ -225,30 +233,30 @@ void BlackjackGame::nextDeal(){
 
 void BlackjackGame::checkCardsAndRound(GameResult currentState){
     switch (currentState) {
-    case GameResult::PlayerWin:
-        //Emit signal
-        break;
+        case GameResult::PlayerWin:
+            //Emit signal
+            break;
 
-    case GameResult::DealerWin:
-        //Emit signal
-        break;
+        case GameResult::DealerWin:
+            //Emit signal
+            break;
 
-    case GameResult::PlayerBlackjack:
-        //Emit signal
-        break;
+        case GameResult::PlayerBlackjack:
+            //Emit signal
+            break;
 
-    case GameResult::PlayerBust:
-        //Emit signal
-        break;
+        case GameResult::PlayerBust:
+            //Emit signal
+            break;
 
-    case GameResult::DealerBust:
-        //Emit signal
-        break;
+        case GameResult::DealerBust:
+            //Emit signal
+            break;
 
-    case GameResult::Push:
-        //Emit signal
-        break;
-    }
+        case GameResult::Push:
+            //Emit signal
+            break;
+        }
 }
 
 Card BlackjackGame::drawCardFromShoe() {
