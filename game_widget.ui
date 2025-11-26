@@ -17,10 +17,10 @@
    <string>Form</string>
   </property>
   <property name="autoFillBackground">
-   <bool>true</bool>
+   <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">background-color: rgb(0, 100, 0);</string>
   </property>
   <layout class="QVBoxLayout" name="mainVerticalLayout">
    <property name="spacing">
@@ -38,6 +38,9 @@
    <property name="bottomMargin">
     <number>10</number>
    </property>
+   <item>
+    <widget class="QGraphicsView" name="graphicsView"/>
+   </item>
    <item>
     <layout class="QHBoxLayout" name="topHorizontalLayout">
      <item>

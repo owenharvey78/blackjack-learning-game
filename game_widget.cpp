@@ -9,6 +9,14 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     currentBetTotal_(0)
 {
     ui_->setupUi(this);
+    // ui_->mainVerticalLayout->
+
+    scene_ = new QGraphicsScene(this);
+    ui_->graphicsView->setScene(scene_);
+
+    scene_->addText("Test");
+
+    view_ = ui_->graphicsView;
 
     // Set up current bet map
     currentBet_[1] = 0;
