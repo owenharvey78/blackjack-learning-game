@@ -25,10 +25,11 @@ public:
     /// @brief Frees any resources associated with this GameWidget.
     ~GameWidget();
 
-private slots:
     /// @brief Triggers the betting stage, displaying the buttons for the user
     /// to place their bet and start the round.
     void beginBetStage();
+
+private slots:
 
     /// @brief During the betting stage, adds a chip of the given value to the
     /// current bet.

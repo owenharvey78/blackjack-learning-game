@@ -4,7 +4,9 @@
 GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     : QWidget(parent),
     ui_(new Ui::GameWidget),
-    game_(game)
+    game_(game),
+    balance_(1000),
+    currentBetTotal_(0)
 {
     ui_->setupUi(this);
 
@@ -86,7 +88,7 @@ void GameWidget::addChip(int value) {
 
     // Show and update current bet label
     ui_->betLabel->setVisible(true);
-    ui_->betLabel->setText("-$" + QString::number(value));
+    ui_->betLabel->setText("-$" + QString::number(currentBetTotal_));
 
     // Disable any necessary buttons
     setChipButtonsEnabled();
