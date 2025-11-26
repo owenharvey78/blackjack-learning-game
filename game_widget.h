@@ -4,8 +4,11 @@
 #include <QWidget>
 #include <QVector>
 #include <QMap>
+#include <QGraphicsScene>
+#include <QGraphicsView>
 #include "blackjack_game.h"
 #include "card.h"
+
 
 namespace Ui {
 class GameWidget;
@@ -42,6 +45,12 @@ private slots:
 private:
     /// @brief The UI form associated with this widget.
     Ui::GameWidget* ui_;
+
+    /// @brief The graphics/animation scene this widget holds.
+    QGraphicsScene* scene_;
+
+    /// @brief The view of the animation scene.
+    QGraphicsView* view_;
 
     /// @brief The game currently being played.
     BlackjackGame* game_;
