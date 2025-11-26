@@ -3,7 +3,7 @@
 #include "card.h"
 #include <QTimer>
 
-BlackJackGame::BlackJackGame(QObject *parent) : QObject{parent}{
+BlackJackGame::BlackJackGame(QObject *parent) : QObject{parent} {
 
     rules_ = Ruleset();
     shoe_ = new Shoe(rules_.numDecks, 0.75f, this);
@@ -142,7 +142,7 @@ bool BlackJackGame::dealerShouldHit(QVector<Card>& hand) const {
     return false;
 }
 
-void BlackJackGame::dealerTurn(){
+void BlackJackGame::dealerTurn() {
     emit turnChanged(false, -1);
 
     // Start the recursive loop
@@ -154,7 +154,8 @@ void BlackJackGame::continueDealerTurn() {
         dealerHit();
         // Recursively call this function after a delay
         QTimer::singleShot(1500, this, &BlackJackGame::continueDealerTurn);
-    } else {
+    }
+    else {
         // Stop hitting and resolve game
         dealerStand();
     }
@@ -173,7 +174,7 @@ void BlackJackGame::dealerStand() {
     }
 }
 
-void BlackJackGame::playerHit(){
+void BlackJackGame::playerHit() {
     // Hit the active hand
     if (currentHandIndex_ >= playerHands_.size()) return; // safety check
     Card c = drawCardFromShoe();
@@ -199,7 +200,7 @@ void BlackJackGame::playerDoubleDown() {
     playerStand();
 }
 
-void BlackJackGame::playerStand(){
+void BlackJackGame::playerStand() {
     // Check if the player has other hands
     if (currentHandIndex_ < playerHands_.size() - 1) {
         currentHandIndex_++;
@@ -209,7 +210,7 @@ void BlackJackGame::playerStand(){
     }
 }
 
-void BlackJackGame::playerSplit(){
+void BlackJackGame::playerSplit() {
     // BET WILL BE DOUBLED
 
     // Ensure player can split
@@ -252,9 +253,9 @@ void BlackJackGame::startRound() {
     dealNewHand();
 }
 
-void BlackJackGame::dealNewHand(){
+void BlackJackGame::dealNewHand() {
     // Check shuffling status.
-    if(needsShuffling_){
+    if(needsShuffling_) {
         shoe_->shuffle();
         needsShuffling_ = false;
     }
@@ -266,7 +267,7 @@ void BlackJackGame::dealNewHand(){
     currentHandIndex_ = 0;
 
     // Deal initial cards
-    for(int i = 0; i < 2; i++){
+    for(int i = 0; i < 2; i++) {
         // Deal to player's hand.
         Card c = drawCardFromShoe();
         playerHands_[0].append(c);
@@ -285,12 +286,13 @@ void BlackJackGame::dealNewHand(){
     if (playerHasBJ || dealerHasBJ) {
         // Game is over immediately
         checkCardsAndRound(0, determineWinner(playerHands_[0], dealerHand_));
-    } else {
+    }
+    else {
         emit turnChanged(true, 0); // Start player turn
     }
 }
 
-void BlackJackGame::checkCardsAndRound(int handIndex, GameResult currentState){
+void BlackJackGame::checkCardsAndRound(int handIndex, GameResult currentState) {
     emit roundOver(handIndex, currentState);
 }
 
