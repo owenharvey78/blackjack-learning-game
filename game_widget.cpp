@@ -15,6 +15,21 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     currentBet_[25] = 0;
     currentBet_[50] = 0;
     currentBet_[100] = 0;
+
+    // Set up connections for chip buttons
+    connect(ui_->chip1Button, &QPushButton::clicked, this, [this]() { addChip(1); });
+    connect(ui_->chip5Button, &QPushButton::clicked, this, [this]() { addChip(5); });
+    connect(ui_->chip10Button, &QPushButton::clicked, this, [this]() { addChip(10); });
+    connect(ui_->chip25Button, &QPushButton::clicked, this, [this]() { addChip(25); });
+    connect(ui_->chip50Button, &QPushButton::clicked, this, [this]() { addChip(50); });
+    connect(ui_->chip100Button, &QPushButton::clicked, this, [this]() { addChip(100); });
+
+    connect(ui_->betDisplay1Button, &QPushButton::clicked, this, [this]() { removeChip(1); });
+    connect(ui_->betDisplay5Button, &QPushButton::clicked, this, [this]() { removeChip(5); });
+    connect(ui_->betDisplay10Button, &QPushButton::clicked, this, [this]() { removeChip(10); });
+    connect(ui_->betDisplay25Button, &QPushButton::clicked, this, [this]() { removeChip(25); });
+    connect(ui_->betDisplay50Button, &QPushButton::clicked, this, [this]() { removeChip(50); });
+    connect(ui_->betDisplay100Button, &QPushButton::clicked, this, [this]() { removeChip(100); });
 }
 
 GameWidget::~GameWidget()
@@ -34,8 +49,104 @@ void GameWidget::beginBetStage() {
 }
 
 void GameWidget::addChip(int value) {
+    // Update current bet
     currentBetTotal_ += value;
     currentBet_[value]++;
+
+    // Add button to view so players can remove chip from bet, and show number
+    // of chips of that value currently in bet
+    switch (value) {
+    case 1:
+        ui_->betDisplay1Button->setVisible(true);
+        ui_->betDisplay1Button->setText("$1 (" + QString::number(currentBet_[value]) + ")");
+        break;
+    case 5:
+        ui_->betDisplay5Button->setVisible(true);
+        ui_->betDisplay5Button->setText("$5 (" + QString::number(currentBet_[value]) + ")");
+        break;
+    case 10:
+        ui_->betDisplay10Button->setVisible(true);
+        ui_->betDisplay10Button->setText("$10 (" + QString::number(currentBet_[value]) + ")");
+        break;
+    case 25:
+        ui_->betDisplay25Button->setVisible(true);
+        ui_->betDisplay25Button->setText("$25 (" + QString::number(currentBet_[value]) + ")");
+        break;
+    case 50:
+        ui_->betDisplay50Button->setVisible(true);
+        ui_->betDisplay50Button->setText("$50 (" + QString::number(currentBet_[value]) + ")");
+        break;
+    case 100:
+        ui_->betDisplay100Button->setVisible(true);
+        ui_->betDisplay100Button->setText("$100 (" + QString::number(currentBet_[value]) + ")");
+        break;
+    default:
+        break;  // Should never run
+    }
+
+    // Show and update current bet label
+    ui_->betLabel->setVisible(true);
+    ui_->betLabel->setText("-$" + QString::number(value));
+
+    // Disable any necessary buttons
+    setChipButtonsEnabled();
+}
+
+void GameWidget::removeChip(int value) {
+    // Update current bet
+    currentBetTotal_ -= value;
+    int newChipCount = --currentBet_[value];
+
+    // Update label on remove button
+    switch (value) {
+    case 1:
+        if (newChipCount == 0)
+            ui_->betDisplay1Button->setVisible(false);
+        else
+            ui_->betDisplay1Button->setText("$1 (" + QString::number(newChipCount) + ")");
+        break;
+    case 5:
+        if (newChipCount == 0)
+            ui_->betDisplay5Button->setVisible(false);
+        else
+            ui_->betDisplay5Button->setText("$5 (" + QString::number(newChipCount) + ")");
+        break;
+    case 10:
+        if (newChipCount == 0)
+            ui_->betDisplay10Button->setVisible(false);
+        else
+            ui_->betDisplay10Button->setText("$10 (" + QString::number(newChipCount) + ")");
+        break;
+    case 25:
+        if (newChipCount == 0)
+            ui_->betDisplay25Button->setVisible(false);
+        else
+            ui_->betDisplay25Button->setText("$25 (" + QString::number(newChipCount) + ")");
+        break;
+    case 50:
+        if (newChipCount == 0)
+            ui_->betDisplay50Button->setVisible(false);
+        else
+            ui_->betDisplay50Button->setText("$50 (" + QString::number(newChipCount) + ")");
+        break;
+    case 100:
+        if (newChipCount == 0)
+            ui_->betDisplay100Button->setVisible(false);
+        else
+            ui_->betDisplay100Button->setText("$100 (" + QString::number(newChipCount) + ")");
+        break;
+    default:
+        break;  // Should never run
+    }
+
+    // Update current bet label and hide if necessary
+    if (currentBetTotal_ == 0)
+        ui_->betLabel->setVisible(false);
+    else
+        ui_->betLabel->setText("-$" + QString::number(currentBetTotal_));
+
+    // Enable any necessary chip buttons
+    setChipButtonsEnabled();
 }
 
 void GameWidget::setChipButtonsEnabled() {

@@ -34,6 +34,10 @@ private slots:
     /// current bet.
     void addChip(int value);
 
+    /// @brief During the betting stage, removes a chip of the given value from
+    /// the current bet.
+    void removeChip(int value);
+
 private:
     /// @brief The UI form associated with this widget.
     Ui::GameWidget* ui_;
