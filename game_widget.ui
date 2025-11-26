@@ -39,9 +39,6 @@
     <number>10</number>
    </property>
    <item>
-    <widget class="QGraphicsView" name="graphicsView"/>
-   </item>
-   <item>
     <layout class="QHBoxLayout" name="topHorizontalLayout">
      <item>
       <layout class="QVBoxLayout" name="labelsVerticalLayout">
@@ -76,17 +73,7 @@
     </layout>
    </item>
    <item>
-    <spacer name="middleVerticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+    <widget class="QGraphicsView" name="graphicsView"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="betDisplayLayout" stretch="0,0,0,0,0,0,0,0">

@@ -15,6 +15,10 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     ui_->graphicsView->setScene(scene_);
 
     scene_->addText("Test");
+    scene_->addText("Test2");
+    scene_->addText("Test3");
+    scene_->addText("Test4");
+    scene_->addText("Test5");
 
     view_ = ui_->graphicsView;
 
