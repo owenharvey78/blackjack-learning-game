@@ -6,13 +6,13 @@
 #include "shoe.h"
 #include <QObject>
 
-class BlackjackGame : public QObject {
+class BlackJackGame : public QObject {
     Q_OBJECT
 
 public:
 
     /// @brief
-    explicit BlackjackGame(QObject *parent = nullptr);
+    explicit BlackJackGame(QObject *parent = nullptr);
 
     /// @brief defines an enum for the different possible results of a hand.
     enum class GameResult {
@@ -30,9 +30,16 @@ public:
     /// @param rules The new ruleset.
     void setRuleset(Ruleset rules);
 
-public slots:
+private slots:
+
+    /// @brief Starts the game.
+    void gameStart();
+
     /// @brief Starts the next round/deal.
-    void dealNewHand();
+    void nextDeal();
+
+    /// @brief Deals cards to player and dealer.
+    void dealCards();
 
     /// @brief Player hits to draw another card.
     void playerHit();
@@ -43,20 +50,16 @@ public slots:
     /// @brief Player splits bet and hand.
     void playerSplit();
 
-    /// @brief Player doubles bet and recieves one more card and can no longer hit.
-    void playerDoubleDown();
+    /// @brief Emits that teh dealer's turn has started.
+    void dealerTurn();
 
     /// @brief Checks game state.
-    void checkCardsAndRound(int handIndex, GameResult currentState);
-
-    /// @brief Starts the round.
-    void startRound();
-
-private slots:
-    /// @brief Recursive helper for dealer's turn.
-    void continueDealerTurn();
+    void checkCardsAndRound(GameResult currentState);
 
 private:
+
+    // Game Logic Methods.
+
     /// @brief Dealer hits to draw another card.
     void dealerHit();
 
@@ -66,10 +69,7 @@ private:
     /// @brief Helper to draw card from shoe.
     Card drawCardFromShoe();
 
-    /// @brief Emits that the dealer's turn has started.
-    void dealerTurn();
-
-    // Static helper methods.
+    // Static game state methods.
 
     /// @brief gets the total value of the hand.
     /// Handles logic of ace being 1 or 11.
@@ -155,19 +155,7 @@ private:
     int currentHandIndex_;
 
 signals:
-    void startNewHand();
 
-    void shuffleCards();
-
-    void dealPlayerCard(int handIndex, Card card);
-
-    void dealDealerCard(Card card);
-
-    void roundOver(int handIndex, GameResult result);
-
-    void splitHand(int handCount);
-
-    void turnChanged(bool isPlayerTurn, int handIndex);
 };
 
 #endif // BLACKJACK_GAME_H
