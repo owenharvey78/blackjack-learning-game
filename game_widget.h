@@ -7,6 +7,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
+#include <QVariantAnimation>
 #include "blackjack_game.h"
 #include "card.h"
 #include "card_sprites.h"
@@ -35,9 +36,6 @@ public:
     /// to place their bet and start the round.
     void beginBetStage();
 
-    /// @brief Starts the game, enables displays.
-    void onStartButtonClicked();
-
 private slots:
 
     /// @brief During the betting stage, adds a chip of the given value to the
@@ -47,6 +45,12 @@ private slots:
     /// @brief During the betting stage, removes a chip of the given value from
     /// the current bet.
     void removeChip(int value);
+
+    /// @brief Starts the game, enables displays.
+    void onStartButtonClicked();
+
+    /// @brief Animates a player card being dealt.
+    void onPlayerCardDealt(Card card);
 
 private:
     /// @brief The UI form associated with this widget.
@@ -60,6 +64,9 @@ private:
 
     /// @brief The deck, unmoving (TBD).
     QGraphicsPixmapItem* deckItem_;
+
+    /// @brief The deck position.
+    QPoint deckPos_;
 
     /// @brief The game currently being played.
     BlackjackGame* game_;

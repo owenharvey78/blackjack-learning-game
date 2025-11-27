@@ -10,11 +10,14 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     ui_->setupUi(this);
 
     scene_ = new QGraphicsScene(this);
+    scene_->setSceneRect(0, 0, 800, 600);
     ui_->graphicsView->setScene(scene_);
+
+    deckPos_ = QPoint(600, 80);
 
     // Place "deck"
     deckItem_ = scene_->addPixmap(cardSprites_.back());
-    deckItem_->setPos(QPointF(600, 80));
+    deckItem_->setPos(deckPos_);
 
     view_ = ui_->graphicsView;
 
@@ -43,6 +46,9 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
 
     // Starting game.
     connect(ui_->startRoundButton, &QPushButton::clicked, this, &GameWidget::onStartButtonClicked);
+
+    // Card deals.
+    connect(game, &BlackjackGame::playerCardDealt, this, &GameWidget::onPlayerCardDealt);
 }
 
 GameWidget::~GameWidget()
@@ -173,7 +179,30 @@ void GameWidget::setChipButtonsEnabled() {
 }
 
 void GameWidget::onStartButtonClicked() {
+    ui_->startRoundButton->setVisible(false);
     game_->gameStart();
-    // timer_.singleShot(5000, this, [this](){
-    // });
+}
+
+void GameWidget::onPlayerCardDealt(Card card){
+    QPixmap backPix = cardSprites_.back();
+    auto* item = scene_->addPixmap(backPix);
+    item->setPos(deckPos_);
+
+    // Change based on index here. (To be implemented, this is just to test so far).
+    //                     |
+    //                     V
+    QPoint targetPos(100 + 0 * 30, 250);
+
+    QVariantAnimation* dealPlayerCard = new QVariantAnimation(this);
+    dealPlayerCard->setDuration(300);
+    dealPlayerCard->setStartValue(deckPos_);
+    dealPlayerCard->setEndValue(targetPos);
+
+    connect(dealPlayerCard, &QVariantAnimation::valueChanged, this, [item](const QVariant& v) {
+        item->setPos(v.toPointF());
+    });
+
+    // So far this has just moved the card, A card flip animation to make it face up is what I am planning.
+
+    dealPlayerCard->start(QAbstractAnimation::DeleteWhenStopped);
 }

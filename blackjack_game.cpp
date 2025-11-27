@@ -190,14 +190,12 @@ void BlackjackGame::dealCards() {
     for(int i = 0; i < 2; i++){
         // Deal to player's hand.
         Card drawnCard = drawCardFromShoe();
-        timer_.singleShot(2000, this, [this, &drawnCard](){
-            playerHands_[0].append(drawnCard);
-            emit playerCardDealt(drawnCard);
-        });
+        playerHands_[0].append(drawnCard);
+        emit playerCardDealt(drawnCard);
 
         // Deal to dealer.
         drawnCard = drawCardFromShoe();
-        timer_.singleShot(2000, this, [this, &drawnCard](){
+        timer_.singleShot(5000, this, [this, &drawnCard](){
             dealerHand_.append(drawnCard);
             emit dealerCardDealt(drawnCard);
         });
