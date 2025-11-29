@@ -8,7 +8,7 @@ LearnWidget::LearnWidget(QWidget *parent)
     ui->setupUi(this);
 }
 
-learn_widget::~learn_widget()
+LearnWidget::~LearnWidget()
 {
     delete ui;
 }
