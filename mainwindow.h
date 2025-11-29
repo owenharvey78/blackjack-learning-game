@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QStackedWidget>
+#include "learn_widget.h"
 
 class GameWidget;
 
@@ -23,6 +24,8 @@ public:
 private slots:
     void onPracticeButtonClicked();
 
+    void onLearnButtonClicked();
+
 private:
     /// @brief The UI form object for this window.
     Ui::MainWindow* ui_;
@@ -33,5 +36,8 @@ private:
 
     /// @brief The widget for the main menu.
     QWidget* menuWidget_;
+
+    /// @brief The widget for the learn window.
+    learn_widget* learnWidget_;
 };
 #endif // MAINWINDOW_H
