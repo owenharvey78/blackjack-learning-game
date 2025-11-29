@@ -38,6 +38,6 @@ private:
     QWidget* menuWidget_;
 
     /// @brief The widget for the learn window.
-    learn_widget* learnWidget_;
+    LearnWidget* learnWidget_;
 };
 #endif // MAINWINDOW_H
