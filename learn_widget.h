@@ -22,7 +22,7 @@ private slots:
     void onPrevButtonClicked();
 
 private:
-    Ui::learn_widget *ui;
+    Ui::learn_widget *ui_;
 
     /// @brief stores the instruction strings in a String List
     QStringList instructionList_;   // QStringList provides more functionality to stings
@@ -31,7 +31,10 @@ private:
     QStringList headerList_;
 
     /// @brief keeps track of where we are in the instructions/header
-    int stepCounter_;
+    int currentInstruction_;
+
+    /// @brief sets up the learning page and enables and disables buttons as needed
+    void updatePage();
 };
 
 #endif // LEARN_WIDGET_H
