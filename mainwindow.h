@@ -2,6 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QStackedWidget>
+#include "learn_widget.h"
+
+class GameWidget;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,7 +21,23 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void onPracticeButtonClicked();
+
+    void onLearnButtonClicked();
+
 private:
-    Ui::MainWindow *ui;
+    /// @brief The UI form object for this window.
+    Ui::MainWindow* ui_;
+
+    /// @brief A QStackedWidget used for ensuring the game takes complete control
+    /// over the application when it starts.
+    QStackedWidget* stackedWidget_;
+
+    /// @brief The widget for the main menu.
+    QWidget* menuWidget_;
+
+    /// @brief The widget for the learn window.
+    learn_widget* learnWidget_;
 };
 #endif // MAINWINDOW_H
