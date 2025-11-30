@@ -9,7 +9,6 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    game_widget.cpp \
     blackjack_game.cpp \
     learn_widget.cpp \
     main.cpp \
@@ -18,7 +17,6 @@ SOURCES += \
     shoe.cpp
 
 HEADERS += \
-    game_widget.h \
     blackjack_game.h \
     learn_widget.h \
     mainwindow.h \
@@ -27,7 +25,6 @@ HEADERS += \
     shoe.h
 
 FORMS += \
-    game_widget.ui \
     learn_widget.ui \
     mainwindow.ui
 

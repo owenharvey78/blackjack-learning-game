@@ -31,7 +31,7 @@ LearnWidget::LearnWidget(QWidget *parent)
                         "If your first two cards total 21, that is Blackjack!\n"
                         "Blackjack pays 3:2 (1.5x of what you bid)",
 
-                        "If the dealers first card is an Ace, The dealer checks for Blackjack before you make a choice"
+                        "If the dealers first card is an Ace, The dealer checks for Blackjack before you make a choice\n"
                         "This prevents you from running into a guarenteed loss",
 
                         "If you Hit, you get another card.\n"

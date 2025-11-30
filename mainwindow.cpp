@@ -1,7 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "game_widget.h"
-#include "blackjack_game.h"
 #include "learn_widget.h"
 #include "ui_mainwindow.h"
 
@@ -39,22 +37,8 @@ MainWindow::~MainWindow()
     delete ui_;
 }
 
-void MainWindow::onPracticeButtonClicked()
-{
-    // Create a new BlackjackGame
-    BlackjackGame* game = new BlackjackGame(this);
+void MainWindow::onPracticeButtonClicked(){
 
-    // Create a new GameWidget with the game
-    GameWidget* gameWidget = new GameWidget(game, this);
-
-    // Add the game widget to the stacked widget
-    stackedWidget_->addWidget(gameWidget);
-
-    // Switch to the game widget
-    stackedWidget_->setCurrentWidget(gameWidget);
-
-    // Start the betting stage
-    gameWidget->beginBetStage();
 }
 
 void MainWindow::onLearnButtonClicked(){
