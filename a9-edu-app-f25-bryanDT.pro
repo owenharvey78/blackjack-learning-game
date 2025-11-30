@@ -11,7 +11,6 @@ CONFIG += c++17
 SOURCES += \
     game_widget.cpp \
     blackjack_game.cpp \
-    learn_widget.cpp \
     main.cpp \
     mainwindow.cpp \
     card.cpp \
@@ -20,7 +19,6 @@ SOURCES += \
 HEADERS += \
     game_widget.h \
     blackjack_game.h \
-    learn_widget.h \
     mainwindow.h \
     ruleset.h \
     card.h \
@@ -28,7 +26,6 @@ HEADERS += \
 
 FORMS += \
     game_widget.ui \
-    learn_widget.ui \
     mainwindow.ui
 
 # Default rules for deployment.

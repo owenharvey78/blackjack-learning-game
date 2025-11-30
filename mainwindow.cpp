@@ -19,17 +19,11 @@ MainWindow::MainWindow(QWidget *parent)
     // Add the menu widget to the stacked widget
     stackedWidget_->addWidget(menuWidget_);
 
-    // Add the learn widget to the stacked widget
-    stackedWidget_->addWidget(learnWidget_);
-
     // Set the stacked widget as the central widget
     setCentralWidget(stackedWidget_);
 
     // Connect the practice button to the slot
     connect(ui_->practiceButton, &QPushButton::clicked, this, &MainWindow::onPracticeButtonClicked);
-
-    // Connect the learn button to the slot
-    connect(ui_->learnButton, &QPushButton::clicked, this, &MainWindow::onLearnButtonClicked);
 }
 
 MainWindow::~MainWindow()
@@ -53,8 +47,4 @@ void MainWindow::onPracticeButtonClicked()
 
     // Start the betting stage
     gameWidget->beginBetStage();
-}
-
-void MainWindow::onLearnButtonClicked(){
-    stackedWidget_->setCurrentWidget(learnWidget_);
 }
