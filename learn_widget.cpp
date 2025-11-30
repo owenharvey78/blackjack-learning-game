@@ -3,9 +3,9 @@
 
 LearnWidget::LearnWidget(QWidget *parent)
     : QWidget(parent)
-    , ui_(new Ui::learn_widget)
+    , ui(new Ui::learn_widget)
 {
-    ui_->setupUi(this);
+    ui->setupUi(this);
 
     headerList_ = {"Welcome to Blackjack!",
                    "Basic Goal",
@@ -55,38 +55,17 @@ LearnWidget::LearnWidget(QWidget *parent)
                         "The no one busts the total closer to 21 wins.\n"
                         "If there is a tie you keep your bet."
     };
-
-    updatePage();
-
-    connect(ui_->nextButton, &QPushButton::clicked, this, &LearnWidget::onNextButtonClicked);
-
-    connect(ui_->previousButton, &QPushButton::clicked, this, &LearnWidget::onPrevButtonClicked);
-}
-
-void LearnWidget::updatePage(){
-    ui_->headerLabel->setText(headerList_[currentInstruction_]);
-    ui_->instructionLabel->setText(instructionList_[currentInstruction_]);
-
-    // diable previous button if we are on the first instruction
-    ui_->previousButton->setDisabled(currentInstruction_ == 0);
-
-    // diable next button if we are on the last page
-    ui_->nextButton->setDisabled(currentInstruction_ == headerList_.size() - 1);
 }
 
 void LearnWidget::onNextButtonClicked(){
-    if(currentInstruction_ != headerList_.size())
-        currentInstruction_++;
-    updatePage();
+
 }
 
 void LearnWidget::onPrevButtonClicked(){
-    if(currentInstruction_ != 0)
-        currentInstruction_--;
-    updatePage();
+
 }
 
 LearnWidget::~LearnWidget()
 {
-    delete ui_;
+    delete ui;
 }
