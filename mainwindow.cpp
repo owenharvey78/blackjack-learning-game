@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include "game_widget.h"
 #include "blackjack_game.h"
-#include "learn_widget.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -19,6 +18,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Add the menu widget to the stacked widget
     stackedWidget_->addWidget(menuWidget_);
+
+    // Add the learn widget to the stacked widget
+    stackedWidget_->addWidget(learnWidget_);
 
     // Set the stacked widget as the central widget
     setCentralWidget(stackedWidget_);
@@ -54,4 +56,5 @@ void MainWindow::onPracticeButtonClicked()
 }
 
 void MainWindow::onLearnButtonClicked(){
+    stackedWidget_->setCurrentWidget(learnWidget_);
 }
