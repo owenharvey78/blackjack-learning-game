@@ -4,7 +4,7 @@
 #include <QWidget>
 
 namespace Ui {
-class learn_widget;
+class LearnWidget;
 }
 
 class LearnWidget : public QWidget
@@ -16,7 +16,7 @@ public:
     ~LearnWidget();
 
 private:
-    Ui::learn_widget *ui;
+    Ui::LearnWidget *ui;
 };
 
 #endif // LEARN_WIDGET_H
