@@ -30,6 +30,9 @@ private:
     /// @brief stores the header strings in a String List
     QStringList headerList_;
 
+    /// @brief String List to hold the path to backgrounds.
+    QStringList backgroundList_;
+
     /// @brief keeps track of where we are in the instructions/header
     int currentInstruction_;
 

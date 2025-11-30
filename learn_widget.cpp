@@ -56,6 +56,8 @@ LearnWidget::LearnWidget(QWidget *parent)
                         "If there is a tie you keep your bet."
     };
 
+    backgroundList_ = {};
+
     updatePage();
 
     connect(ui_->nextButton, &QPushButton::clicked, this, &LearnWidget::onNextButtonClicked);
