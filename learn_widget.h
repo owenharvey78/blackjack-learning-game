@@ -2,7 +2,6 @@
 #define LEARN_WIDGET_H
 
 #include <QWidget>
-#include <QStringList>
 
 namespace Ui {
 class learn_widget;
@@ -16,22 +15,8 @@ public:
     explicit LearnWidget(QWidget *parent = nullptr);
     ~LearnWidget();
 
-private slots:
-
-    void onNextButtonClicked();
-    void onPrevButtonClicked();
-
 private:
     Ui::learn_widget *ui;
-
-    /// @brief stores the instruction strings in a String List
-    QStringList instructionList_;   // QStringList provides more functionality to stings
-
-    /// @brief stores the header strings in a String List
-    QStringList headerList_;
-
-    /// @brief keeps track of where we are in the instructions/header
-    int stepCounter_;
 };
 
 #endif // LEARN_WIDGET_H
