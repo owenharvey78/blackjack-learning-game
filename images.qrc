@@ -1,13 +1,5 @@
 <RCC>
     <qresource prefix="/images">
         <file>BJbackground.png</file>
-        <file>GreenBackground.png</file>
-        <file>BasicGoalBackground.png</file>
-        <file>CardValue.png</file>
-        <file>HittingAndStanding.png</file>
-        <file>DoubleDown.png</file>
-        <file>Splitting.png</file>
-        <file>Surrender.png</file>
-        <file>EndofHand.png</file>
     </qresource>
 </RCC>

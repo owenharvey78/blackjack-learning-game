@@ -13,39 +13,13 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="6" column="2">
-    <widget class="QPushButton" name="nextButton">
-     <property name="styleSheet">
-      <string notr="true">QPushButton{
-	background-color: qlineargradient(
-		spread:pad,
-		x1:0, y1:0, x2:0, y2:1,
-		stop:0 #2b1f0e
-		stop:1 #8c6c26
-	);
-
-	color: white;
-	font-weight: bold;
-	border: 3px solid #d4af37;
-	border-radius: 15px;
-	padding: 10px;
+  <property name="styleSheet">
+   <string notr="true">#learn_widget { 
+image: url(:/images/GreenBackground.png)
 }
-
-QPushButton:hover{
-	background-color: qlineargradient(
-		spread:pad,
-		x1:0, y1:0, x2:0, y2:1,
-		stop:0 #3b2f1c,
-		stop:1 #ad8c32
-	);
-}</string>
-     </property>
-     <property name="text">
-      <string>next</string>
-     </property>
-    </widget>
-   </item>
+</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop">
     <widget class="QLabel" name="headerLabel">
      <property name="styleSheet">
@@ -107,6 +81,38 @@ QPushButton:hover{
      </property>
      <property name="text">
       <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="QPushButton" name="nextButton">
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #2b1f0e
+		stop:1 #8c6c26
+	);
+
+	color: white;
+	font-weight: bold;
+	border: 3px solid #d4af37;
+	border-radius: 15px;
+	padding: 10px;
+}
+
+QPushButton:hover{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #3b2f1c,
+		stop:1 #ad8c32
+	);
+}</string>
+     </property>
+     <property name="text">
+      <string>next</string>
      </property>
     </widget>
    </item>

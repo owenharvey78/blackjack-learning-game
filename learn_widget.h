@@ -30,14 +30,12 @@ private:
     /// @brief stores the header strings in a String List
     QStringList headerList_;
 
-    /// @brief String List to hold the path to backgrounds.
-    QStringList backgroundList_;
-
     /// @brief keeps track of where we are in the instructions/header
     int currentInstruction_;
 
     /// @brief sets up the learning page and enables and disables buttons as needed
     void updatePage();
+
 };
 
 #endif // LEARN_WIDGET_H
