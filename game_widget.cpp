@@ -3,10 +3,8 @@
 
 GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     : QWidget(parent), ui_(new Ui::GameWidget), game_(game),
-    cardSprites_(":/images/cards.png"),
-    balance_(1000), playerHandIndex_(0),
-    currentBetTotal_(0)
-{
+    cardSprites_(":/images/cards.png"), balance_(1000), playerHandIndex_(0),
+    dealerHandIndex_(0), currentBetTotal_(0) {
     ui_->setupUi(this);
 
     scene_ = new QGraphicsScene(this);
@@ -49,6 +47,7 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
 
     // Card deals.
     connect(game, &BlackjackGame::playerCardDealt, this, &GameWidget::onPlayerCardDealt);
+    connect(game, &BlackjackGame::dealerCardDealt, this, &GameWidget::onDealerCardDealt);
 }
 
 GameWidget::~GameWidget()
@@ -179,7 +178,7 @@ void GameWidget::setChipButtonsEnabled() {
 }
 
 void GameWidget::onStartButtonClicked() {
-    ui_->startRoundButton->setVisible(false);
+    // ui_->startRoundButton->setVisible(false);
     game_->gameStart();
 }
 
@@ -188,11 +187,11 @@ void GameWidget::onPlayerCardDealt(Card card){
     auto* item = scene_->addPixmap(backPix);
     item->setPos(deckPos_);
 
-    // Changes based on "index" here. Not exactly a true index so I'll probably change the name at some point.
+    // Changes based on "index" here.
     //                            |
     //                            V
-    QPoint handPosition(100 + playerHandIndex_ * 30, 400);
-    playerHandIndex_ += 3;
+    QPoint handPosition(100 + playerHandIndex_ * 80, 400);
+    playerHandIndex_++;
     QPoint belowPosition(375, 60);
 
     QVariantAnimation* drawPlayerCard = new QVariantAnimation(this);
@@ -218,4 +217,41 @@ void GameWidget::onPlayerCardDealt(Card card){
     });
 
     drawPlayerCard->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void GameWidget::onDealerCardDealt(Card card){
+    QPixmap backPix = cardSprites_.back();
+    auto* item = scene_->addPixmap(backPix);
+    item->setPos(deckPos_);
+
+    // Changes based on "index" here.
+    //                            |
+    //                            V
+    QPoint handPosition(100 + dealerHandIndex_ * 80, 100);
+    dealerHandIndex_++;
+    QPoint belowPosition(375, 60);
+
+    QVariantAnimation* drawDealerCard = new QVariantAnimation(this);
+    drawDealerCard->setDuration(150);
+    drawDealerCard->setStartValue(deckPos_);
+    drawDealerCard->setEndValue(belowPosition);
+
+    QVariantAnimation* dealDealerCard = new QVariantAnimation(this);
+    dealDealerCard->setDuration(300);
+    dealDealerCard->setStartValue(belowPosition);
+    dealDealerCard->setEndValue(handPosition);
+
+    connect(drawDealerCard, &QVariantAnimation::valueChanged, this, [item](const QVariant& v) {
+        item->setPos(v.toPointF());
+    });
+
+    connect(dealDealerCard, &QVariantAnimation::valueChanged, this, [item](const QVariant& v) {
+        item->setPos(v.toPointF());
+    });
+
+    connect(drawDealerCard, &QVariantAnimation::finished, this, [dealDealerCard] {
+        dealDealerCard->start(QAbstractAnimation::DeleteWhenStopped);
+    });
+
+    drawDealerCard->start(QAbstractAnimation::DeleteWhenStopped);
 }

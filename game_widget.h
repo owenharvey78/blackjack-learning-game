@@ -52,6 +52,9 @@ private slots:
     /// @brief Animates a player card being dealt.
     void onPlayerCardDealt(Card card);
 
+    /// @brief Animates a dealer card being dealt.
+    void onDealerCardDealt(Card card);
+
 private:
     /// @brief The UI form associated with this widget.
     Ui::GameWidget* ui_;
@@ -87,8 +90,11 @@ private:
     /// @brief The cards the player currently has.
     QVector<QVector<Card>> playerHands_;
 
-    /// @brief Keeps track of the cards drawn for animation.
+    /// @brief Keeps track of the cards drawn for animation. (Player)
     int playerHandIndex_;
+
+    /// @brief Keeps track of the cards drawn for animation. (Dealer)
+    int dealerHandIndex_;
 
     /// @brief During the betting stage, represents the player's current bet.
     /// The keys represent the chip values (1, 5, 10, 25, 50, and 100). The
