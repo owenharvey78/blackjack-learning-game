@@ -291,7 +291,7 @@ void GameWidget::flipCard(QGraphicsPixmapItem* item, const Card& card){
         item->setScale(s);
     });
 
-    // Once shrunk, this swaps pixmap to correct card face and grow again in reverse.
+    // Once shrunk, this swaps pixmap to correct card face and grow again.
     connect(shrink, &QVariantAnimation::finished, this, [this, item, card]() {
         item->setPixmap(cardSprites_.faceFor(card));
 
