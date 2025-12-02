@@ -184,12 +184,21 @@ void GameWidget::onStartButtonClicked() {
     ui_->startRoundButton->setVisible(false);
     ui_->hitButton->setVisible(true);
     ui_->standButton->setVisible(true);
+
+    // remove betting buttons
+    ui_->chip1Button->setVisible(false);
+    ui_->chip5Button->setVisible(false);
+    ui_->chip10Button->setVisible(false);
+    ui_->chip25Button->setVisible(false);
+    ui_->chip50Button->setVisible(false);
+    ui_->chip100Button->setVisible(false);
+
     game_->gameStart();
 }
 
 void GameWidget::onPlayerCardDealt(Card card){
     QPixmap backPix = cardSprites_.back();
-    auto* item = scene_->addPixmap(backPix);
+    QGraphicsPixmapItem* item = scene_->addPixmap(backPix);
     item->setPos(deckPos_);
 
     // Changes based on "index" here.
@@ -230,7 +239,7 @@ void GameWidget::onPlayerCardDealt(Card card){
 
 void GameWidget::onDealerCardDealt(Card card){
     QPixmap backPix = cardSprites_.back();
-    auto* item = scene_->addPixmap(backPix);
+    QGraphicsPixmapItem* item = scene_->addPixmap(backPix);
     item->setPos(deckPos_);
 
     // Changes based on "index" here.
@@ -281,7 +290,7 @@ void GameWidget::flipCard(QGraphicsPixmapItem* item, const Card& card){
     item->setTransformOriginPoint(item->boundingRect().center());
 
     // First this animates shrinking x axis.
-    auto* shrink = new QVariantAnimation(this);
+    QVariantAnimation* shrink = new QVariantAnimation(this);
     shrink->setDuration(150);
     shrink->setStartValue(1.0);
     shrink->setEndValue(0.0);
@@ -295,7 +304,7 @@ void GameWidget::flipCard(QGraphicsPixmapItem* item, const Card& card){
     connect(shrink, &QVariantAnimation::finished, this, [this, item, card]() {
         item->setPixmap(cardSprites_.faceFor(card));
 
-        auto* grow = new QVariantAnimation(this);
+        QVariantAnimation* grow = new QVariantAnimation(this);
         grow->setDuration(150);
         grow->setStartValue(0.0);
         grow->setEndValue(1.0);
@@ -305,7 +314,7 @@ void GameWidget::flipCard(QGraphicsPixmapItem* item, const Card& card){
             item->setScale(s);
         });
 
-                grow->start(QAbstractAnimation::DeleteWhenStopped);
+        grow->start(QAbstractAnimation::DeleteWhenStopped);
     });
 
     shrink->start(QAbstractAnimation::DeleteWhenStopped);
