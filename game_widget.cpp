@@ -184,6 +184,15 @@ void GameWidget::onStartButtonClicked() {
     ui_->startRoundButton->setVisible(false);
     ui_->hitButton->setVisible(true);
     ui_->standButton->setVisible(true);
+
+    // remove betting buttons
+    ui_->chip1Button->setVisible(false);
+    ui_->chip5Button->setVisible(false);
+    ui_->chip10Button->setVisible(false);
+    ui_->chip25Button->setVisible(false);
+    ui_->chip50Button->setVisible(false);
+    ui_->chip100Button->setVisible(false);
+
     game_->gameStart();
 }
 

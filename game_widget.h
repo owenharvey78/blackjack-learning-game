@@ -12,8 +12,6 @@
 #include "card.h"
 #include "card_sprites.h"
 
-
-
 namespace Ui {
 class GameWidget;
 }
