@@ -221,6 +221,10 @@ void GameWidget::onPlayerCardDealt(Card card){
         dealPlayerCard->start(QAbstractAnimation::DeleteWhenStopped);
     });
 
+    connect(dealPlayerCard, &QVariantAnimation::finished, this, [this, item, card]() {
+        flipCard(item, card);
+    });
+
     drawPlayerCard->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
@@ -258,6 +262,51 @@ void GameWidget::onDealerCardDealt(Card card){
         dealDealerCard->start(QAbstractAnimation::DeleteWhenStopped);
     });
 
+    connect(dealDealerCard, &QVariantAnimation::finished, this, [this, item, card]() {
+        if(dealerHandIndex_ < 2){
+            flipCard(item, card);
+        }
+    });
+
     drawDealerCard->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
+void GameWidget::flipCard(QGraphicsPixmapItem* item, const Card& card){
+    // Since everything is 2D there is no actual flipping, so instead I did a cool shrinking thing I saw online
+    // and wanted to replicate.
+
+    // This was kinda hard to do and follow so I'll leave comments so that the group can understand easier.
+
+    // This flips around the vertical center.
+    item->setTransformOriginPoint(item->boundingRect().center());
+
+    // First this animates shrinking x axis.
+    auto* shrink = new QVariantAnimation(this);
+    shrink->setDuration(150);
+    shrink->setStartValue(1.0);
+    shrink->setEndValue(0.0);
+
+    connect(shrink, &QVariantAnimation::valueChanged, this, [item](const QVariant& v) {
+        const qreal s = v.toReal();
+        item->setScale(s);
+    });
+
+    // Once shrunk, this swaps pixmap to correct card face and grow again in reverse.
+    connect(shrink, &QVariantAnimation::finished, this, [this, item, card]() {
+        item->setPixmap(cardSprites_.faceFor(card));
+
+        auto* grow = new QVariantAnimation(this);
+        grow->setDuration(150);
+        grow->setStartValue(0.0);
+        grow->setEndValue(1.0);
+
+        connect(grow, &QVariantAnimation::valueChanged, this, [item](const QVariant& v) {
+            const qreal s = v.toReal();
+            item->setScale(s);
+        });
+
+                grow->start(QAbstractAnimation::DeleteWhenStopped);
+    });
+
+    shrink->start(QAbstractAnimation::DeleteWhenStopped);
+}
