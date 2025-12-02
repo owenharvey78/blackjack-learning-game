@@ -59,6 +59,9 @@ GameWidget::~GameWidget()
 }
 
 void GameWidget::beginBetStage() {
+    // Show betting buttons
+    ui_->startRoundButton->setVisible(true);
+    ui_->startRoundButton->setEnabled(false);
     ui_->chip1Button->setVisible(true);
     ui_->chip5Button->setVisible(true);
     ui_->chip10Button->setVisible(true);
@@ -66,13 +69,21 @@ void GameWidget::beginBetStage() {
     ui_->chip50Button->setVisible(true);
     ui_->chip100Button->setVisible(true);
     setChipButtonsEnabled();
-    // TODO: hide other buttons if necessary
+
+    // Hide gameplay buttons
+    ui_->hitButton->setVisible(false);
+    ui_->standButton->setVisible(false);
+    ui_->doubleButton->setVisible(false);
+    ui_->splitButton->setVisible(false);
 }
 
 void GameWidget::addChip(int value) {
     // Update current bet
     currentBetTotal_ += value;
     currentBet_[value]++;
+
+    // Enable "Start Round" button
+    ui_->startRoundButton->setEnabled(true);
 
     // Add button to view so players can remove chip from bet, and show number
     // of chips of that value currently in bet
@@ -160,9 +171,11 @@ void GameWidget::removeChip(int value) {
         break;  // Should never run
     }
 
-    // Update current bet label and hide if necessary
-    if (currentBetTotal_ == 0)
+    // Update current bet label and hide if necessary; disable start button if necessary
+    if (currentBetTotal_ == 0) {
         ui_->betLabel->setVisible(false);
+        ui_->startRoundButton->setEnabled(false);
+    }
     else
         ui_->betLabel->setText("-$" + QString::number(currentBetTotal_));
 
@@ -184,6 +197,8 @@ void GameWidget::onStartButtonClicked() {
     ui_->startRoundButton->setVisible(false);
     ui_->hitButton->setVisible(true);
     ui_->standButton->setVisible(true);
+    ui_->doubleButton->setVisible(true);
+    ui_->splitButton->setVisible(true);
 
     // remove betting buttons
     ui_->chip1Button->setVisible(false);
