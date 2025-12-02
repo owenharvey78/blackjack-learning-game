@@ -21,6 +21,9 @@ private slots:
     void onNextButtonClicked();
     void onPrevButtonClicked();
 
+signals:
+    void returnToMainMenu();
+
 private:
     Ui::learn_widget *ui_;
 

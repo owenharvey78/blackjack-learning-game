@@ -30,11 +30,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Connect the learn button to the slot
     connect(ui_->learnButton, &QPushButton::clicked, this, &MainWindow::onLearnButtonClicked);
+
+    connect(learnWidget_, &LearnWidget::returnToMainMenu, this, &MainWindow::onReturnToMainMenuClicked);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui_;
+}
+
+void MainWindow::onReturnToMainMenuClicked(){
+    stackedWidget_->setCurrentIndex(0);
 }
 
 void MainWindow::onPracticeButtonClicked(){

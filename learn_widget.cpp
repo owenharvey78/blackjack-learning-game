@@ -61,6 +61,8 @@ LearnWidget::LearnWidget(QWidget *parent)
     connect(ui_->nextButton, &QPushButton::clicked, this, &LearnWidget::onNextButtonClicked);
 
     connect(ui_->previousButton, &QPushButton::clicked, this, &LearnWidget::onPrevButtonClicked);
+
+    connect(ui_->mainMenuButton, &QPushButton::clicked, this, &LearnWidget::returnToMainMenu);
 }
 
 void LearnWidget::updatePage(){

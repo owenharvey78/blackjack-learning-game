@@ -23,7 +23,7 @@ public:
 
 private slots:
     void onPracticeButtonClicked();
-
+    void onReturnToMainMenuClicked();
     void onLearnButtonClicked();
 
 private:
