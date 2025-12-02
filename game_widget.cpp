@@ -188,11 +188,10 @@ void GameWidget::onPlayerCardDealt(Card card){
     auto* item = scene_->addPixmap(backPix);
     item->setPos(deckPos_);
 
-
     // Changes based on "index" here. Not exactly a true index so I'll probably change the name at some point.
-    //                     |
-    //                     V
-    QPoint handPosition(100 + playerHandIndex_ * 30, 250);
+    //                            |
+    //                            V
+    QPoint handPosition(100 + playerHandIndex_ * 30, 400);
     playerHandIndex_ += 3;
     QPoint belowPosition(375, 60);
 
@@ -219,6 +218,4 @@ void GameWidget::onPlayerCardDealt(Card card){
     });
 
     drawPlayerCard->start(QAbstractAnimation::DeleteWhenStopped);
-
-    // So far this has just moved the card, A card flip animation to make it face up is what I am planning.
 }
