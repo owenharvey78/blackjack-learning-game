@@ -87,6 +87,9 @@ private:
     /// @brief The cards the player currently has.
     QVector<QVector<Card>> playerHands_;
 
+    /// @brief Keeps track of the cards drawn for animation.
+    int playerHandIndex_;
+
     /// @brief During the betting stage, represents the player's current bet.
     /// The keys represent the chip values (1, 5, 10, 25, 50, and 100). The
     /// values represent the number of chips the player has bet for each of

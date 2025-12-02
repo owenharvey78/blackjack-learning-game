@@ -4,7 +4,7 @@
 GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     : QWidget(parent), ui_(new Ui::GameWidget), game_(game),
     cardSprites_(":/images/cards.png"),
-    balance_(1000),
+    balance_(1000), playerHandIndex_(0),
     currentBetTotal_(0)
 {
     ui_->setupUi(this);
@@ -191,7 +191,8 @@ void GameWidget::onPlayerCardDealt(Card card){
     // Change based on index here. (To be implemented, this is just to test so far).
     //                     |
     //                     V
-    QPoint targetPos(100 + 0 * 30, 250);
+    QPoint targetPos(100 + playerHandIndex_ * 30, 250);
+    playerHandIndex_ += 3;
 
     QVariantAnimation* dealPlayerCard = new QVariantAnimation(this);
     dealPlayerCard->setDuration(300);

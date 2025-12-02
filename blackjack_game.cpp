@@ -187,20 +187,26 @@ void BlackjackGame::playerSplit() {
 }
 
 void BlackjackGame::dealCards() {
-    for(int i = 0; i < 2; i++){
-        // Deal to player's hand.
-        Card drawnCard = drawCardFromShoe();
-        playerHands_[0].append(drawnCard);
-        emit playerCardDealt(drawnCard);
-
-        // Deal to dealer.
-        drawnCard = drawCardFromShoe();
-        timer_.singleShot(5000, this, [this, &drawnCard](){
-            dealerHand_.append(drawnCard);
-            emit dealerCardDealt(drawnCard);
+    int delay = 0;
+    const int step = 500;  // ms between cards for giving enough time for animation.
+    for (int i = 0; i < 2; ++i) {
+        QTimer::singleShot(delay, this, [this]() {
+            Card c = drawCardFromShoe();
+            playerHands_[0].append(c);
+            emit playerCardDealt(c);
         });
+
+        delay += step;
+
+        QTimer::singleShot(delay, this, [this]() {
+            Card c = drawCardFromShoe();
+            dealerHand_.append(c);
+            emit dealerCardDealt(c);
+        });
+        delay += step;
     }
 }
+
 
 // Game Progression
 
