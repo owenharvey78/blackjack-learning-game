@@ -50,9 +50,11 @@ private slots:
     void onStartButtonClicked();
 
     /// @brief Animates a player card being dealt.
+    /// @param card The card to deal.
     void onPlayerCardDealt(Card card);
 
     /// @brief Animates a dealer card being dealt.
+    /// @param card The card to deal.
     void onDealerCardDealt(Card card);
 
 private:
@@ -110,6 +112,10 @@ private:
     /// player's balance and current bet to prevent the player from betting more
     /// than they have.
     void setChipButtonsEnabled();
+
+    /// @brief Helper for flipping a card.
+    /// @param card The card to flip.
+    void flipCard(QGraphicsPixmapItem* item, const Card& card);
 };
 
 #endif // GAME_WIDGET_H

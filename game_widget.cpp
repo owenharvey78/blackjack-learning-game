@@ -260,3 +260,4 @@ void GameWidget::onDealerCardDealt(Card card){
 
     drawDealerCard->start(QAbstractAnimation::DeleteWhenStopped);
 }
+
