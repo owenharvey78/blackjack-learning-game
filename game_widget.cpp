@@ -7,6 +7,9 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     dealerHandIndex_(0), currentBetTotal_(0) {
     ui_->setupUi(this);
 
+    ui_->hitButton->setVisible(false);
+    ui_->standButton->setVisible(false);
+
     scene_ = new QGraphicsScene(this);
     scene_->setSceneRect(0, 0, 800, 800);
     ui_->graphicsView->setScene(scene_);
@@ -178,7 +181,9 @@ void GameWidget::setChipButtonsEnabled() {
 }
 
 void GameWidget::onStartButtonClicked() {
-    // ui_->startRoundButton->setVisible(false);
+    ui_->startRoundButton->setVisible(false);
+    ui_->hitButton->setVisible(true);
+    ui_->standButton->setVisible(true);
     game_->gameStart();
 }
 
@@ -190,7 +195,7 @@ void GameWidget::onPlayerCardDealt(Card card){
     // Changes based on "index" here.
     //                            |
     //                            V
-    QPoint handPosition(100 + playerHandIndex_ * 80, 400);
+    QPoint handPosition(100 + playerHandIndex_ * 80, 375);
     playerHandIndex_++;
     QPoint belowPosition(375, 60);
 
