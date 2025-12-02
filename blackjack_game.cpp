@@ -190,7 +190,7 @@ void BlackjackGame::dealCards() {
     int delay = 0;
     const int step = 500;  // ms between cards for giving enough time for animation.
     for (int i = 0; i < 2; ++i) {
-        QTimer::singleShot(delay, this, [this]() {
+        timer_.singleShot(delay, this, [this]() {
             Card c = drawCardFromShoe();
             playerHands_[0].append(c);
             emit playerCardDealt(c);
@@ -198,7 +198,7 @@ void BlackjackGame::dealCards() {
 
         delay += step;
 
-        QTimer::singleShot(delay, this, [this]() {
+        timer_.singleShot(delay, this, [this]() {
             Card c = drawCardFromShoe();
             dealerHand_.append(c);
             emit dealerCardDealt(c);

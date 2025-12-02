@@ -188,22 +188,37 @@ void GameWidget::onPlayerCardDealt(Card card){
     auto* item = scene_->addPixmap(backPix);
     item->setPos(deckPos_);
 
-    // Change based on index here. (To be implemented, this is just to test so far).
+
+    // Changes based on "index" here. Not exactly a true index so I'll probably change the name at some point.
     //                     |
     //                     V
-    QPoint targetPos(100 + playerHandIndex_ * 30, 250);
+    QPoint handPosition(100 + playerHandIndex_ * 30, 250);
     playerHandIndex_ += 3;
+    QPoint belowPosition(375, 60);
+
+    QVariantAnimation* drawPlayerCard = new QVariantAnimation(this);
+    drawPlayerCard->setDuration(150);
+    drawPlayerCard->setStartValue(deckPos_);
+    drawPlayerCard->setEndValue(belowPosition);
 
     QVariantAnimation* dealPlayerCard = new QVariantAnimation(this);
     dealPlayerCard->setDuration(300);
-    dealPlayerCard->setStartValue(deckPos_);
-    dealPlayerCard->setEndValue(targetPos);
+    dealPlayerCard->setStartValue(belowPosition);
+    dealPlayerCard->setEndValue(handPosition);
+
+    connect(drawPlayerCard, &QVariantAnimation::valueChanged, this, [item](const QVariant& v) {
+        item->setPos(v.toPointF());
+    });
 
     connect(dealPlayerCard, &QVariantAnimation::valueChanged, this, [item](const QVariant& v) {
         item->setPos(v.toPointF());
     });
 
-    // So far this has just moved the card, A card flip animation to make it face up is what I am planning.
+    connect(drawPlayerCard, &QVariantAnimation::finished, this, [dealPlayerCard] {
+        dealPlayerCard->start(QAbstractAnimation::DeleteWhenStopped);
+    });
 
-    dealPlayerCard->start(QAbstractAnimation::DeleteWhenStopped);
+    drawPlayerCard->start(QAbstractAnimation::DeleteWhenStopped);
+
+    // So far this has just moved the card, A card flip animation to make it face up is what I am planning.
 }
