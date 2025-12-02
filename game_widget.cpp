@@ -10,10 +10,10 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     ui_->setupUi(this);
 
     scene_ = new QGraphicsScene(this);
-    scene_->setSceneRect(0, 0, 800, 600);
+    scene_->setSceneRect(0, 0, 800, 800);
     ui_->graphicsView->setScene(scene_);
 
-    deckPos_ = QPoint(600, 80);
+    deckPos_ = QPoint(375, 0);
 
     // Place "deck"
     deckItem_ = scene_->addPixmap(cardSprites_.back());
