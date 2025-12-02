@@ -305,7 +305,7 @@ void GameWidget::flipCard(QGraphicsPixmapItem* item, const Card& card){
             item->setScale(s);
         });
 
-                grow->start(QAbstractAnimation::DeleteWhenStopped);
+        grow->start(QAbstractAnimation::DeleteWhenStopped);
     });
 
     shrink->start(QAbstractAnimation::DeleteWhenStopped);
