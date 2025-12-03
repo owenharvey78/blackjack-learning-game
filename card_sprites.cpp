@@ -1,7 +1,7 @@
 #include "card_sprites.h"
 
-CardSprites::CardSprites(const QString& path)
-    : sheet_(path) {
+CardSprites::CardSprites(const QString& path, qreal scale)
+    : sheet_(path), scale_(scale) {
     cardWidth_  = sheet_.width()  / 14;
     cardHeight_ = sheet_.height() / 4;
 }
@@ -76,19 +76,34 @@ QRect CardSprites::rectFor(Card::Suit suit, Card::Rank rank) const {
 }
 
 QPixmap CardSprites::faceFor(const Card& card) const {
-    return sheet_.copy(rectFor(card.suit, card.rank));
+    QPixmap pix = sheet_.copy(rectFor(card.suit, card.rank));
+    if (scale_ != 1.0) {
+        return pix.scaled(pix.width() * scale_, pix.height() * scale_,
+                         Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
+    return pix;
 }
 
 QPixmap CardSprites::back() const {
 
     // back is in last column, diamond row
     QRect r(13 * cardWidth_, 1 * cardHeight_, cardWidth_, cardHeight_);
-    return sheet_.copy(r);
+    QPixmap pix = sheet_.copy(r);
+    if (scale_ != 1.0) {
+        return pix.scaled(pix.width() * scale_, pix.height() * scale_,
+                         Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
+    return pix;
 }
 
 QPixmap CardSprites::cutCard() const {
 
     // cut card in last column, e.g. hearts row
     QRect r(13 * cardWidth_, cardHeight_, cardWidth_, cardHeight_);
-    return sheet_.copy(r);
+    QPixmap pix = sheet_.copy(r);
+    if (scale_ != 1.0) {
+        return pix.scaled(pix.width() * scale_, pix.height() * scale_,
+                         Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
+    return pix;
 }

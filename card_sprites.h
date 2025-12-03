@@ -8,7 +8,8 @@ class CardSprites {
 public:
     /// @brief Constructor
     /// @param path Holds the filepath for the cards.
-    explicit CardSprites(const QString& path);
+    /// @param scale Scale factor for card size (default 1.0 = original size).
+    explicit CardSprites(const QString& path, qreal scale = 1.0);
 
     /// @brief Gets the correct card face for the passed in card.
     /// @param card The passed in card.
@@ -34,6 +35,9 @@ private:
 
     /// @brief The height of a card from filepath (cards.png).
     int cardHeight_;
+
+    /// @brief Scale factor for card rendering.
+    qreal scale_;
 
     /// @brief Gets the rect for the passed in suit and rank.
     /// @param suit The passed in card suit.

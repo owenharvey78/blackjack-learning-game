@@ -69,6 +69,12 @@
        </item>
        <item alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignBottom">
         <widget class="QLabel" name="betLabel">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>25</height>
+          </size>
+         </property>
          <property name="visible">
           <bool>false</bool>
          </property>
@@ -95,7 +101,7 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>800</height>
+       <height>16777215</height>
       </size>
      </property>
      <property name="verticalScrollBarPolicy">
