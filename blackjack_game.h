@@ -25,16 +25,14 @@ public:
         DealerBust
     };
 
-    // Utility methods
-
     /// @brief Change the ruleset of the game.
     /// @param rules The new ruleset.
     void setRuleset(Ruleset rules);
 
+public slots:
     /// @brief Starts the game.
     void gameStart();
 
-public slots:
     /// @brief Player hits to draw another card.
     void playerHit();
 
@@ -44,35 +42,86 @@ public slots:
     /// @brief Player splits bet and hand.
     void playerSplit();
 
+    /// @brief Player doubles bet, receives one card, and stands.
+    void playerDoubleDown();
+
+signals:
+    // Signals used by game widget.
+
+    /// @brief Emitted when a card is dealt to the player (for animation).
+    void playerCardDealt(Card card);
+
+    /// @brief Emitted when a card is dealt to the dealer (for animation).
+    void dealerCardDealt(Card card);
+
+    /// @brief Emitted when the round is finished.
+    void roundEnded(GameResult result);
+
+    // Internal logic signals.
+
+    /// @brief Emitted when a hand splits (to update UI hand count).
+    void splitHand(int handCount);
+
+    /// @brief Emitted when the active turn changes.
+    void turnChanged(bool isPlayerTurn, int handIndex);
+
 private slots:
-
-    /// @brief Starts the next round/deal.
-    void nextDeal();
-
-    /// @brief Deals cards to player and dealer.
-    void dealCards();
-
-    /// @brief Emits that teh dealer's turn has started.
-    void dealerTurn();
-
-    /// @brief Checks game state.
-    void checkCardsAndRound(GameResult currentState);
+    /// @brief Recursive helper for dealer's turn (called by QTimer).
+    void continueDealerTurn();
 
 private:
+    // Internal helper methods.
+    /// @brief Resets state and calls dealCards().
+    void dealNewHand();
 
-    // Game Logic Methods.
+    /// @brief Handles the initial deal animation with timers.
+    void dealCards();
 
+    /// @brief Helper to resolve the round and emit roundEnded.
+    void checkCardsAndRound(int handIndex, GameResult currentState);
+
+    /// @brief Helper to draw card from shoe.
+    Card drawCardFromShoe();
+
+    /// @brief determines the winner of the hand.
+    /// @param playerHand vector holding player's hand.
+    /// @param dealerHand vector holding dealer's hand.
+    /// @return game result.
+    static GameResult determineWinner(QVector<Card>& playerHand, QVector<Card>& dealerHand);
+
+    /// @brief Inidicates dealer turn.
+    void dealerTurn();
+
+    /// @brief determines if the player can double.
+    /// @param hand vector holding the cards.
+    /// @param currentSplitCount The number of times the player has split this round.
+    /// @return true if player can double.
+    bool canDouble(const QVector<Card>& hand, int currentSplitCount) const;
+
+    /// @brief determines if the player can surrender.
+    /// @param hand vector holding the cards.
+    /// @return true if player can surrender.
+    bool canSurrender(const QVector<Card>& hand) const;
+
+    /// @brief determines if the player can split.
+    /// @param hand vector holding the cards.
+    /// @param currentSplitCount amount of times already split.
+    /// @return true if player can split.
+    bool canSplit(const QVector<Card>& hand, int currentSplitCount) const;
+
+    // Dealer methods
     /// @brief Dealer hits to draw another card.
     void dealerHit();
 
     /// @brief Dealer stands, round/deal ends.
     void dealerStand();
 
-    /// @brief Helper to draw card from shoe.
-    Card drawCardFromShoe();
+    /// @brief determines if the dealer should hit.
+    /// @param hand vector holding the cards.
+    /// @return true if dealer should hit.
+    bool dealerShouldHit(QVector<Card>& hand) const;
 
     // Static game state methods.
-
     /// @brief gets the total value of the hand.
     /// Handles logic of ace being 1 or 11.
     /// @param hand vector holding the cards.
@@ -100,40 +149,7 @@ private:
     /// @return true if is soft hand.
     static bool isSoftHand(const QVector<Card>& hand);
 
-    /// @brief determines the winner of the hand.
-    /// @param playerHand vector holding player's hand.
-    /// @param dealerHand vector holding dealer's hand.
-    /// @return game result.
-    static GameResult determineWinner(QVector<Card>& playerHand, QVector<Card>& dealerHand);
-
-    // Non-static game state methods.
-
-    /// @brief determines if the dealer should hit.
-    /// @param hand vector holding the cards.
-    /// @return true if dealer should hit.
-    bool dealerShouldHit(QVector<Card>& hand) const;
-
-    /// @brief determines if the player can double.
-    /// @param hand vector holding the cards.
-    /// @param currentSplitCount The number of times the player has split this round.
-    /// @return true if player can double.
-    bool canDouble(const QVector<Card>& hand, int currentSplitCount) const;
-
-    /// @brief determines if the player can surrender.
-    /// @param hand vector holding the cards.
-    /// @return true if player can surrender.
-    bool canSurrender(const QVector<Card>& hand) const;
-
-    /// @brief determines if the player can split.
-    /// @param hand vector holding the cards.
-    /// @param currentSplitCount amount of times already split.
-    /// @return true if player can split.
-    bool canSplit(const QVector<Card>& hand, int currentSplitCount) const;
-
     // Member variables.
-
-    QTimer timer_;
-
     /// @brief Holds the ruleset.
     Ruleset rules_;
 
@@ -146,9 +162,6 @@ private:
     /// @brief Holds the dealer's current hand.
     QVector<Card> dealerHand_;
 
-    /// @brief Holds the total chip amount.
-    int totalChipAmount;
-
     /// @brief True if the shoe needs shuffling. False otherwise.
     bool needsShuffling_;
 
@@ -157,17 +170,6 @@ private:
 
     /// @brief Tracks which hand is currently active to account for split hands.
     int currentHandIndex_;
-
-signals:
-
-    /// @brief Signals that a player card has been dealt.
-    void playerCardDealt(Card card);
-
-    /// @brief Signals that a dealer card has been dealt.
-    void dealerCardDealt(Card card);
-
-    /// @brief Signals that the round is over and passes the result.
-    void roundEnded(GameResult result);
 };
 
 #endif // BLACKJACK_GAME_H
