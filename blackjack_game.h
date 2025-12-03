@@ -7,13 +7,13 @@
 #include <QObject>
 #include <QTimer>
 
-class BlackJackGame : public QObject {
+class BlackjackGame : public QObject {
     Q_OBJECT
 
 public:
 
     /// @brief
-    explicit BlackJackGame(QObject *parent = nullptr);
+    explicit BlackjackGame(QObject *parent = nullptr);
 
     /// @brief defines an enum for the different possible results of a hand.
     enum class GameResult {
