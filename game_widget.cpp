@@ -4,7 +4,7 @@
 GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     : QWidget(parent), ui_(new Ui::GameWidget), game_(game),
     cardSprites_(":/images/cards.png", 2.0), balance_(1000), playerHandIndex_(0),
-    dealerHandIndex_(0), currentBetTotal_(0) {
+    dealerHandIndex_(0), currentBetTotal_(0), holeCard_(Card::Rank::Cut, Card::Suit::Cut) {
     ui_->setupUi(this);
 
     ui_->hitButton->setVisible(false);
@@ -356,7 +356,12 @@ void GameWidget::onDealerCardDealt(Card card){
     });
 
     connect(dealDealerCard, &QVariantAnimation::finished, this, [this, item, card]() {
-        if(dealerHandIndex_ > 1){
+        if(dealerHandIndex_ == 2) {     // TODO: this starts at 1 instead of 0, fix
+            // This is the hole card; save it to flip later
+            holeCard_ = card;
+            holeCardItem_ = item;
+        }
+        else {
             flipCard(item, card);
         }
     });
@@ -466,4 +471,7 @@ void GameWidget::onDealerTurnStarted() {
     ui_->standButton->setVisible(false);
     ui_->doubleButton->setVisible(false);
     ui_->splitButton->setVisible(false);
+
+    // Flip hole card
+    flipCard(holeCardItem_, holeCard_);
 }

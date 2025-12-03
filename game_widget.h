@@ -140,6 +140,13 @@ private:
 
     /// @brief Resets the game.
     void resetGame();
+
+    /// @brief The graphics item for the dealer's hole card that will be flipped
+    /// after the player is done.
+    QGraphicsPixmapItem* holeCardItem_;
+
+    /// @brief The dealer's hole card that will be flipped after the player is done.
+    Card holeCard_;
 };
 
 #endif // GAME_WIDGET_H
