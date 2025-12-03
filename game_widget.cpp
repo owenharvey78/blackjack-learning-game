@@ -76,33 +76,26 @@ GameWidget::~GameWidget()
     delete ui_;
 }
 
-void GameWidget::onRoundEnded(BlackjackGame::GameResult result) {
+void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout) {
     QString message;
 
     switch (result) {
-    case BlackjackGame::GameResult::PlayerWin:
-        balance_ += currentBetTotal_ * 2; // Return bet + win amount
-        message = "You Win!";
+    case BlackjackGame::GameResult::Win:
+        message = "Win";
         break;
-    case BlackjackGame::GameResult::PlayerBlackjack:
-        balance_ += currentBetTotal_ + (currentBetTotal_ * 1.5); // 3:2 payout
-        message = "Blackjack!";
+    case BlackjackGame::GameResult::Lose:
+        message = "Lose";
         break;
     case BlackjackGame::GameResult::Push:
-        balance_ += currentBetTotal_; // Return original bet only
-        message = "Push (Tie)";
+        message = "Push";
         break;
-    case BlackjackGame::GameResult::DealerWin:
-    case BlackjackGame::GameResult::PlayerBust:
-        message = "Dealer Wins";
-        break;
-    case BlackjackGame::GameResult::DealerBust:
-        balance_ += currentBetTotal_ * 2;
-        message = "Dealer Busts! You Win!";
+    case BlackjackGame::GameResult::Blackjack:
+        message = "Blackjack";
         break;
     }
 
     // Update balance label.
+    balance_ += payout;
     ui_->balanceLabel->setText("$" + QString::number(balance_));
 
     // Indicate results in bet label.
@@ -491,8 +484,8 @@ void GameWidget::onDealerTurnStarted() {
     flipCard(holeCardItem_, holeCard_);
 }
 
-void GameWidget::onBetPlaced(int betAmount, int newBalance) {
-    balance_ = newBalance;
+void GameWidget::onBetPlaced(int betAmount) {
+    balance_ -= betAmount;
     ui_->betLabel->setText("-$" + QString::number(betAmount));
     QTimer::singleShot(2000, [this]() {
         ui_->balanceLabel->setText("$" + QString::number(balance_));

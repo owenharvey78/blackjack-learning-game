@@ -80,7 +80,8 @@ signals:
 
     /// @brief Signals that the player has placed a bet (either during the
     /// betting stage, by doubling, or by splitting).
-    void betPlaced(int amount, int newBalance);
+    /// @param amount The total amount of the bet the player has placed.
+    void betPlaced(int amount);
 
 private slots:
     /// @brief Recursive helper for dealer's turn (called by QTimer).
@@ -185,6 +186,9 @@ private:
 
     /// @brief The amount of money the player has.
     int balance_;
+
+    /// @brief The current bet amount for the round.
+    int currentBetAmount_;
 
     /// @brief Holds the player's current hands.
     QVector<QVector<Card>> playerHands_;

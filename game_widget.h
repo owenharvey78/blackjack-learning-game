@@ -49,8 +49,7 @@ public slots:
     /// balance for two seconds, then updates the balance label and hides the bet
     /// amount.
     /// @param betAmount The amount the player bet.
-    /// @param newBalance The player's balance after making the bet.
-    void onBetPlaced(int betAmount, int newBalance);
+    void onBetPlaced(int betAmount);
 
 private slots:
 
@@ -77,7 +76,7 @@ private slots:
 
     /// @brief Recieves the game result from game logic class.
     /// @param result of the game.
-    void onRoundEnded(BlackjackGame::GameResult result);
+    void onRoundEnded(BlackjackGame::GameResult result, int payout);
 
     /// @brief Handles player's turn starting.
     /// @param handIndex Index of the active hand.

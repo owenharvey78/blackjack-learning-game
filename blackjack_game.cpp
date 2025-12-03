@@ -4,7 +4,7 @@
 
 BlackjackGame::BlackjackGame(QObject *parent) : QObject{parent},
     rules_(), shoe_(new Shoe(rules_.numDecks, 0.2, this)),
-    balance_(1000), needsShuffling_(true), hasRoundStarted_(false),
+    balance_(1000), currentBetAmount_(0), needsShuffling_(true), hasRoundStarted_(false),
     currentHandIndex_(0)
 { }
 
@@ -15,8 +15,9 @@ void BlackjackGame::setRuleset(Ruleset rules) {
 // Game start and Animation
 
 void BlackjackGame::beginRound(int betAmount) {
+    currentBetAmount_ = betAmount;
     balance_ -= betAmount;
-    emit betPlaced(betAmount, balance_);
+    emit betPlaced(betAmount);
     dealNewHand();
 }
 
@@ -30,6 +31,8 @@ void BlackjackGame::dealNewHand() {
     // Reset necessary elements.
     playerHands_.clear();
     playerHands_.append(QVector<Card>());
+    betAmounts_.clear();
+    betAmounts_.append(currentBetAmount_);
     dealerHand_.clear();
     currentHandIndex_ = 0;
 
@@ -277,6 +280,7 @@ void BlackjackGame::playerSplit() {
     QVector<Card> newHand;
     newHand.append(splitCard);
     playerHands_.insert(currentHandIndex_ + 1, newHand);
+    betAmounts_.insert(currentHandIndex_ + 1, betAmounts_[currentHandIndex_]);
 
     // Deal new cards
     dealPlayerCard(currentHandIndex_, splitCard.rank == Card::Rank::Ace);
@@ -290,7 +294,24 @@ void BlackjackGame::playerSplit() {
 
 void BlackjackGame::checkCardsAndRound(int handIndex, GameResult currentState) {
     int payout = 0;
-    // TODO: calculate payout
+    switch (currentState) {
+    case GameResult::Win:
+        // Give player back the money they bet and the money they made
+        payout = betAmounts_[handIndex] * 2;
+        break;
+    case GameResult::Push:
+        // Give player back the money they bet
+        payout = betAmounts_[handIndex];
+        break;
+    case GameResult::Blackjack:
+        // Give back bet amount, then give payout based on ruleset
+        payout = static_cast<int>(betAmounts_[handIndex] * (1 + rules_.blackjackPayout));
+        break;
+    default:
+        // If player loses, pay nothing
+        break;
+    }
+    balance_ += payout;
     emit roundEnded(currentState, payout);
 }
 
