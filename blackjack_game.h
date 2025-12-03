@@ -34,14 +34,7 @@ public:
     /// @brief Starts the game.
     void gameStart();
 
-private slots:
-
-    /// @brief Starts the next round/deal.
-    void nextDeal();
-
-    /// @brief Deals cards to player and dealer.
-    void dealCards();
-
+public slots:
     /// @brief Player hits to draw another card.
     void playerHit();
 
@@ -50,6 +43,14 @@ private slots:
 
     /// @brief Player splits bet and hand.
     void playerSplit();
+
+private slots:
+
+    /// @brief Starts the next round/deal.
+    void nextDeal();
+
+    /// @brief Deals cards to player and dealer.
+    void dealCards();
 
     /// @brief Emits that teh dealer's turn has started.
     void dealerTurn();
@@ -164,6 +165,9 @@ signals:
 
     /// @brief Signals that a dealer card has been dealt.
     void dealerCardDealt(Card card);
+
+    /// @brief Signals that the round is over and passes the result.
+    void roundEnded(GameResult result);
 };
 
 #endif // BLACKJACK_GAME_H
