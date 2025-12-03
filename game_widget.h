@@ -34,6 +34,10 @@ public:
     /// to place their bet and start the round.
     void beginBetStage();
 
+protected:
+    /// @brief Handles window/widget resize events to maintain aspect ratio.
+    void resizeEvent(QResizeEvent* event) override;
+
 private slots:
 
     /// @brief During the betting stage, adds a chip of the given value to the
@@ -114,6 +118,9 @@ private:
     /// @brief Helper for flipping a card.
     /// @param card The card to flip.
     void flipCard(QGraphicsPixmapItem* item, const Card& card);
+
+    /// @brief Updates the view scaling to maintain aspect ratio.
+    void updateViewScale();
 };
 
 #endif // GAME_WIDGET_H

@@ -22,6 +22,13 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
 
     view_ = ui_->graphicsView;
 
+    // Configure view for proper scaling behavior
+    view_->setTransformationAnchor(QGraphicsView::AnchorViewCenter);
+    view_->setResizeAnchor(QGraphicsView::AnchorViewCenter);
+    view_->setRenderHint(QPainter::SmoothPixmapTransform, true);
+    view_->setRenderHint(QPainter::Antialiasing, true);
+    view_->setCacheMode(QGraphicsView::CacheBackground);
+
     // Set up current bet map
     currentBet_[1] = 0;
     currentBet_[5] = 0;
@@ -70,6 +77,10 @@ void GameWidget::beginBetStage() {
     ui_->chip100Button->setVisible(true);
     setChipButtonsEnabled();
 
+    // Hide bet text (without shifting layout)
+    ui_->betLabel->setVisible(true);
+    ui_->betLabel->setText("");
+
     // Hide gameplay buttons
     ui_->hitButton->setVisible(false);
     ui_->standButton->setVisible(false);
@@ -116,8 +127,7 @@ void GameWidget::addChip(int value) {
         break;  // Should never run
     }
 
-    // Show and update current bet label
-    ui_->betLabel->setVisible(true);
+    // Update current bet label
     ui_->betLabel->setText("-$" + QString::number(currentBetTotal_));
 
     // Disable any necessary buttons
@@ -171,9 +181,9 @@ void GameWidget::removeChip(int value) {
         break;  // Should never run
     }
 
-    // Update current bet label and hide if necessary; disable start button if necessary
+    // Update current bet label and disable start button if necessary
     if (currentBetTotal_ == 0) {
-        ui_->betLabel->setVisible(false);
+        ui_->betLabel->setText("");
         ui_->startRoundButton->setEnabled(false);
     }
     else
@@ -333,4 +343,18 @@ void GameWidget::flipCard(QGraphicsPixmapItem* item, const Card& card){
     });
 
     shrink->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void GameWidget::resizeEvent(QResizeEvent* event) {
+    QWidget::resizeEvent(event);
+    updateViewScale();
+}
+
+void GameWidget::updateViewScale() {
+    if (!view_ || !scene_) {
+        return;
+    }
+
+    // Fit the 800x800 scene into the available space while maintaining aspect ratio
+    view_->fitInView(scene_->sceneRect(), Qt::KeepAspectRatio);
 }
