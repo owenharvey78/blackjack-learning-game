@@ -261,6 +261,8 @@ void BlackjackGame::checkCardsAndRound(GameResult currentState){
             //Emit signal
             break;
         }
+
+    emit roundEnded(currentState);
 }
 
 Card BlackjackGame::drawCardFromShoe() {

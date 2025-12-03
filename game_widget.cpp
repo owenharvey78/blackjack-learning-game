@@ -51,6 +51,10 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     // Card deals.
     connect(game, &BlackjackGame::playerCardDealt, this, &GameWidget::onPlayerCardDealt);
     connect(game, &BlackjackGame::dealerCardDealt, this, &GameWidget::onDealerCardDealt);
+
+    // Button presses.
+    connect(ui_->hitButton, &QPushButton::clicked, game_, &BlackjackGame::playerHit);
+    connect(ui_->standButton, &QPushButton::clicked, game_, &BlackjackGame::playerStand);
 }
 
 GameWidget::~GameWidget()
