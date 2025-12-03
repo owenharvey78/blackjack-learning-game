@@ -59,6 +59,10 @@ private slots:
     /// @param card The card to deal.
     void onDealerCardDealt(Card card);
 
+    /// @brief Recieves the game result from game logic class.
+    /// @param result of the game.
+    void onRoundEnded(BlackjackGame::GameResult result);
+
 private:
     /// @brief The UI form associated with this widget.
     Ui::GameWidget* ui_;
@@ -121,6 +125,9 @@ private:
 
     /// @brief Updates the view scaling to maintain aspect ratio.
     void updateViewScale();
+
+    /// @brief Resets the game.
+    void resetGame();
 };
 
 #endif // GAME_WIDGET_H
