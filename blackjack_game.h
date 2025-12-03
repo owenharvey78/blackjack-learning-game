@@ -5,7 +5,6 @@
 #include "ruleset.h"
 #include "shoe.h"
 #include <QObject>
-#include <QTimer>
 
 class BlackJackGame : public QObject {
     Q_OBJECT
@@ -31,10 +30,10 @@ public:
     /// @param rules The new ruleset.
     void setRuleset(Ruleset rules);
 
-    /// @brief Starts the game.
-    void gameStart();
-
 public slots:
+    /// @brief Starts the next round/deal.
+    void dealNewHand();
+
     /// @brief Player hits to draw another card.
     void playerHit();
 
@@ -44,24 +43,20 @@ public slots:
     /// @brief Player splits bet and hand.
     void playerSplit();
 
-private slots:
-
-    /// @brief Starts the next round/deal.
-    void nextDeal();
-
-    /// @brief Deals cards to player and dealer.
-    void dealCards();
-
-    /// @brief Emits that teh dealer's turn has started.
-    void dealerTurn();
+    /// @brief Player doubles bet and recieves one more card and can no longer hit.
+    void playerDoubleDown();
 
     /// @brief Checks game state.
-    void checkCardsAndRound(GameResult currentState);
+    void checkCardsAndRound(int handIndex, GameResult currentState);
+
+    /// @brief Starts the round.
+    void startRound();
+
+private slots:
+    /// @brief Recursive helper for dealer's turn.
+    void continueDealerTurn();
 
 private:
-
-    // Game Logic Methods.
-
     /// @brief Dealer hits to draw another card.
     void dealerHit();
 
@@ -71,7 +66,10 @@ private:
     /// @brief Helper to draw card from shoe.
     Card drawCardFromShoe();
 
-    // Static game state methods.
+    /// @brief Emits that the dealer's turn has started.
+    void dealerTurn();
+
+    // Static helper methods.
 
     /// @brief gets the total value of the hand.
     /// Handles logic of ace being 1 or 11.
@@ -132,8 +130,6 @@ private:
 
     // Member variables.
 
-    QTimer timer_;
-
     /// @brief Holds the ruleset.
     Ruleset rules_;
 
@@ -159,15 +155,19 @@ private:
     int currentHandIndex_;
 
 signals:
+    void startNewHand();
 
-    /// @brief Signals that a player card has been dealt.
-    void playerCardDealt(Card card);
+    void shuffleCards();
 
-    /// @brief Signals that a dealer card has been dealt.
-    void dealerCardDealt(Card card);
+    void dealPlayerCard(int handIndex, Card card);
 
-    /// @brief Signals that the round is over and passes the result.
-    void roundEnded(GameResult result);
+    void dealDealerCard(Card card);
+
+    void roundOver(int handIndex, GameResult result);
+
+    void splitHand(int handCount);
+
+    void turnChanged(bool isPlayerTurn, int handIndex);
 };
 
 #endif // BLACKJACK_GAME_H
