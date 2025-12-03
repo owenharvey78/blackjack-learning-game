@@ -44,6 +44,9 @@ public slots:
     /// @brief Player splits bet and hand.
     void playerSplit();
 
+    /// @brief The player doubles their current bet and draws only one more card.
+    void playerDouble();
+
 private slots:
 
     /// @brief Starts the next round/deal.
