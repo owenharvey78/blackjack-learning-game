@@ -62,8 +62,14 @@ signals:
     /// @brief Emitted when a hand splits (to update UI hand count).
     void splitHand(int handCount);
 
-    /// @brief Emitted when the active turn changes.
-    void turnChanged(bool isPlayerTurn, int handIndex);
+    /// @brief Emitted when it becomes the player's turn.
+    /// @param handIndex Index of the active hand.
+    /// @param canDouble True if player can double on current hand.
+    /// @param canSplit True if player can split current hand.
+    void playerTurn(int handIndex, bool canDouble, bool canSplit);
+
+    /// @brief Emitted when it becomes the dealer's turn.
+    void dealerTurnStarted();
 
 private slots:
     /// @brief Recursive helper for dealer's turn (called by QTimer).

@@ -55,6 +55,8 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     // Starting/ending game.
     connect(ui_->startRoundButton, &QPushButton::clicked, this, &GameWidget::onStartButtonClicked);
     connect(game_, &BlackjackGame::roundEnded, this, &GameWidget::onRoundEnded);
+    connect(game_, &BlackjackGame::playerTurn, this, &GameWidget::onPlayerTurn);
+    connect(game_, &BlackjackGame::dealerTurnStarted, this, &GameWidget::onDealerTurnStarted);
 
     // Card deals.
     connect(game, &BlackjackGame::playerCardDealt, this, &GameWidget::onPlayerCardDealt);
@@ -248,11 +250,10 @@ void GameWidget::setChipButtonsEnabled() {
 }
 
 void GameWidget::onStartButtonClicked() {
+    // Hide start round button
     ui_->startRoundButton->setVisible(false);
-    ui_->hitButton->setVisible(true);
-    ui_->standButton->setVisible(true);
-    ui_->doubleButton->setVisible(true);
-    ui_->splitButton->setVisible(true);
+
+    // Gameplay buttons will be shown by onTurnChanged signal
 
     // remove betting buttons
     ui_->chip1Button->setVisible(false);
@@ -261,6 +262,20 @@ void GameWidget::onStartButtonClicked() {
     ui_->chip25Button->setVisible(false);
     ui_->chip50Button->setVisible(false);
     ui_->chip100Button->setVisible(false);
+
+    // Hide bet label
+    ui_->betLabel->setText("");
+
+    // Update balance label with current balance after bet
+    balance_ -= currentBetTotal_;
+    currentBet_[1] = 0;
+    currentBet_[5] = 0;
+    currentBet_[10] = 0;
+    currentBet_[25] = 0;
+    currentBet_[50] = 0;
+    currentBet_[100] = 0;   // TODO: refactor this into a helper method
+    currentBetTotal_ = 0;
+    ui_->balanceLabel->setText("$" + QString::number(balance_));
 
     game_->gameStart();
 }
@@ -430,4 +445,25 @@ void GameWidget::resetGame() {
     ui_->betDisplay100Button->setVisible(false);
 
     beginBetStage();
+}
+
+void GameWidget::onPlayerTurn(int handIndex, bool canDouble, bool canSplit) {
+    // Track which hand is active to support multi-hand logic
+    currentHandIndex_ = handIndex;
+
+    // Show gameplay buttons for player's turn
+    ui_->hitButton->setVisible(true);
+    ui_->standButton->setVisible(true);
+
+    // Show double/split buttons based on game logic decision
+    ui_->doubleButton->setVisible(canDouble);
+    ui_->splitButton->setVisible(canSplit);
+}
+
+void GameWidget::onDealerTurnStarted() {
+    // Hide all gameplay buttons during dealer's turn
+    ui_->hitButton->setVisible(false);
+    ui_->standButton->setVisible(false);
+    ui_->doubleButton->setVisible(false);
+    ui_->splitButton->setVisible(false);
 }

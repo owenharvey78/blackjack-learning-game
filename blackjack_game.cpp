@@ -73,7 +73,10 @@ void BlackjackGame::dealCards() {
                 if (playerHasBJ || dealerHasBJ) {
                     checkCardsAndRound(0, determineWinner(playerHands_[0], dealerHand_));
                 } else {
-                    emit turnChanged(true, 0);
+                    // Player's turn - check if double/split allowed
+                    bool canDbl = canDouble(playerHands_[0], 0);
+                    bool canSpl = canSplit(playerHands_[0], 0);
+                    emit playerTurn(0, canDbl, canSpl);
                 }
             }
         });
@@ -202,14 +205,14 @@ bool BlackjackGame::dealerShouldHit(QVector<Card>& hand) const {
 }
 
 void BlackjackGame::dealerTurn() {
-    emit turnChanged(false, -1);
+    emit dealerTurnStarted();
     continueDealerTurn();
 }
 
 void BlackjackGame::continueDealerTurn() {
     if (dealerShouldHit(dealerHand_)) {
         dealerHit();
-        // Delay next card for animation
+        // Wait for animation delay before continuing
         QTimer::singleShot(1000, this, &BlackjackGame::continueDealerTurn);
     }
     else {

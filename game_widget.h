@@ -63,6 +63,15 @@ private slots:
     /// @param result of the game.
     void onRoundEnded(BlackjackGame::GameResult result);
 
+    /// @brief Handles player's turn starting.
+    /// @param handIndex Index of the active hand.
+    /// @param canDouble True if player can double on current hand.
+    /// @param canSplit True if player can split current hand.
+    void onPlayerTurn(int handIndex, bool canDouble, bool canSplit);
+
+    /// @brief Handles dealer's turn starting.
+    void onDealerTurnStarted();
+
 private:
     /// @brief The UI form associated with this widget.
     Ui::GameWidget* ui_;
@@ -103,6 +112,9 @@ private:
 
     /// @brief Keeps track of the cards drawn for animation. (Dealer)
     int dealerHandIndex_;
+
+    /// @brief Keeps track of the currently active hand during play.
+    int currentHandIndex_;
 
     /// @brief During the betting stage, represents the player's current bet.
     /// The keys represent the chip values (1, 5, 10, 25, 50, and 100). The
