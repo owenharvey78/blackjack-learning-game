@@ -14,9 +14,9 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     scene_->setSceneRect(0, 0, 800, 800);
     ui_->graphicsView->setScene(scene_);
 
-    deckPos_ = QPoint(375, 0);
+    deckPos_ = QPoint(750, 0);
 
-    // Place "deck"
+    // Place "deck" in top-right corner
     deckItem_ = scene_->addPixmap(cardSprites_.back());
     deckItem_->setPos(deckPos_);
 

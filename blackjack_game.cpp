@@ -257,7 +257,8 @@ void BlackjackGame::playerDouble() {
 
     dealPlayerCard(currentHandIndex_, true);
 
-    playerStand();
+    // Wait a short delay before the dealer's turn
+    QTimer::singleShot(500, this, &BlackjackGame::playerStand);
 }
 
 void BlackjackGame::playerStand() {
