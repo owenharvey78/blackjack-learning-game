@@ -3,7 +3,7 @@
 
 GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     : QWidget(parent), ui_(new Ui::GameWidget), game_(game),
-    cardSprites_(":/images/cards.png"), balance_(1000), playerHandIndex_(0),
+    cardSprites_(":/images/cards.png", 2.0), balance_(1000), playerHandIndex_(0),
     dealerHandIndex_(0), currentBetTotal_(0) {
     ui_->setupUi(this);
 
@@ -301,7 +301,7 @@ void GameWidget::onDealerCardDealt(Card card){
     });
 
     connect(dealDealerCard, &QVariantAnimation::finished, this, [this, item, card]() {
-        if(dealerHandIndex_ < 2){
+        if(dealerHandIndex_ > 1){
             flipCard(item, card);
         }
     });
