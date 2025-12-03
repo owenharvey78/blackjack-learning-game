@@ -21,7 +21,6 @@ void BlackjackGame::setRuleset(Ruleset rules) {
 // Game start and Animation
 
 void BlackjackGame::gameStart() {
-    // This is the entry point expected by GameWidget
     dealNewHand();
 }
 
@@ -43,9 +42,6 @@ void BlackjackGame::dealNewHand() {
 }
 
 void BlackjackGame::dealCards() {
-    // This uses QTimer to create the delay effect your teammate added.
-    // We use QTimer::singleShot to avoid needing a member timer variable.
-
     int delay = 0;
     const int step = 500;  // 500ms between cards
 
@@ -57,7 +53,7 @@ void BlackjackGame::dealCards() {
             if (playerHands_.isEmpty()) return;
 
             playerHands_[0].append(c);
-            emit playerCardDealt(c); // SIGNAL MATCHING GAME WIDGET
+            emit playerCardDealt(c);
         });
 
         delay += step;
@@ -66,7 +62,7 @@ void BlackjackGame::dealCards() {
         QTimer::singleShot(delay, this, [this]() {
             Card c = drawCardFromShoe();
             dealerHand_.append(c);
-            emit dealerCardDealt(c); // SIGNAL MATCHING GAME WIDGET
+            emit dealerCardDealt(c);
 
             // If this is the last card (2nd round, dealer), check for BJ
             if (dealerHand_.size() == 2) {
@@ -224,7 +220,7 @@ void BlackjackGame::continueDealerTurn() {
 void BlackjackGame::dealerHit() {
     Card c = drawCardFromShoe();
     dealerHand_.append(c);
-    emit dealerCardDealt(c); // SIGNAL MATCHING GAME WIDGET
+    emit dealerCardDealt(c);
 }
 
 void BlackjackGame::dealerStand() {
@@ -241,11 +237,9 @@ void BlackjackGame::playerHit() {
 
     Card c = drawCardFromShoe();
     playerHands_[currentHandIndex_].append(c);
-    emit playerCardDealt(c); // SIGNAL MATCHING GAME WIDGET
+    emit playerCardDealt(c);
 
     if (isBust(playerHands_[currentHandIndex_])) {
-        // Signal bust logic handled by UI or controller?
-        // For now, auto-stand if bust
         playerStand();
     }
 }
@@ -256,7 +250,7 @@ void BlackjackGame::playerDoubleDown() {
 
     Card c = drawCardFromShoe();
     playerHands_[currentHandIndex_].append(c);
-    emit playerCardDealt(c); // SIGNAL MATCHING GAME WIDGET
+    emit playerCardDealt(c);
 
     playerStand();
 }
@@ -281,12 +275,10 @@ void BlackjackGame::playerSplit() {
     // Deal new cards
     Card c1 = drawCardFromShoe();
     playerHands_[currentHandIndex_].append(c1);
-    emit playerCardDealt(c1); // SIGNAL MATCHING GAME WIDGET
+    emit playerCardDealt(c1);
 
     Card c2 = drawCardFromShoe();
     playerHands_[currentHandIndex_ + 1].append(c2);
-    // Note: The UI might struggle to visualize the 2nd hand dealing immediately
-    // without an index, but we are keeping the teammate's signal signature.
     emit playerCardDealt(c2);
 
     emit splitHand(playerHands_.size());
@@ -295,7 +287,6 @@ void BlackjackGame::playerSplit() {
 // Results
 
 void BlackjackGame::checkCardsAndRound(int handIndex, GameResult currentState) {
-    // We emit the signal expected by GameWidget
     emit roundEnded(currentState);
 }
 
