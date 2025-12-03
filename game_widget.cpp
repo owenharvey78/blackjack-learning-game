@@ -52,8 +52,9 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(ui_->betDisplay50Button, &QPushButton::clicked, this, [this]() { removeChip(50); });
     connect(ui_->betDisplay100Button, &QPushButton::clicked, this, [this]() { removeChip(100); });
 
-    // Starting game.
+    // Starting/ending game.
     connect(ui_->startRoundButton, &QPushButton::clicked, this, &GameWidget::onStartButtonClicked);
+    connect(game_, &BlackjackGame::roundEnded, this, &GameWidget::onRoundEnded);
 
     // Card deals.
     connect(game, &BlackjackGame::playerCardDealt, this, &GameWidget::onPlayerCardDealt);
@@ -67,6 +68,43 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
 GameWidget::~GameWidget()
 {
     delete ui_;
+}
+
+void GameWidget::onRoundEnded(BlackjackGame::GameResult result) {
+    QString message;
+
+    switch (result) {
+    case BlackjackGame::GameResult::PlayerWin:
+        balance_ += currentBetTotal_ * 2; // Return bet + win amount
+        message = "You Win!";
+        break;
+    case BlackjackGame::GameResult::PlayerBlackjack:
+        balance_ += currentBetTotal_ + (currentBetTotal_ * 1.5); // 3:2 payout
+        message = "Blackjack!";
+        break;
+    case BlackjackGame::GameResult::Push:
+        balance_ += currentBetTotal_; // Return original bet only
+        message = "Push (Tie)";
+        break;
+    case BlackjackGame::GameResult::DealerWin:
+    case BlackjackGame::GameResult::PlayerBust:
+        message = "Dealer Wins";
+        break;
+    case BlackjackGame::GameResult::DealerBust:
+        balance_ += currentBetTotal_ * 2;
+        message = "Dealer Busts! You Win!";
+        break;
+    }
+
+    // Update balance label.
+    ui_->balanceLabel->setText("$" + QString::number(balance_));
+
+    // Indicate results in bet label.
+    ui_->betLabel->setVisible(true);
+    ui_->betLabel->setText(message);
+
+    // Reset game after short delay.
+    QTimer::singleShot(3000, this, &GameWidget::resetGame);
 }
 
 void GameWidget::beginBetStage() {
@@ -361,4 +399,33 @@ void GameWidget::updateViewScale() {
 
     // Fit the 800x800 scene into the available space while maintaining aspect ratio
     view_->fitInView(scene_->sceneRect(), Qt::KeepAspectRatio);
+}
+
+void GameWidget::resetGame() {
+    // Reset the scene.
+    scene_->clear();
+    deckItem_ = scene_->addPixmap(cardSprites_.back());
+    deckItem_->setPos(deckPos_);
+
+    // Reset variables.
+    playerHandIndex_ = 0;
+    dealerHandIndex_ = 0;
+    currentBetTotal_ = 0;
+
+    // Reset chips.
+    QMapIterator<int, int> i(currentBet_);
+    while (i.hasNext()) {
+        i.next();
+        currentBet_[i.key()] = 0;
+    }
+
+    // Hide chip buttons.
+    ui_->betDisplay1Button->setVisible(false);
+    ui_->betDisplay5Button->setVisible(false);
+    ui_->betDisplay10Button->setVisible(false);
+    ui_->betDisplay25Button->setVisible(false);
+    ui_->betDisplay50Button->setVisible(false);
+    ui_->betDisplay100Button->setVisible(false);
+
+    beginBetStage();
 }
