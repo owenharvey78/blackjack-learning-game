@@ -138,7 +138,9 @@ void BlackjackGame::dealerTurn(){
 }
 
 void BlackjackGame::dealerHit() {
-    dealerHand_.push_back(drawCardFromShoe());
+    Card c = drawCardFromShoe();
+    dealerHand_.push_back(c);
+    emit dealerCardDealt(c);
 }
 
 void BlackjackGame::dealerStand() {
@@ -152,9 +154,9 @@ void BlackjackGame::dealerStand() {
 void BlackjackGame::playerHit() {
     // Hit the active hand
     if (currentHandIndex_ >= playerHands_.size()) return; // safety check
-    playerHands_[currentHandIndex_].append(drawCardFromShoe());
-
-    // Emit signal
+    Card c = drawCardFromShoe();
+    playerHands_[currentHandIndex_].append(c);
+    emit playerCardDealt(c);
 }
 
 void BlackjackGame::playerStand() {
@@ -180,10 +182,13 @@ void BlackjackGame::playerSplit() {
     playerHands_.insert(currentHandIndex_ + 1, newHand); // add the new hand to player hands
 
     // Deal a new card to both hands.
-    playerHands_[currentHandIndex_].append(drawCardFromShoe());
-    playerHands_[currentHandIndex_ + 1].append(drawCardFromShoe());
+    Card newCard1 = drawCardFromShoe();
+    playerHands_[currentHandIndex_].append(newCard1);
+    emit playerCardDealt(newCard1);
 
-    // emit signal
+    Card newCard2 = drawCardFromShoe();
+    playerHands_[currentHandIndex_ + 1].append(newCard2);
+    emit playerCardDealt(newCard2);
 }
 
 void BlackjackGame::dealCards() {
