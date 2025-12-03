@@ -76,7 +76,10 @@ private slots:
 
     /// @brief Recieves the game result from game logic class.
     /// @param result of the game.
-    void onRoundEnded(BlackjackGame::GameResult result, int payout);
+    /// @param payout The amount paid for this hand.
+    /// @param handIndex Which hand this result is for.
+    /// @param totalHands Total number of hands in this round.
+    void onRoundEnded(BlackjackGame::GameResult result, int payout, int handIndex, int totalHands);
 
     /// @brief Handles player's turn starting.
     /// @param handIndex Index of the active hand.

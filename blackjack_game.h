@@ -59,15 +59,17 @@ signals:
     void dealerCardDealt(Card card);
 
     /// @brief Emitted when the round is finished.
-    /// @brief result The result of the round.
-    /// @brief payout The amount the player should be paid (including their
-    /// original bet).
-    void roundEnded(BlackjackGame::GameResult result, int payout);
+    /// @param result The result of the round.
+    /// @param payout The amount the player should be paid (including their original bet).
+    /// @param handIndex Which hand this result is for (0-based index).
+    /// @param totalHands Total number of hands in this round.
+    void roundEnded(BlackjackGame::GameResult result, int payout, int handIndex, int totalHands);
 
     // Internal logic signals.
 
     /// @brief Emitted when a hand splits (to update UI hand count).
-    void splitHand(int handCount);
+    /// @param handIndex The index of the hand that will be split.
+    void splitHand(int handIndex);
 
     /// @brief Emitted when it becomes the player's turn.
     /// @param handIndex Index of the active hand.
@@ -86,6 +88,9 @@ signals:
 private slots:
     /// @brief Recursive helper for dealer's turn (called by QTimer).
     void continueDealerTurn();
+
+    /// @brief Processes the next hand's result with appropriate delay.
+    void processNextHandResult();
 
 private:
     // Internal helper methods.
@@ -120,22 +125,19 @@ private:
     /// @brief Inidicates dealer turn.
     void dealerTurn();
 
-    /// @brief determines if the player can double.
-    /// @param hand vector holding the cards.
-    /// @param currentSplitCount The number of times the player has split this round.
-    /// @return true if player can double.
-    bool canDouble(const QVector<Card>& hand, int currentSplitCount) const;
+    /// @brief Determines if the player can double based on their current active
+    /// hand and the ruleset.
+    /// @return true if player can double, false otherwise.
+    bool canDouble() const;
 
     /// @brief determines if the player can surrender.
     /// @param hand vector holding the cards.
     /// @return true if player can surrender.
-    bool canSurrender(const QVector<Card>& hand) const;
+    bool canSurrender() const;
 
     /// @brief determines if the player can split.
-    /// @param hand vector holding the cards.
-    /// @param currentSplitCount amount of times already split.
     /// @return true if player can split.
-    bool canSplit(const QVector<Card>& hand, int currentSplitCount) const;
+    bool canSplit() const;
 
     // Dealer methods
     /// @brief Dealer hits to draw another card.
@@ -148,6 +150,10 @@ private:
     /// @param hand vector holding the cards.
     /// @return true if dealer should hit.
     bool dealerShouldHit(QVector<Card>& hand) const;
+
+    /// @brief Checks if all player hands are busted.
+    /// @return true if all hands are busted, false otherwise.
+    bool allHandsBusted() const;
 
     // Static game state methods.
     /// @brief gets the total value of the hand.
@@ -207,6 +213,9 @@ private:
 
     /// @brief Tracks which hand is currently active to account for split hands.
     int currentHandIndex_;
+
+    /// @brief Index of hand currently being processed for result display.
+    int resultHandIndex_;
 };
 
 #endif // BLACKJACK_GAME_H

@@ -15,8 +15,9 @@ struct Ruleset {
 
     // Restrictions
     bool doubleAfterSplit = true;     // can you double on a hand that was just split?
-    bool resplitAces = false;         // can you split if you split aces and get another ace?
+    bool resplit = true;              // Can you split non-aces after splitting?
     bool hitSplitAces = false;        // Can you hit after splitting Aces? Default is player gets one more card
+    bool resplitAces = false;         // can you split if you split aces and get another ace? (Only applicable if hitSplitAces is true)
     bool surrenderAllowed = true;     // Can you give up half your bet after dealer checks for blackjack? Lose the hand and half your bet
 
     // Add section for player assistances and hints in practice mode

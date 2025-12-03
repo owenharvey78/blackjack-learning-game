@@ -76,7 +76,8 @@ GameWidget::~GameWidget()
     delete ui_;
 }
 
-void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout) {
+void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
+                               int handIndex, int totalHands) {
     QString message;
 
     switch (result) {
@@ -94,6 +95,11 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout) {
         break;
     }
 
+    // Add hand number if multiple hands
+    if (totalHands > 1) {
+        message = QString("Hand %1: %2").arg(handIndex + 1).arg(message);
+    }
+
     // Update balance label.
     balance_ += payout;
     ui_->balanceLabel->setText("$" + QString::number(balance_));
@@ -102,8 +108,11 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout) {
     ui_->betLabel->setVisible(true);
     ui_->betLabel->setText(message);
 
-    // Reset game after short delay.
-    QTimer::singleShot(3000, this, &GameWidget::resetGame);
+    // Only reset game after the LAST hand is processed
+    if (handIndex == totalHands - 1) {
+        // Add extra delay after last hand before reset
+        QTimer::singleShot(2000, this, &GameWidget::resetGame);
+    }
 }
 
 void GameWidget::beginBetStage() {
