@@ -30,8 +30,9 @@ public:
     void setRuleset(Ruleset rules);
 
 public slots:
-    /// @brief Starts the game.
-    void gameStart();
+    /// @brief Signals that the player's balance has changed, then starts a new
+    /// round.
+    void beginRound(int betAmount);
 
     /// @brief Player hits to draw another card.
     void playerHit();
@@ -70,6 +71,10 @@ signals:
 
     /// @brief Emitted when it becomes the dealer's turn.
     void dealerTurnStarted();
+
+    /// @brief Signals that the player has placed a bet (either during the
+    /// betting stage, by doubling, or by splitting).
+    void betPlaced(int amount, int newBalance);
 
 private slots:
     /// @brief Recursive helper for dealer's turn (called by QTimer).
@@ -162,8 +167,14 @@ private:
     /// @brief The shoe of the blackjack game.
     Shoe* shoe_;
 
-    /// @brief Holds the player's current hand.
+    /// @brief The amount of money the player has.
+    int balance_;
+
+    /// @brief Holds the player's current hands.
     QVector<QVector<Card>> playerHands_;
+
+    /// @brief Holds the bet amounts for each of the player's hands.
+    QVector<int> betAmounts_;
 
     /// @brief Holds the dealer's current hand.
     QVector<Card> dealerHand_;

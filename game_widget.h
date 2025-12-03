@@ -34,9 +34,23 @@ public:
     /// to place their bet and start the round.
     void beginBetStage();
 
+signals:
+    /// @brief Signals that the player has completed betting and begun the round.
+    /// @param betAmount The bet the player placed.
+    void beginRound(int betAmount);
+
 protected:
     /// @brief Handles window/widget resize events to maintain aspect ratio.
     void resizeEvent(QResizeEvent* event) override;
+
+public slots:
+    /// @brief Updates the balance label when a bet is placed (either during betting,
+    /// by doubling, or by splitting). Shows the amount that was bet underneath the
+    /// balance for two seconds, then updates the balance label and hides the bet
+    /// amount.
+    /// @param betAmount The amount the player bet.
+    /// @param newBalance The player's balance after making the bet.
+    void onBetPlaced(int betAmount, int newBalance);
 
 private slots:
 

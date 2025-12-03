@@ -54,9 +54,11 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
 
     // Starting/ending game.
     connect(ui_->startRoundButton, &QPushButton::clicked, this, &GameWidget::onStartButtonClicked);
+    connect(this, &GameWidget::beginRound, game_, &BlackjackGame::beginRound);
     connect(game_, &BlackjackGame::roundEnded, this, &GameWidget::onRoundEnded);
     connect(game_, &BlackjackGame::playerTurn, this, &GameWidget::onPlayerTurn);
     connect(game_, &BlackjackGame::dealerTurnStarted, this, &GameWidget::onDealerTurnStarted);
+    connect(game_, &BlackjackGame::betPlaced, this, &GameWidget::onBetPlaced);
 
     // Card deals.
     connect(game, &BlackjackGame::playerCardDealt, this, &GameWidget::onPlayerCardDealt);
@@ -266,8 +268,9 @@ void GameWidget::onStartButtonClicked() {
     // Hide bet label
     ui_->betLabel->setText("");
 
+    emit beginRound(currentBetTotal_);
+
     // Update balance label with current balance after bet
-    balance_ -= currentBetTotal_;
     currentBet_[1] = 0;
     currentBet_[5] = 0;
     currentBet_[10] = 0;
@@ -275,9 +278,6 @@ void GameWidget::onStartButtonClicked() {
     currentBet_[50] = 0;
     currentBet_[100] = 0;   // TODO: refactor this into a helper method
     currentBetTotal_ = 0;
-    ui_->balanceLabel->setText("$" + QString::number(balance_));
-
-    game_->gameStart();
 }
 
 void GameWidget::onPlayerCardDealt(Card card){
@@ -472,6 +472,23 @@ void GameWidget::onDealerTurnStarted() {
     ui_->doubleButton->setVisible(false);
     ui_->splitButton->setVisible(false);
 
+    // Disable chip buttons (but keep them visible)
+    ui_->betDisplay1Button->setEnabled(false);
+    ui_->betDisplay5Button->setEnabled(false);
+    ui_->betDisplay10Button->setEnabled(false);
+    ui_->betDisplay25Button->setEnabled(false);
+    ui_->betDisplay50Button->setEnabled(false);
+    ui_->betDisplay100Button->setEnabled(false);
+
     // Flip hole card
     flipCard(holeCardItem_, holeCard_);
+}
+
+void GameWidget::onBetPlaced(int betAmount, int newBalance) {
+    balance_ = newBalance;
+    ui_->betLabel->setText("-$" + QString::number(betAmount));
+    QTimer::singleShot(2000, [this]() {
+        ui_->balanceLabel->setText("$" + QString::number(balance_));
+        ui_->betLabel->setText("");
+    });
 }

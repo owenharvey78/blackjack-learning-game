@@ -2,17 +2,11 @@
 #include "shoe.h"
 #include "card.h"
 
-BlackjackGame::BlackjackGame(QObject *parent) : QObject{parent}{
-    rules_ = Ruleset();
-    shoe_ = new Shoe(rules_.numDecks, 0.75f, this);
-    needsShuffling_ = true;
-    hasRoundStarted_ = false;
-    playerHands_ = QVector<QVector<Card>>();
-    dealerHand_ = QVector<Card>();
-    currentHandIndex_ = 0;
-
-    // Add necessary connects here.
-}
+BlackjackGame::BlackjackGame(QObject *parent) : QObject{parent},
+    rules_(), shoe_(new Shoe(rules_.numDecks, 0.2, this)),
+    balance_(1000), needsShuffling_(true), hasRoundStarted_(false),
+    currentHandIndex_(0)
+{ }
 
 void BlackjackGame::setRuleset(Ruleset rules) {
     rules_ = rules;
@@ -20,7 +14,9 @@ void BlackjackGame::setRuleset(Ruleset rules) {
 
 // Game start and Animation
 
-void BlackjackGame::gameStart() {
+void BlackjackGame::beginRound(int betAmount) {
+    balance_ -= betAmount;
+    emit betPlaced(betAmount, balance_);
     dealNewHand();
 }
 
