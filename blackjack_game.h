@@ -17,12 +17,10 @@ public:
 
     /// @brief defines an enum for the different possible results of a hand.
     enum class GameResult {
-        PlayerWin,
-        PlayerBlackjack,
-        DealerWin,
+        Win,
+        Lose,
         Push,
-        PlayerBust,
-        DealerBust
+        Blackjack
     };
 
     /// @brief Change the ruleset of the game.

@@ -165,21 +165,21 @@ BlackjackGame::GameResult BlackjackGame::determineWinner(QVector<Card>& playerHa
 
     // Check Busts
     if (playerValue > 21) {
-        return GameResult::PlayerBust;
+        return GameResult::Lose;
     }
     if (dealerValue > 21) {
-        return GameResult::DealerBust;
+        return GameResult::Win;
     }
 
-    // Check Blackjacks (BJ beats non-BJ 21)
+    // Check Blackjacks if on first hand
     bool pBJ = isBlackJack(playerHand);
     bool dBJ = isBlackJack(dealerHand);
 
     if (pBJ && !dBJ) {
-        return GameResult::PlayerBlackjack;
+        return GameResult::Blackjack;
     }
     if (dBJ && !pBJ) {
-        return GameResult::DealerWin;
+        return GameResult::Lose;
     }
     if (pBJ && dBJ) {
         return GameResult::Push;
@@ -187,10 +187,10 @@ BlackjackGame::GameResult BlackjackGame::determineWinner(QVector<Card>& playerHa
 
     // Compare Values
     if (playerValue > dealerValue) {
-        return GameResult::PlayerWin;
+        return GameResult::Win;
     }
     if (playerValue < dealerValue) {
-        return GameResult::DealerWin;
+        return GameResult::Lose;
     }
 
     // Otherwise a push
