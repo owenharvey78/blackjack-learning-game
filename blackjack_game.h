@@ -50,13 +50,21 @@ signals:
     // Signals used by game widget.
 
     /// @brief Emitted when a card is dealt to the player (for animation).
-    void playerCardDealt(Card card);
+    /// @param card The card that is dealt.
+    /// @param handIndex The hand that is dealt to the player.
+    /// @param isLastCard Indicates whether this is the last card to be dealt
+    /// for this hand (if the player doubled or split aces) and should be
+    /// dealt sideways.
+    void playerCardDealt(Card card, int handIndex, bool isLastCard);
 
     /// @brief Emitted when a card is dealt to the dealer (for animation).
     void dealerCardDealt(Card card);
 
     /// @brief Emitted when the round is finished.
-    void roundEnded(BlackjackGame::GameResult result);
+    /// @brief result The result of the round.
+    /// @brief payout The amount the player should be paid (including their
+    /// original bet).
+    void roundEnded(BlackjackGame::GameResult result, int payout);
 
     // Internal logic signals.
 
@@ -87,6 +95,16 @@ private:
 
     /// @brief Handles the initial deal animation with timers.
     void dealCards();
+
+    /// @brief Deals a card to the dealer.
+    void dealDealerCard();
+
+    /// @brief Deals a card to the player.
+    /// @param handIndex The index of the hand to deal to.
+    /// @param isLastDeal Indicates whether the card to be dealt will be the
+    /// last card dealt for the hand (i.e. if the player doubled or split aces)
+    /// and should be dealt sideways.
+    void dealPlayerCard(int handIndex, bool isLastDeal);
 
     /// @brief Helper to resolve the round and emit roundEnded.
     void checkCardsAndRound(int handIndex, GameResult currentState);

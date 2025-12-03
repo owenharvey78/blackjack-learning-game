@@ -44,39 +44,49 @@ void BlackjackGame::dealCards() {
     for (int i = 0; i < 2; ++i) {
         // Deal Player Card
         QTimer::singleShot(delay, this, [this]() {
-            Card c = drawCardFromShoe();
-            // Safety check in case game closed
-            if (playerHands_.isEmpty()) return;
-
-            playerHands_[0].append(c);
-            emit playerCardDealt(c);
+            dealPlayerCard(0, false);
         });
 
         delay += step;
 
         // Deal Dealer Card
-        QTimer::singleShot(delay, this, [this]() {
-            Card c = drawCardFromShoe();
-            dealerHand_.append(c);
-            emit dealerCardDealt(c);
-
-            // If this is the last card (2nd round, dealer), check for BJ
-            if (dealerHand_.size() == 2) {
-                // Check Immediate Blackjack after animation finishes
-                bool playerHasBJ = isBlackJack(playerHands_[0]);
-                bool dealerHasBJ = isBlackJack(dealerHand_);
-
-                if (playerHasBJ || dealerHasBJ) {
-                    checkCardsAndRound(0, determineWinner(playerHands_[0], dealerHand_));
-                } else {
-                    // Player's turn - check if double/split allowed
-                    bool canDbl = canDouble(playerHands_[0], 0);
-                    bool canSpl = canSplit(playerHands_[0], 0);
-                    emit playerTurn(0, canDbl, canSpl);
-                }
-            }
-        });
+        QTimer::singleShot(delay, this, &BlackjackGame::dealDealerCard);
         delay += step;
+    }
+}
+
+void BlackjackGame::dealPlayerCard(int handIndex, bool isLastCard) {
+    Card c = drawCardFromShoe();
+    // Safety check in case game closed
+    if (playerHands_.isEmpty()) return;
+
+    playerHands_[handIndex].append(c);
+    emit playerCardDealt(c, handIndex, isLastCard);
+}
+
+void BlackjackGame::dealDealerCard() {
+    Card c = drawCardFromShoe();
+    dealerHand_.append(c);
+    emit dealerCardDealt(c);
+
+    // If this is the last card (2nd round, dealer), check for BJ
+    if (dealerHand_.size() == 2) {
+        // TODO: add a signal (and a slot in GameWidget) to show a small animation
+        // with the dealer checking their other card if their upcard is an ace or
+        // 10-valued
+
+        // Check Immediate Blackjack after animation finishes
+        bool playerHasBJ = isBlackJack(playerHands_[0]);
+        bool dealerHasBJ = isBlackJack(dealerHand_);
+
+        if (playerHasBJ || dealerHasBJ) {
+            checkCardsAndRound(0, determineWinner(playerHands_[0], dealerHand_));
+        } else {
+            // Player's turn - check if double/split allowed
+            bool canDbl = canDouble(playerHands_[0], 0);
+            bool canSpl = canSplit(playerHands_[0], 0);
+            emit playerTurn(0, canDbl, canSpl);
+        }
     }
 }
 
@@ -286,7 +296,9 @@ void BlackjackGame::playerSplit() {
 // Results
 
 void BlackjackGame::checkCardsAndRound(int handIndex, GameResult currentState) {
-    emit roundEnded(currentState);
+    int payout = 0;
+    // TODO: calculate payout
+    emit roundEnded(currentState, payout);
 }
 
 Card BlackjackGame::drawCardFromShoe() {
