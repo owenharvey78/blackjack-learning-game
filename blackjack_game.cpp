@@ -244,9 +244,7 @@ void BlackjackGame::dealerStand() {
 void BlackjackGame::playerHit() {
     if (currentHandIndex_ >= playerHands_.size()) return;
 
-    Card c = drawCardFromShoe();
-    playerHands_[currentHandIndex_].append(c);
-    emit playerCardDealt(c);
+    dealPlayerCard(currentHandIndex_, false);
 
     if (isBust(playerHands_[currentHandIndex_])) {
         playerStand();
@@ -257,9 +255,7 @@ void BlackjackGame::playerDouble() {
     if (currentHandIndex_ >= playerHands_.size()) return;
     if (!canDouble(playerHands_[currentHandIndex_], playerHands_.size() - 1)) return;
 
-    Card c = drawCardFromShoe();
-    playerHands_[currentHandIndex_].append(c);
-    emit playerCardDealt(c);
+    dealPlayerCard(currentHandIndex_, true);
 
     playerStand();
 }
@@ -282,13 +278,9 @@ void BlackjackGame::playerSplit() {
     playerHands_.insert(currentHandIndex_ + 1, newHand);
 
     // Deal new cards
-    Card newCard1 = drawCardFromShoe();
-    playerHands_[currentHandIndex_].append(newCard1);
-    emit playerCardDealt(newCard1);
+    dealPlayerCard(currentHandIndex_, splitCard.rank == Card::Rank::Ace);
 
-    Card newCard2 = drawCardFromShoe();
-    playerHands_[currentHandIndex_ + 1].append(newCard2);
-    emit playerCardDealt(newCard2);
+    dealPlayerCard(currentHandIndex_ + 1, splitCard.rank == Card::Rank::Ace);
 
     emit splitHand(playerHands_.size());
 }

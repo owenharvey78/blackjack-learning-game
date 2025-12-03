@@ -67,7 +67,9 @@ private slots:
 
     /// @brief Animates a player card being dealt.
     /// @param card The card to deal.
-    void onPlayerCardDealt(Card card);
+    /// @param handIndex The index of the hand to deal to.
+    /// @param isLastCard Indicates whether the card should be dealt sideways.
+    void onPlayerCardDealt(Card card, int handIndex, bool isLastCard);
 
     /// @brief Animates a dealer card being dealt.
     /// @param card The card to deal.

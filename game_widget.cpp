@@ -280,10 +280,14 @@ void GameWidget::onStartButtonClicked() {
     currentBetTotal_ = 0;
 }
 
-void GameWidget::onPlayerCardDealt(Card card){
+void GameWidget::onPlayerCardDealt(Card card, int handIndex, bool isLastCard) {
     QPixmap backPix = cardSprites_.back();
     QGraphicsPixmapItem* item = scene_->addPixmap(backPix);
     item->setPos(deckPos_);
+
+    // Make the card rotated by 90 degrees if isLastCard is true
+    if (isLastCard)
+        item->setRotation(-90);
 
     // Changes based on "index" here.
     //                            |
@@ -321,9 +325,10 @@ void GameWidget::onPlayerCardDealt(Card card){
     drawPlayerCard->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-void GameWidget::onDealerCardDealt(Card card){
+void GameWidget::onDealerCardDealt(Card card) {
     QPixmap backPix = cardSprites_.back();
     QGraphicsPixmapItem* item = scene_->addPixmap(backPix);
+
     item->setPos(deckPos_);
 
     // Changes based on "index" here.
@@ -335,11 +340,13 @@ void GameWidget::onDealerCardDealt(Card card){
 
     QVariantAnimation* drawDealerCard = new QVariantAnimation(this);
     drawDealerCard->setDuration(150);
+    drawDealerCard->setEasingCurve(QEasingCurve::InOutExpo);
     drawDealerCard->setStartValue(deckPos_);
     drawDealerCard->setEndValue(belowPosition);
 
     QVariantAnimation* dealDealerCard = new QVariantAnimation(this);
     dealDealerCard->setDuration(300);
+    drawDealerCard->setEasingCurve(QEasingCurve::InOutExpo);
     dealDealerCard->setStartValue(belowPosition);
     dealDealerCard->setEndValue(handPosition);
 
@@ -369,7 +376,7 @@ void GameWidget::onDealerCardDealt(Card card){
     drawDealerCard->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-void GameWidget::flipCard(QGraphicsPixmapItem* item, const Card& card){
+void GameWidget::flipCard(QGraphicsPixmapItem* item, const Card& card) {
     // Since everything is 2D there is no actual flipping, so instead I did a cool shrinking thing I saw online
     // and wanted to replicate.
 
