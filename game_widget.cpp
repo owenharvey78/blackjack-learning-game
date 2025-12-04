@@ -120,7 +120,7 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
             msgBox.exec();
 
             if (msgBox.clickedButton() == restartButton) {
-                GameWidget::resetGame();
+                // GameWidget::resetGame();
             }
             else if (msgBox.clickedButton() == menuButton) {
                 emit returnToMainMenu();
