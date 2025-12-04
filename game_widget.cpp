@@ -328,7 +328,7 @@ void GameWidget::onPlayerCardDealt(Card card, int handIndex, bool isLastCard) {
     int yPos = 375;  // All player hands at same Y
 
     QPoint handPosition(finalX, yPos);
-    QPoint belowPosition(375, 60);  // Gathering point
+    QPoint belowPosition(deckPos_.x(), deckPos_.y() + 60);
 
     // Animation 1: Draw from deck to gathering point (150ms)
     QVariantAnimation* drawPlayerCard = new QVariantAnimation(this);
@@ -381,7 +381,7 @@ void GameWidget::onDealerCardDealt(Card card) {
 
     // This card's final position
     QPoint handPosition(xPositions.last(), yPos);
-    QPoint belowPosition(375, 60);
+    QPoint belowPosition(deckPos_.x(), deckPos_.y() + 60);
 
     // Animation 1: Draw from deck to gathering point
     QVariantAnimation* drawDealerCard = new QVariantAnimation(this);
