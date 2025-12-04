@@ -15,6 +15,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     card.cpp \
+    ruleset_widget.cpp \
     shoe.cpp
 
 HEADERS += \
@@ -24,11 +25,13 @@ HEADERS += \
     mainwindow.h \
     ruleset.h \
     card.h \
+    ruleset_widget.h \
     shoe.h
 
 FORMS += \
     game_widget.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    ruleset_widget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
