@@ -106,16 +106,26 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
     balance_ += payout;
     ui_->balanceLabel->setText("$" + QString::number(balance_));
 
-    if(balance_ == 0){
-        // No money broke boy.
-        QMessageBox::StandardButton reply = QMessageBox::question(this, "YOU HAVE NO MONEY!", "Do you want to restart?", QMessageBox::Yes | QMessageBox::No);
-        if (reply == QMessageBox::Yes) {
-            // Handle "Yes" action
-        }
-        else if (reply == QMessageBox::No) {
-            emit returnToMainMenu();
-        }
-        ui_->balanceLabel->setText("$" + QString::number(balance_) + "\n You got no more money. HAHA LOSER");
+    if (balance_ == 0) {
+        timer_.singleShot(1500, this, [this]() {
+            QMessageBox msgBox(this);
+            msgBox.setWindowTitle("YOU HAVE NO MONEY!");
+            msgBox.setText("Do you want to restart?");
+
+            QPushButton* restartButton =
+                msgBox.addButton("Yes, restart", QMessageBox::AcceptRole);
+            QPushButton* menuButton =
+                msgBox.addButton("No, return to menu", QMessageBox::RejectRole);
+
+            msgBox.exec();
+
+            if (msgBox.clickedButton() == restartButton) {
+                // TODO: restart game here
+            }
+            else if (msgBox.clickedButton() == menuButton) {
+                emit returnToMainMenu();
+            }
+        });
     }
 
     // Indicate results in bet label.

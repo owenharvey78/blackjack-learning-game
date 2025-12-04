@@ -23,8 +23,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Connect the practice button to the slot
     connect(ui_->practiceButton, &QPushButton::clicked, this, &MainWindow::onPracticeButtonClicked);
-
-    // connect(gameWidget_, &GameWidget::returnToMainMenu, this, &MainWindow::onFromPracticeReturnToMenu);
 }
 
 MainWindow::~MainWindow() {
@@ -46,8 +44,11 @@ void MainWindow::onPracticeButtonClicked() {
 
     // Start the betting stage
     gameWidget_->beginBetStage();
+
+    // Check for returning back to menu.
+    connect(gameWidget_, &GameWidget::returnToMainMenu, this, &MainWindow::onFromPracticeReturnToMenu);
 }
 
 void MainWindow::onFromPracticeReturnToMenu(){
-    stackedWidget_->setCurrentWidget(this);
+    stackedWidget_->setCurrentWidget(menuWidget_);
 }
