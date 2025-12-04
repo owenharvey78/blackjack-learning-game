@@ -106,6 +106,11 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
     balance_ += payout;
     ui_->balanceLabel->setText("$" + QString::number(balance_));
 
+    if(balance_ == 0){
+        // No money broke boy.
+        ui_->balanceLabel->setText("$" + QString::number(balance_) + "\n You got no more money. HAHA LOSER");
+    }
+
     // Indicate results in bet label.
     ui_->betLabel->setVisible(true);
     ui_->betLabel->setText(message);
