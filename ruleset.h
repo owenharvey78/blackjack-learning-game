@@ -11,7 +11,7 @@ struct Ruleset {
 
     // Payouts/Decks
     double blackjackPayout = 1.5;     // determines payout when player hits a blackjack.
-    int numDecks = 6;                 // default to 1 for simplicity.
+    int numDecks = 6;                 // 6 or 8 is standard. define valid range 1 - 10.
 
     // Restrictions
     bool doubleAfterSplit = true;     // can you double on a hand that was just split?
