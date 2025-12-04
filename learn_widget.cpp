@@ -17,8 +17,7 @@ LearnWidget::LearnWidget(QWidget *parent)
                    "Splitting Pairs",
                    "Surrender",
                    "End-of-Hand",
-                   "Basic Strategies",
-                   "Basic Stategies"
+                   "Basic Strategies"
     };
 
     instructionList_ = {"",
@@ -57,9 +56,7 @@ LearnWidget::LearnWidget(QWidget *parent)
                         "The no one busts the total closer to 21 wins.\n"
                         "If there is a tie you keep your bet.",
 
-                        "If you would like to learn basic strategies press next.",
-
-                        ""
+                        "If you would like to learn basic strategies press next."
     };
 
     updatePage();
