@@ -3,18 +3,18 @@
 
 GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     : QWidget(parent), ui_(new Ui::GameWidget), game_(game),
-    cardSprites_(":/images/cards.png", 2.0), balance_(1000), playerHandIndex_(0),
-    dealerHandIndex_(0), currentBetTotal_(0), holeCard_(Card::Rank::Cut, Card::Suit::Cut) {
+    cardSprites_(":/images/cards.png", 2.0), balance_(1000),
+    currentBetTotal_(0), holeCard_(Card::Rank::Cut, Card::Suit::Cut) {
     ui_->setupUi(this);
 
     ui_->hitButton->setVisible(false);
     ui_->standButton->setVisible(false);
 
     scene_ = new QGraphicsScene(this);
-    scene_->setSceneRect(0, 0, 800, 800);
+    scene_->setSceneRect(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
     ui_->graphicsView->setScene(scene_);
 
-    deckPos_ = QPoint(750, 0);
+    deckPos_ = QPoint(SCENE_WIDTH - 50, 0);
 
     // Place "deck" in top-right corner
     deckItem_ = scene_->addPixmap(cardSprites_.back());
@@ -52,6 +52,7 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(ui_->betDisplay50Button, &QPushButton::clicked, this, [this]() { removeChip(50); });
     connect(ui_->betDisplay100Button, &QPushButton::clicked, this, [this]() { removeChip(100); });
 
+    // TODO: change the placement of the connect calls below this comment
     // Starting/ending game.
     connect(ui_->startRoundButton, &QPushButton::clicked, this, &GameWidget::onStartButtonClicked);
     connect(this, &GameWidget::beginRound, game_, &BlackjackGame::beginRound);
@@ -59,6 +60,7 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(game_, &BlackjackGame::playerTurn, this, &GameWidget::onPlayerTurn);
     connect(game_, &BlackjackGame::dealerTurnStarted, this, &GameWidget::onDealerTurnStarted);
     connect(game_, &BlackjackGame::betPlaced, this, &GameWidget::onBetPlaced);
+    connect(game_, &BlackjackGame::splitHand, this, &GameWidget::onHandSplit);
 
     // Card deals.
     connect(game, &BlackjackGame::playerCardDealt, this, &GameWidget::onPlayerCardDealt);
@@ -283,96 +285,140 @@ void GameWidget::onStartButtonClicked() {
 }
 
 void GameWidget::onPlayerCardDealt(Card card, int handIndex, bool isLastCard) {
+    // Create card item at deck position
     QPixmap backPix = cardSprites_.back();
     QGraphicsPixmapItem* item = scene_->addPixmap(backPix);
     item->setPos(deckPos_);
 
-    // Make the card rotated by 90 degrees if isLastCard is true
+    // Rotate if last card (doubled/split aces)
     if (isLastCard)
         item->setRotation(-90);
 
-    // Changes based on "index" here.
-    //                            |
-    //                            V
-    QPoint handPosition(100 + playerHandIndex_ * 80, 375);
-    playerHandIndex_++;
-    QPoint belowPosition(375, 60);
+    // Add a new hand if this is the first card being dealt
+    if (playerHandCards_.empty()) {
+        playerHandCards_.append(QVector<QGraphicsPixmapItem*>());
+    }
+    playerHandCards_[handIndex].append(item);
 
+    // Calculate position using horizontal distribution
+    int numCards = playerHandCards_[handIndex].size();
+    int totalHands = playerHandCards_.size();
+
+    // Get hand base position
+    QVector<int> handBasePositions = calculateHandBaseXPositions(totalHands);
+    int handBaseX = handBasePositions[handIndex];
+
+    // Get relative positions for cards in this hand
+    QVector<int> relativePositions = calculateRelativeCardPositions(numCards);
+
+    // This card's final position (last card in hand)
+    int finalX = handBaseX + relativePositions.last();
+    int yPos = 375;  // All player hands at same Y
+
+    QPoint handPosition(finalX, yPos);
+    QPoint belowPosition(375, 60);  // Gathering point
+
+    // Animation 1: Draw from deck to gathering point (150ms)
     QVariantAnimation* drawPlayerCard = new QVariantAnimation(this);
     drawPlayerCard->setDuration(150);
     drawPlayerCard->setStartValue(deckPos_);
     drawPlayerCard->setEndValue(belowPosition);
 
+    connect(drawPlayerCard, &QVariantAnimation::valueChanged,
+            this, [item](const QVariant& v) {
+        item->setPos(v.toPointF());
+    });
+
+    // Animation 2: Deal from gathering point to hand position (300ms)
     QVariantAnimation* dealPlayerCard = new QVariantAnimation(this);
     dealPlayerCard->setDuration(300);
     dealPlayerCard->setStartValue(belowPosition);
     dealPlayerCard->setEndValue(handPosition);
 
-    connect(drawPlayerCard, &QVariantAnimation::valueChanged, this, [item](const QVariant& v) {
+    connect(dealPlayerCard, &QVariantAnimation::valueChanged,
+            this, [item](const QVariant& v) {
         item->setPos(v.toPointF());
     });
 
-    connect(dealPlayerCard, &QVariantAnimation::valueChanged, this, [item](const QVariant& v) {
-        item->setPos(v.toPointF());
-    });
-
-    connect(drawPlayerCard, &QVariantAnimation::finished, this, [dealPlayerCard] {
+    // Connect animations in sequence
+    connect(drawPlayerCard, &QVariantAnimation::finished,
+            this, [dealPlayerCard] {
         dealPlayerCard->start(QAbstractAnimation::DeleteWhenStopped);
     });
 
-    connect(dealPlayerCard, &QVariantAnimation::finished, this, [this, item, card]() {
+    // On completion: flip card and reposition existing cards to maintain centering
+    connect(dealPlayerCard, &QVariantAnimation::finished,
+            this, [this, item, card, handIndex]() {
         flipCard(item, card);
+        // Reposition all cards in hand to keep centered (200ms smooth shift)
+        repositionHandCards(handIndex, 200);
     });
 
     drawPlayerCard->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
 void GameWidget::onDealerCardDealt(Card card) {
+    // Create card item at deck position
     QPixmap backPix = cardSprites_.back();
     QGraphicsPixmapItem* item = scene_->addPixmap(backPix);
-
     item->setPos(deckPos_);
 
-    // Changes based on "index" here.
-    //                            |
-    //                            V
-    QPoint handPosition(100 + dealerHandIndex_ * 80, 100);
-    dealerHandIndex_++;
+    // Add to dealer hand tracking
+    dealerHandCards_.append(item);
+
+    // Calculate final centered positions for dealer hand
+    int numCards = dealerHandCards_.size();
+    QVector<int> xPositions = calculateCenteredPositions(numCards);
+    int yPos = 100;
+
+    // This card's final position
+    QPoint handPosition(xPositions.last(), yPos);
     QPoint belowPosition(375, 60);
 
+    // Animation 1: Draw from deck to gathering point
     QVariantAnimation* drawDealerCard = new QVariantAnimation(this);
     drawDealerCard->setDuration(150);
     drawDealerCard->setEasingCurve(QEasingCurve::InOutExpo);
     drawDealerCard->setStartValue(deckPos_);
     drawDealerCard->setEndValue(belowPosition);
 
+    connect(drawDealerCard, &QVariantAnimation::valueChanged,
+            this, [item](const QVariant& v) {
+        item->setPos(v.toPointF());
+    });
+
+    // Animation 2: Deal from gathering point to hand position
     QVariantAnimation* dealDealerCard = new QVariantAnimation(this);
     dealDealerCard->setDuration(300);
-    drawDealerCard->setEasingCurve(QEasingCurve::InOutExpo);
+    dealDealerCard->setEasingCurve(QEasingCurve::InOutExpo);
     dealDealerCard->setStartValue(belowPosition);
     dealDealerCard->setEndValue(handPosition);
 
-    connect(drawDealerCard, &QVariantAnimation::valueChanged, this, [item](const QVariant& v) {
+    connect(dealDealerCard, &QVariantAnimation::valueChanged,
+            this, [item](const QVariant& v) {
         item->setPos(v.toPointF());
     });
 
-    connect(dealDealerCard, &QVariantAnimation::valueChanged, this, [item](const QVariant& v) {
-        item->setPos(v.toPointF());
-    });
-
-    connect(drawDealerCard, &QVariantAnimation::finished, this, [dealDealerCard] {
+    // Connect animations in sequence
+    connect(drawDealerCard, &QVariantAnimation::finished,
+            this, [dealDealerCard] {
         dealDealerCard->start(QAbstractAnimation::DeleteWhenStopped);
     });
 
-    connect(dealDealerCard, &QVariantAnimation::finished, this, [this, item, card]() {
-        if(dealerHandIndex_ == 2) {     // TODO: this starts at 1 instead of 0, fix
-            // This is the hole card; save it to flip later
+    // On completion: handle hole card or flip, then reposition
+    connect(dealDealerCard, &QVariantAnimation::finished,
+            this, [this, item, card]() {
+        // Check if this is the second card (hole card)
+        if (dealerHandCards_.size() == 2) {
+            // Save hole card for later flip
             holeCard_ = card;
             holeCardItem_ = item;
-        }
-        else {
+        } else {
+            // Flip regular dealer card
             flipCard(item, card);
         }
+        // Reposition dealer cards to maintain centering
+        repositionHandCards(-1, 200);  // -1 indicates dealer hand
     });
 
     drawDealerCard->start(QAbstractAnimation::DeleteWhenStopped);
@@ -432,15 +478,150 @@ void GameWidget::updateViewScale() {
     view_->fitInView(scene_->sceneRect(), Qt::KeepAspectRatio);
 }
 
+QVector<int> GameWidget::calculateCenteredPositions(int numCards) const {
+    if (numCards == 0) return QVector<int>();
+
+    const int sceneWidth = 800;
+    const int cardWidth = 71;   // Width of card sprite
+    const int cardGap = 10;     // Gap between cards (reduced from 80)
+
+    // Calculate total width needed for all cards
+    int totalWidth = (numCards * cardWidth) + ((numCards - 1) * cardGap);
+
+    // Calculate starting X to center the hand
+    int startX = (sceneWidth - totalWidth) / 2;
+
+    // Generate X position for each card
+    QVector<int> positions;
+    for (int i = 0; i < numCards; i++) {
+        positions.append(startX + (i * (cardWidth + cardGap)));
+    }
+
+    return positions;
+}
+
+QVector<int> GameWidget::calculateHandBaseXPositions(int totalHands) const {
+    if (totalHands == 0) return QVector<int>();
+
+    QVector<int> basePositions;
+
+    for (int i = 0; i < totalHands; i++) {
+        // Center of each section: (width / N) * (i + 0.5)
+        int centerX = (SCENE_WIDTH * (i + 0.5)) / totalHands;
+        basePositions.append(centerX);
+    }
+
+    return basePositions;
+}
+
+QVector<int> GameWidget::calculateRelativeCardPositions(int numCards) const {
+    if (numCards == 0) return QVector<int>();
+
+    const int cardWidth = 71;
+    const int cardGap = 10;
+
+    // Total width of all cards plus gaps
+    int totalWidth = (numCards * cardWidth) + ((numCards - 1) * cardGap);
+
+    // Starting offset from hand center (negative = left of center)
+    int startOffset = -totalWidth / 2;
+
+    QVector<int> relativePositions;
+    for (int i = 0; i < numCards; i++) {
+        relativePositions.append(startOffset + (i * (cardWidth + cardGap)));
+    }
+
+    return relativePositions;
+}
+
+void GameWidget::repositionHandCards(int handIndex, int duration) {
+    QVector<QGraphicsPixmapItem*> cards;
+    int yPos;
+
+    if (handIndex == -1) {
+        // Dealer hand - unchanged behavior
+        cards = dealerHandCards_;
+        yPos = 100;
+
+        if (cards.isEmpty()) return;
+
+        // Dealer always centered
+        QVector<int> newXPositions = calculateCenteredPositions(cards.size());
+
+        for (int i = 0; i < cards.size(); i++) {
+            QGraphicsPixmapItem* card = cards[i];
+            QPointF currentPos = card->pos();
+            QPointF newPos(newXPositions[i], yPos);
+
+            if (currentPos == newPos) continue;
+
+            QVariantAnimation* reposition = new QVariantAnimation(this);
+            reposition->setDuration(duration);
+            reposition->setStartValue(currentPos);
+            reposition->setEndValue(newPos);
+            reposition->setEasingCurve(QEasingCurve::InOutQuad);
+
+            connect(reposition, &QVariantAnimation::valueChanged,
+                    this, [card](const QVariant& v) {
+                card->setPos(v.toPointF());
+            });
+
+            reposition->start(QAbstractAnimation::DeleteWhenStopped);
+        }
+    } else {
+        // Player hand - NEW horizontal distribution logic
+        if (handIndex >= playerHandCards_.size()) return;
+        cards = playerHandCards_[handIndex];
+        yPos = 375;  // All player hands at same Y
+
+        if (cards.isEmpty()) return;
+
+        // Calculate horizontal distribution
+        int totalHands = playerHandCards_.size();
+        QVector<int> handBasePositions = calculateHandBaseXPositions(totalHands);
+        int handBaseX = handBasePositions[handIndex];
+
+        // Calculate relative card positions
+        QVector<int> relativePositions = calculateRelativeCardPositions(cards.size());
+
+        // Animate each card
+        for (int i = 0; i < cards.size(); i++) {
+            QGraphicsPixmapItem* card = cards[i];
+            QPointF currentPos = card->pos();
+
+            // Combine hand base position with card offset
+            int finalX = handBaseX + relativePositions[i];
+            QPointF newPos(finalX, yPos);
+
+            if (currentPos == newPos) continue;
+
+            QVariantAnimation* reposition = new QVariantAnimation(this);
+            reposition->setDuration(duration);
+            reposition->setStartValue(currentPos);
+            reposition->setEndValue(newPos);
+            reposition->setEasingCurve(QEasingCurve::InOutQuad);
+
+            connect(reposition, &QVariantAnimation::valueChanged,
+                    this, [card](const QVariant& v) {
+                card->setPos(v.toPointF());
+            });
+
+            reposition->start(QAbstractAnimation::DeleteWhenStopped);
+        }
+    }
+}
+
 void GameWidget::resetGame() {
     // Reset the scene.
     scene_->clear();
     deckItem_ = scene_->addPixmap(cardSprites_.back());
     deckItem_->setPos(deckPos_);
 
+    // Clear card tracking structures
+    playerHandCards_.clear();
+    dealerHandCards_.clear();
+
     // Reset variables.
-    playerHandIndex_ = 0;
-    dealerHandIndex_ = 0;
     currentBetTotal_ = 0;
 
     // Reset chips.
@@ -491,6 +672,33 @@ void GameWidget::onDealerTurnStarted() {
 
     // Flip hole card
     flipCard(holeCardItem_, holeCard_);
+}
+
+void GameWidget::onHandSplit(int handIndex) {
+    playerHandCards_.insert(handIndex + 1, QVector<QGraphicsPixmapItem*>());
+
+    // Move the second card from the hand being split into the new hand
+    QGraphicsPixmapItem* splitCardItem = playerHandCards_[handIndex].takeAt(1);
+    playerHandCards_[handIndex + 1].append(splitCardItem);
+
+    // if (totalHands >= 2 && playerHandCards_.contains(0) && playerHandCards_.contains(1)) {
+    //     // Move the second card item from hand 0 to be the first card in hand 1
+    //     if (playerHandCards_[0].size() >= 3 && playerHandCards_[1].size() >= 1) {
+    //         // The split card is the second card in hand 0 (index 1)
+    //         QGraphicsPixmapItem* splitCardItem = playerHandCards_[0][1];
+
+    //         // Remove from hand 0
+    //         playerHandCards_[0].remove(1);
+
+    //         // Insert at beginning of hand 1 (before the newly dealt card)
+    //         playerHandCards_[1].prepend(splitCardItem);
+    //     }
+    // }
+
+    // Now reposition all player hands to distribute horizontally
+    for (int handIndex = 0; handIndex < playerHandCards_.size(); handIndex++) {
+        repositionHandCards(handIndex, 400);
+    }
 }
 
 void GameWidget::onBetPlaced(int betAmount) {

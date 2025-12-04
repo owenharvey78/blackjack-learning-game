@@ -338,11 +338,11 @@ void BlackjackGame::playerSplit() {
     // rules declare no hitting after splitting aces
     bool isLastCard = splitCard.rank == Card::Rank::Ace && !rules_.hitSplitAces;
 
+    emit splitHand(currentHandIndex_);
+
     // Deal new cards
     dealPlayerCard(currentHandIndex_, isLastCard);
     dealPlayerCard(currentHandIndex_ + 1, isLastCard);
-
-    emit splitHand(playerHands_.size());
 
     if (isLastCard) {
         // Stand after a short delay
@@ -395,5 +395,3 @@ bool BlackjackGame::allHandsBusted() const {
     }
     return true;
 }
-
-// TODO
