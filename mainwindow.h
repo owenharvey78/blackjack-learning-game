@@ -22,6 +22,7 @@ public:
 
 private slots:
     void onPracticeButtonClicked();
+    void onRulsetButtonClicked();
 
 private:
     /// @brief The UI form object for this window.
