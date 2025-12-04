@@ -5,8 +5,7 @@
 BlackjackGame::BlackjackGame(QObject *parent) : QObject{parent},
     rules_(), shoe_(new Shoe(rules_.numDecks, 0.2, this)),
     balance_(1000), currentBetAmount_(0), needsShuffling_(true), hasRoundStarted_(false),
-    currentHandIndex_(0), resultHandIndex_(0)
-{ }
+    currentHandIndex_(0), resultHandIndex_(0){ }
 
 void BlackjackGame::setRuleset(Ruleset rules) {
     rules_ = rules;
@@ -35,6 +34,7 @@ void BlackjackGame::dealNewHand() {
     betAmounts_.append(currentBetAmount_);
     dealerHand_.clear();
     currentHandIndex_ = 0;
+    runningCount_ = 0;
 
     // Call the animated dealer
     dealCards();
@@ -65,12 +65,17 @@ void BlackjackGame::dealPlayerCard(int handIndex, bool isLastCard) {
 
     playerHands_[handIndex].append(c);
     emit playerCardDealt(c, handIndex, isLastCard);
+
+    // Add Hi-Lo Count to running count
+    runningCount_ += c.getHiLoValue();
 }
 
 void BlackjackGame::dealDealerCard() {
     Card c = drawCardFromShoe();
     dealerHand_.append(c);
     emit dealerCardDealt(c);
+
+    runningCount_ += c.getHiLoValue();
 
     // If this is the last card (2nd round, dealer), check for BJ
     if (dealerHand_.size() == 2) {
@@ -307,6 +312,19 @@ void BlackjackGame::playerDouble() {
 
     // Wait a short delay before the dealer's turn
     QTimer::singleShot(500, this, &BlackjackGame::playerStand);
+}
+
+int BlackjackGame::getRunningCount(){
+    return runningCount_;
+}
+
+int BlackjackGame::getTrueCount(){
+    double floatingNumber = static_cast<double>(shoe_->getSize()) / 52.0;
+
+    if(floatingNumber == 0)
+        return 0;
+
+    return static_cast<double>(runningCount_) / floatingNumber;
 }
 
 void BlackjackGame::playerStand() {
