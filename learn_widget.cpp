@@ -16,7 +16,9 @@ LearnWidget::LearnWidget(QWidget *parent)
                    "Double Down",
                    "Splitting Pairs",
                    "Surrender",
-                   "End-of-Hand"
+                   "End-of-Hand",
+                   "Basic Strategies",
+                   "Basic Stategies"
     };
 
     instructionList_ = {"",
@@ -31,7 +33,7 @@ LearnWidget::LearnWidget(QWidget *parent)
                         "If your first two cards total 21, that is Blackjack!\n"
                         "Blackjack pays 3:2 (1.5x of what you bid)",
 
-                        "If the dealers first card is an Ace, The dealer checks for Blackjack before you make a choice\n"
+                        "If the dealers first card is an Ace, the dealer checks for\n Blackjack before you make a choice\n"
                         "This prevents you from running into a guarenteed loss",
 
                         "If you Hit, you get another card.\n"
@@ -53,7 +55,11 @@ LearnWidget::LearnWidget(QWidget *parent)
                         "If you bust (go over 21), you lose.\n"
                         "If the dealer busts, you win.\n"
                         "The no one busts the total closer to 21 wins.\n"
-                        "If there is a tie you keep your bet."
+                        "If there is a tie you keep your bet.",
+
+                        "If you would like to learn basic strategies press next.",
+
+                        ""
     };
 
     updatePage();
@@ -74,6 +80,17 @@ void LearnWidget::updatePage(){
 
     // diable next button if we are on the last page
     ui_->nextButton->setDisabled(currentInstruction_ == headerList_.size() - 1);
+
+    if(currentInstruction_ != 0){
+        ui_->instructionLabel->setStyleSheet(QString("QLabel { color: white; font-family: 'Georgia'; "
+                                                     "font-size: 18px;"
+                                                     "background-color: #003b16;"
+                                                     "border-radius: 20px;"
+                                                     "border: 3px solid #ffd700;"
+                                                     "}"));
+    }else{
+        ui_->instructionLabel->setStyleSheet(QString()); // This else feels redundant but helps. Trust
+    }
 }
 
 void LearnWidget::onNextButtonClicked(){

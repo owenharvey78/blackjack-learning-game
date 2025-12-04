@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/images">
         <file>BJbackground.png</file>
-        <file>GreenBackground.png</file>
     </qresource>
 </RCC>

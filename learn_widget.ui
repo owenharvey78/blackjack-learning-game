@@ -20,14 +20,7 @@
    <item row="1" column="1" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop">
     <widget class="QLabel" name="instructionLabel">
      <property name="styleSheet">
-      <string notr="true">QLabel {
-	color: white;	/* makes the letters white */
-	font-family: 'Georgia';
-	font-size: 18px;
-	background-color: #003b16; /* green color */
-	border-radius: 20px; 
-	border: 3px solid #ffd700;	/* yello border */
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string/>
