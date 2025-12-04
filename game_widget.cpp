@@ -107,7 +107,7 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
     ui_->balanceLabel->setText("$" + QString::number(balance_));
 
     if (balance_ == 0) {
-        timer_.singleShot(1500, this, [this]() {
+        timer_.singleShot(2000, this, [this]() {
             QMessageBox msgBox(this);
             msgBox.setWindowTitle("YOU HAVE NO MONEY!");
             msgBox.setText("Do you want to restart?");
@@ -120,7 +120,7 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
             msgBox.exec();
 
             if (msgBox.clickedButton() == restartButton) {
-                // TODO: restart game here
+                GameWidget::resetGame();
             }
             else if (msgBox.clickedButton() == menuButton) {
                 emit returnToMainMenu();
@@ -135,7 +135,7 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
     // Only reset game after the LAST hand is processed
     if (handIndex == totalHands - 1) {
         // Add extra delay after last hand before reset
-        QTimer::singleShot(2000, this, &GameWidget::resetGame);
+        timer_.singleShot(2000, this, &GameWidget::resetGame);
     }
 }
 
@@ -335,14 +335,14 @@ void GameWidget::onPlayerCardDealt(Card card, int handIndex, bool isLastCard) {
 
     // This card's final position (last card in hand)
     int finalX = handBaseX + relativePositions.last();
-    int yPos = 375;  // All player hands at same Y
 
-    QPoint handPosition(finalX, yPos);
-    QPoint belowPosition(deckPos_.x(), deckPos_.y() + 60);
+    // All player hands at same Y: PLAYER_HAND_Y
+    QPoint handPosition(finalX, PLAYER_HAND_Y);
+    QPoint belowPosition(deckPos_.x(), deckPos_.y() + DECK_DRAW_OFFSET);
 
     // Animation 1: Draw from deck to gathering point (150ms)
     QVariantAnimation* drawPlayerCard = new QVariantAnimation(this);
-    drawPlayerCard->setDuration(150);
+    drawPlayerCard->setDuration(DECK_DRAW_DURATION);
     drawPlayerCard->setStartValue(deckPos_);
     drawPlayerCard->setEndValue(belowPosition);
 
@@ -352,7 +352,7 @@ void GameWidget::onPlayerCardDealt(Card card, int handIndex, bool isLastCard) {
 
     // Animation 2: Deal from gathering point to hand position (300ms)
     QVariantAnimation* dealPlayerCard = new QVariantAnimation(this);
-    dealPlayerCard->setDuration(300);
+    dealPlayerCard->setDuration(DEAL_TO_HAND_DURATION);
     dealPlayerCard->setStartValue(belowPosition);
     dealPlayerCard->setEndValue(handPosition);
 
@@ -387,15 +387,15 @@ void GameWidget::onDealerCardDealt(Card card) {
     // Calculate final centered positions for dealer hand
     int numCards = dealerHandCards_.size();
     QVector<int> xPositions = calculateCenteredPositions(numCards);
-    int yPos = 100;
 
+    // All dealer hands at same Y: DEALER_HAND_Y
     // This card's final position
-    QPoint handPosition(xPositions.last(), yPos);
-    QPoint belowPosition(deckPos_.x(), deckPos_.y() + 60);
+    QPoint handPosition(xPositions.last(), DEALER_HAND_Y);
+    QPoint belowPosition(deckPos_.x(), deckPos_.y() + DECK_DRAW_OFFSET);
 
     // Animation 1: Draw from deck to gathering point
     QVariantAnimation* drawDealerCard = new QVariantAnimation(this);
-    drawDealerCard->setDuration(150);
+    drawDealerCard->setDuration(DECK_DRAW_DURATION);
     drawDealerCard->setEasingCurve(QEasingCurve::InOutExpo);
     drawDealerCard->setStartValue(deckPos_);
     drawDealerCard->setEndValue(belowPosition);
@@ -407,7 +407,7 @@ void GameWidget::onDealerCardDealt(Card card) {
 
     // Animation 2: Deal from gathering point to hand position
     QVariantAnimation* dealDealerCard = new QVariantAnimation(this);
-    dealDealerCard->setDuration(300);
+    dealDealerCard->setDuration(DEAL_TO_HAND_DURATION);
     dealDealerCard->setEasingCurve(QEasingCurve::InOutExpo);
     dealDealerCard->setStartValue(belowPosition);
     dealDealerCard->setEndValue(handPosition);
@@ -453,7 +453,7 @@ void GameWidget::flipCard(QGraphicsPixmapItem* item, const Card& card) {
 
     // First this animates shrinking x axis.
     QVariantAnimation* shrink = new QVariantAnimation(this);
-    shrink->setDuration(150);
+    shrink->setDuration(FLIP_DURATION);
     shrink->setStartValue(1.0);
     shrink->setEndValue(0.0);
 
@@ -554,12 +554,10 @@ QVector<int> GameWidget::calculateRelativeCardPositions(int numCards) const {
 
 void GameWidget::repositionHandCards(int handIndex, int duration) {
     QVector<QGraphicsPixmapItem*> cards;
-    int yPos;
 
     if (handIndex == -1) {
         // Dealer hand - unchanged behavior
         cards = dealerHandCards_;
-        yPos = 100;
 
         if (cards.isEmpty()) return;
 
@@ -569,7 +567,7 @@ void GameWidget::repositionHandCards(int handIndex, int duration) {
         for (int i = 0; i < cards.size(); i++) {
             QGraphicsPixmapItem* card = cards[i];
             QPointF currentPos = card->pos();
-            QPointF newPos(newXPositions[i], yPos);
+            QPointF newPos(newXPositions[i], DEALER_HAND_Y);
 
             if (currentPos == newPos) continue;
 
@@ -586,11 +584,11 @@ void GameWidget::repositionHandCards(int handIndex, int duration) {
 
             reposition->start(QAbstractAnimation::DeleteWhenStopped);
         }
-    } else {
+    }
+    else {
         // Player hand - NEW horizontal distribution logic
         if (handIndex >= playerHandCards_.size()) return;
         cards = playerHandCards_[handIndex];
-        yPos = 375;  // All player hands at same Y
 
         if (cards.isEmpty()) return;
 
@@ -609,7 +607,7 @@ void GameWidget::repositionHandCards(int handIndex, int duration) {
 
             // Combine hand base position with card offset
             int finalX = handBaseX + relativePositions[i];
-            QPointF newPos(finalX, yPos);
+            QPointF newPos(finalX, PLAYER_HAND_Y);
 
             if (currentPos == newPos) continue;
 
@@ -722,7 +720,7 @@ void GameWidget::onHandSplit(int handIndex) {
 void GameWidget::onBetPlaced(int betAmount) {
     balance_ -= betAmount;
     ui_->betLabel->setText("-$" + QString::number(betAmount));
-    QTimer::singleShot(2000, [this]() {
+    timer_.singleShot(2000, [this]() {
         ui_->balanceLabel->setText("$" + QString::number(balance_));
         ui_->betLabel->setText("");
     });

@@ -99,12 +99,6 @@ private slots:
     void onHandSplit(int handIndex);
 
 private:
-    /// @brief The width of the QGraphicsScene used to display the cards.
-    static constexpr int SCENE_WIDTH = 1600;
-
-    /// @brief The height of the QGraphicsScene used to display the cards.
-    static constexpr int SCENE_HEIGHT = 900;
-
     /// @brief The UI form associated with this widget.
     Ui::GameWidget* ui_;
 
@@ -196,6 +190,32 @@ private:
 
     /// @brief The dealer's hole card that will be flipped after the player is done.
     Card holeCard_;
+
+    // Static ConstExpr:
+
+    /// @brief The width of the QGraphicsScene used to display the cards.
+    static constexpr int SCENE_WIDTH = 1600;
+
+    /// @brief The height of the QGraphicsScene used to display the cards.
+    static constexpr int SCENE_HEIGHT = 900;
+
+    /// @brief The Y position for player hands.
+    static constexpr int PLAYER_HAND_Y = 375;
+
+    /// @brief The Y position for dealer hand.
+    static constexpr int DEALER_HAND_Y = 100;
+
+    /// @brief The offset for which to animate the card draw "gathering point".
+    static constexpr int DECK_DRAW_OFFSET = 60;
+
+    /// @brief The duration for the draw animation.
+    static constexpr int DECK_DRAW_DURATION = 150;
+
+    /// @brief The duration for the deal animation.
+    static constexpr int DEAL_TO_HAND_DURATION = 300;
+
+    /// @brief The duration for the card flip animation.
+    static constexpr int FLIP_DURATION = 150;
 };
 
 #endif // GAME_WIDGET_H
