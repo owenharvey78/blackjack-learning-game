@@ -21,7 +21,11 @@ public:
     ~MainWindow();
 
 private slots:
+    /// @brief Handles actions when practice button is clicked.
     void onPracticeButtonClicked();
+
+    /// @brief Handles actions when returning from practice.
+    void onFromPracticeReturnToMenu();
 
 private:
     /// @brief The UI form object for this window.
@@ -33,5 +37,8 @@ private:
 
     /// @brief The widget for the main menu.
     QWidget* menuWidget_;
+
+    /// @brief The game widget.
+    GameWidget* gameWidget_;
 };
 #endif // MAINWINDOW_H

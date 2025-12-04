@@ -8,6 +8,7 @@
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QVariantAnimation>
+#include <QMessageBox>
 #include "blackjack_game.h"
 #include "card.h"
 #include "card_sprites.h"
@@ -38,6 +39,9 @@ signals:
     /// @brief Signals that the player has completed betting and begun the round.
     /// @param betAmount The bet the player placed.
     void beginRound(int betAmount);
+
+    /// @brief Signals to return to main menu.
+    void returnToMainMenu();
 
 protected:
     /// @brief Handles window/widget resize events to maintain aspect ratio.

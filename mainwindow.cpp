@@ -6,8 +6,7 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui_(new Ui::MainWindow)
-{
+    ,ui_(new Ui::MainWindow) {
     ui_->setupUi(this);
 
     // Create the stacked widget
@@ -24,27 +23,31 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Connect the practice button to the slot
     connect(ui_->practiceButton, &QPushButton::clicked, this, &MainWindow::onPracticeButtonClicked);
+
+    // connect(gameWidget_, &GameWidget::returnToMainMenu, this, &MainWindow::onFromPracticeReturnToMenu);
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui_;
 }
 
-void MainWindow::onPracticeButtonClicked()
-{
+void MainWindow::onPracticeButtonClicked() {
     // Create a new BlackjackGame
     BlackjackGame* game = new BlackjackGame(this);
 
     // Create a new GameWidget with the game
-    GameWidget* gameWidget = new GameWidget(game, this);
+    gameWidget_ = new GameWidget(game, this);
 
     // Add the game widget to the stacked widget
-    stackedWidget_->addWidget(gameWidget);
+    stackedWidget_->addWidget(gameWidget_);
 
     // Switch to the game widget
-    stackedWidget_->setCurrentWidget(gameWidget);
+    stackedWidget_->setCurrentWidget(gameWidget_);
 
     // Start the betting stage
-    gameWidget->beginBetStage();
+    gameWidget_->beginBetStage();
+}
+
+void MainWindow::onFromPracticeReturnToMenu(){
+    stackedWidget_->setCurrentWidget(this);
 }

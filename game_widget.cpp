@@ -108,6 +108,13 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
 
     if(balance_ == 0){
         // No money broke boy.
+        QMessageBox::StandardButton reply = QMessageBox::question(this, "YOU HAVE NO MONEY!", "Do you want to restart?", QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::Yes) {
+            // Handle "Yes" action
+        }
+        else if (reply == QMessageBox::No) {
+            emit returnToMainMenu();
+        }
         ui_->balanceLabel->setText("$" + QString::number(balance_) + "\n You got no more money. HAHA LOSER");
     }
 
@@ -329,8 +336,7 @@ void GameWidget::onPlayerCardDealt(Card card, int handIndex, bool isLastCard) {
     drawPlayerCard->setStartValue(deckPos_);
     drawPlayerCard->setEndValue(belowPosition);
 
-    connect(drawPlayerCard, &QVariantAnimation::valueChanged,
-            this, [item](const QVariant& v) {
+    connect(drawPlayerCard, &QVariantAnimation::valueChanged, this, [item](const QVariant& v) {
         item->setPos(v.toPointF());
     });
 
@@ -340,20 +346,17 @@ void GameWidget::onPlayerCardDealt(Card card, int handIndex, bool isLastCard) {
     dealPlayerCard->setStartValue(belowPosition);
     dealPlayerCard->setEndValue(handPosition);
 
-    connect(dealPlayerCard, &QVariantAnimation::valueChanged,
-            this, [item](const QVariant& v) {
+    connect(dealPlayerCard, &QVariantAnimation::valueChanged, this, [item](const QVariant& v) {
         item->setPos(v.toPointF());
     });
 
     // Connect animations in sequence
-    connect(drawPlayerCard, &QVariantAnimation::finished,
-            this, [dealPlayerCard] {
+    connect(drawPlayerCard, &QVariantAnimation::finished, this, [dealPlayerCard] {
         dealPlayerCard->start(QAbstractAnimation::DeleteWhenStopped);
     });
 
     // On completion: flip card and reposition existing cards to maintain centering
-    connect(dealPlayerCard, &QVariantAnimation::finished,
-            this, [this, item, card, handIndex]() {
+    connect(dealPlayerCard, &QVariantAnimation::finished, this, [this, item, card, handIndex]() {
         flipCard(item, card);
         // Reposition all cards in hand to keep centered (200ms smooth shift)
         repositionHandCards(handIndex, 200);
