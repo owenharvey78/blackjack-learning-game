@@ -1,6 +1,9 @@
 #ifndef BASIC_STRATEGY_CHECKER_H
 #define BASIC_STRATEGY_CHECKER_H
 
+#include <QVector>
+#include "card.h"
+
 /// @brief Holds the BlackJack basic strategy plays for H17 and S17, allowing one to
 /// find the optimal play for a given hand and dealer upcard.
 class BasicStrategyChecker
@@ -19,6 +22,21 @@ public:
     /// @param dealaerHitsSoft17 Indicates whether the dealer hits (true) or
     /// stands (false) on soft 17, based on the ruleset.
     BasicStrategyChecker(bool dealerHitsSoft17 = true);
+
+    /// @brief Gets the best move for the given player hand against the dealer's upcard.
+    /// @param hand The list of cards in the player's hand.
+    /// @param dealerUpcard The dealer's first drawn card (the upcard).
+    /// @return The best move for the given hand against the dealer's upcard.
+    PlayerAction getBestMove(const QVector<Card>& hand, Card dealerUpcard);
+
+    /// @brief Gets the second-best move for the given player hand against the dealer's
+    /// upcard. If there is no second-best move (i.e. the best move is always possible),
+    /// the result is the same as getBestMove.
+    /// @param hand The lsit of cards in the player's hand.
+    /// @param dealerUpcard The dealer's first drawn card (the upcard).
+    /// @return The second-best move for the given hand against the dealer's upcard, or
+    /// the best move if no second-best move is necessary.
+    PlayerAction getSecondBestMove(const QVector<Card>& hand, Card dealerUpcard);
 };
 
 #endif // BASIC_STRATEGY_CHECKER_H
