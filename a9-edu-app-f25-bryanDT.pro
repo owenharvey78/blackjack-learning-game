@@ -9,6 +9,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    basic_strategy_checker.cpp \
     card_sprites.cpp \
     game_widget.cpp \
     blackjack_game.cpp \
@@ -18,6 +19,7 @@ SOURCES += \
     shoe.cpp
 
 HEADERS += \
+    basic_strategy_checker.h \
     card_sprites.h \
     game_widget.h \
     blackjack_game.h \
