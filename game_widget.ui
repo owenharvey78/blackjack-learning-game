@@ -350,6 +350,28 @@ background-color: rgb(61, 56, 70);</string>
         </spacer>
        </item>
        <item>
+        <widget class="QPushButton" name="showCountButton">
+         <property name="styleSheet">
+          <string notr="true">font-size: 14pt; font-weight: bold;
+background-color: rgb(61, 56, 70);</string>
+         </property>
+         <property name="text">
+          <string>ShowCount</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="showCountLabel">
+         <property name="styleSheet">
+          <string notr="true">font-size: 14pt; font-weight: bold;
+background-color: rgb(61, 56, 70);</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="chip1Button">
          <property name="minimumSize">
           <size>

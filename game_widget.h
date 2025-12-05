@@ -51,6 +51,9 @@ public slots:
     /// @param betAmount The amount the player bet.
     void onBetPlaced(int betAmount);
 
+    /// @brief Displays the count of cards that have been dealt.
+    void displayCountingLabel();
+
 private slots:
 
     /// @brief During the betting stage, adds a chip of the given value to the

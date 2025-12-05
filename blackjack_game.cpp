@@ -60,22 +60,27 @@ void BlackjackGame::dealCards() {
 
 void BlackjackGame::dealPlayerCard(int handIndex, bool isLastCard) {
     Card c = drawCardFromShoe();
+
+    // Add Hi-Lo Count to running count
+    runningCount_ += c.getHiLoValue();
+
     // Safety check in case game closed
     if (playerHands_.isEmpty()) return;
 
     playerHands_[handIndex].append(c);
     emit playerCardDealt(c, handIndex, isLastCard);
-
-    // Add Hi-Lo Count to running count
-    runningCount_ += c.getHiLoValue();
 }
 
 void BlackjackGame::dealDealerCard() {
     Card c = drawCardFromShoe();
+
     dealerHand_.append(c);
     emit dealerCardDealt(c);
 
-    runningCount_ += c.getHiLoValue();
+    if(dealerHand_.size() == 1){
+        // Add Hi-Lo Count to running count
+        runningCount_ += c.getHiLoValue();
+    }
 
     // If this is the last card (2nd round, dealer), check for BJ
     if (dealerHand_.size() == 2) {

@@ -27,6 +27,12 @@ public:
     /// @param rules The new ruleset.
     void setRuleset(Ruleset rules);
 
+    /// @brief Gets the running count for the game.
+    int getRunningCount();
+
+    /// @brief Gets the true count for the game.
+    int getTrueCount();
+
 public slots:
     /// @brief Signals that the player's balance has changed, then starts a new
     /// round.
@@ -43,12 +49,6 @@ public slots:
 
     /// @brief The player doubles their current bet and draws only one more card.
     void playerDouble();
-
-    /// @brief Gets the running count for the game.
-    int getRunningCount();
-
-    /// @brief Gets the true count for the game.
-    int getTrueCount();
 
 signals:
     // Signals used by game widget.
@@ -225,7 +225,6 @@ private:
 
     /// @brief Holds the running count of all the cards dealt
     int runningCount_;
-
 };
 
 #endif // BLACKJACK_GAME_H

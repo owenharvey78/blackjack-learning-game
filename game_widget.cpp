@@ -9,6 +9,8 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
 
     ui_->hitButton->setVisible(false);
     ui_->standButton->setVisible(false);
+    ui_->showCountLabel->setVisible(false);
+    ui_->showCountButton->setVisible(false);
 
     scene_ = new QGraphicsScene(this);
     scene_->setSceneRect(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
@@ -66,6 +68,9 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(game, &BlackjackGame::playerCardDealt, this, &GameWidget::onPlayerCardDealt);
     connect(game, &BlackjackGame::dealerCardDealt, this, &GameWidget::onDealerCardDealt);
 
+    // Show Count
+    connect(ui_->showCountButton, &QPushButton::clicked, this, &GameWidget::displayCountingLabel);
+
     // Button presses.
     connect(ui_->hitButton, &QPushButton::clicked, game_, &BlackjackGame::playerHit);
     connect(ui_->standButton, &QPushButton::clicked, game_, &BlackjackGame::playerStand);
@@ -110,6 +115,9 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
     ui_->betLabel->setVisible(true);
     ui_->betLabel->setText(message);
 
+    // Make count label disappear for next round
+    ui_->showCountLabel->setVisible(false);
+
     // Only reset game after the LAST hand is processed
     if (handIndex == totalHands - 1) {
         // Add extra delay after last hand before reset
@@ -138,6 +146,7 @@ void GameWidget::beginBetStage() {
     ui_->standButton->setVisible(false);
     ui_->doubleButton->setVisible(false);
     ui_->splitButton->setVisible(false);
+    ui_->showCountButton->setVisible(false);
 }
 
 void GameWidget::addChip(int value) {
@@ -649,6 +658,7 @@ void GameWidget::onPlayerTurn(int handIndex, bool canDouble, bool canSplit) {
     // Show gameplay buttons for player's turn
     ui_->hitButton->setVisible(true);
     ui_->standButton->setVisible(true);
+    ui_->showCountButton->setVisible(true);
 
     // Show double/split buttons based on game logic decision
     ui_->doubleButton->setVisible(canDouble);
@@ -708,4 +718,19 @@ void GameWidget::onBetPlaced(int betAmount) {
         ui_->balanceLabel->setText("$" + QString::number(balance_));
         ui_->betLabel->setText("");
     });
+}
+
+void GameWidget::displayCountingLabel(){
+    ui_->showCountLabel->setVisible(true);
+
+    std::string runningCount = std::to_string(game_->getRunningCount());
+    std::string trueCount = std::to_string(game_->getTrueCount());
+
+    QString labelText = QString("Running Count: ") +
+                        QString::fromStdString(runningCount) +
+                        QString("\n") +
+                        QString("True Count: ") +
+                        QString::fromStdString(trueCount);
+
+    ui_->showCountLabel->setText(labelText);
 }
