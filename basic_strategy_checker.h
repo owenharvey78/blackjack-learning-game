@@ -9,12 +9,16 @@
 class BasicStrategyChecker
 {
 public:
-    /// @brief Defines the possible actions a player can take for a hand.
+    /// @brief Defines the possible actions a player can take for a hand. One of the
+    /// enumerations, SplitIfDas, is not a real action—this value indicates that the
+    /// player should split only if double after split (DAS) is allowed under the
+    /// current ruleset.
     enum class PlayerAction {
         Hit,
         Stand,
         Double,
         Split,
+        SplitIfDas,
         Surrendur
     };
 
