@@ -2,12 +2,7 @@
 #define RULESET_WIDGET_H
 
 #include <QWidget>
-#include <QCheckBox>
-#include <QSpinBox>
-#include <QDoubleSpinBox>
-#include <QGroupBox>
-#include <QVBoxLayout>
-#include <QFormLayout>
+#include "ruleset.h" // Include your struct
 
 namespace Ui {
 class ruleset_widget;
@@ -21,19 +16,24 @@ public:
     explicit RulesetWidget(QWidget *parent = nullptr);
     ~RulesetWidget();
 
-    // Ruleset getRuleset() const;
+    // Get the current state of UI as a Ruleset struct
+    Ruleset getRuleset() const;
 
-    // void setRuleset(const Ruleset& rules);
-
-private slots:
-    // we will need a slot for each rule that can be changed
-    //    - some will be toggled while some will be input
+    // Update the UI to match an existing Ruleset
+    void setRuleset(const Ruleset& rules);
 
 signals:
-    // void rulesChanged(Ruleset newRules);
+    void returnToMainMenu();
+    // Signal to tell MainWindow to grab the new rules
+    void saveRulesRequested();
+
+private slots:
+    // Auto-connected slots for UI buttons
+    void on_saveButton_clicked();
+    void on_menuButton_clicked();
 
 private:
-    Ui::ruleset_widget *ui;
+    Ui::ruleset_widget *ui_;
 };
 
 #endif // RULESET_WIDGET_H

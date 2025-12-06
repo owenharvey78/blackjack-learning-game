@@ -24,6 +24,7 @@ public:
 private slots:
     void onPracticeButtonClicked();
     void onRulesetButtonClicked();
+    void onReturnToMainMenuClicked();
 
 private:
     /// @brief The UI form object for this window.

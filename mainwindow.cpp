@@ -29,13 +29,19 @@ MainWindow::MainWindow(QWidget *parent)
     // Connect the practice button to the slot
     connect(ui_->practiceButton, &QPushButton::clicked, this, &MainWindow::onPracticeButtonClicked);
 
-    // Connect the rules button to the slot
+    // Rulset menu connections
     connect(ui_->rulesetButton, &QPushButton::clicked, this, &MainWindow::onRulesetButtonClicked);
+    connect(rulesetWidget_, &RulesetWidget::returnToMainMenu, this, &MainWindow::onReturnToMainMenuClicked);
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui_;
+}
+
+void MainWindow::onReturnToMainMenuClicked(){
+    stackedWidget_->setCurrentWidget(menuWidget_);
 }
 
 void MainWindow::onPracticeButtonClicked()
