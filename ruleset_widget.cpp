@@ -14,7 +14,7 @@ RulesetWidget::~RulesetWidget()
 }
 
 void RulesetWidget::setRuleset(const Ruleset& rules) {
-    // Map Struct -> UI
+    // Map Ruleset struct to UI
     ui_->checkBox->setChecked(rules.dealerHitsSoft17);
     ui_->checkBox_2->setChecked(rules.dealerPeeks);
     ui_->checkBox_3->setChecked(rules.pushOnDealer22);
