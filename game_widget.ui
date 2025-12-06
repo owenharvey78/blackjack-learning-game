@@ -526,6 +526,29 @@ background-color: rgb(61, 56, 70);</string>
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="betAllButton">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font-size: 16pt; font-weight: bold;
+background-color: rgb(61, 56, 70);</string>
+         </property>
+         <property name="text">
+          <string>ALL IN!</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="hitButton">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">

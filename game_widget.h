@@ -64,6 +64,9 @@ private slots:
     /// the current bet.
     void removeChip(int value);
 
+    /// @brief During the betting stage, adds chips until the bet matches the balance.
+    void onAllIn();
+
     /// @brief Starts the game, enables displays.
     void onStartButtonClicked();
 
