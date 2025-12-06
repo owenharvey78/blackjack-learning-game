@@ -173,7 +173,7 @@ private:
         { PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Stand, PlayerAction::Split, PlayerAction::Split, PlayerAction::Stand, PlayerAction::Stand },
         { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Double, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand },
         { PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split },
-        };
+    };
 };
 
 #endif // BASIC_STRATEGY_CHECKER_H
