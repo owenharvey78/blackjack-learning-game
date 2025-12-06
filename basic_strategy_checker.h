@@ -79,7 +79,7 @@ private:
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
         { PlayerAction::Hit, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
         { PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit },
-        { PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double },
+        { PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit },
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit },
         { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit },
         { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit },
