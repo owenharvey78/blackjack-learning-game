@@ -95,6 +95,23 @@ private:
         { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand }
     };
 
+    /// @brief The optimal actions for any hand with two cards of the same rank in the H17
+    /// ruleset. The rows (first indices) represent the rank of card (2-10, then ace; face
+    /// cards count as 10), and the columns (second indices) represent the dealer's upcard
+    /// (2-10, then ace, with face cards counting as 10.
+    static constexpr PlayerAction H17_SPLITTING[10][10] {
+        { PlayerAction::SplitIfDas, PlayerAction::SplitIfDas, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::SplitIfDas, PlayerAction::SplitIfDas, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::SplitIfDas, PlayerAction::SplitIfDas, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand },
+        { PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::SplitIfDas, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split },
+        { PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Stand, PlayerAction::Split, PlayerAction::Split, PlayerAction::Stand, PlayerAction::Stand },
+        { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Double, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand },
+        { PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split },
+    };
+
     /// @brief The optimal actions for any hand with a hard total in the S17 ruleset. The
     /// rows (first indices) represent the player's hard total (from 4 to 20, inclusive),
     /// while the columns represent the dealer's upcard (2-10, then ace; face cards count
