@@ -13,13 +13,131 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">/* --- MAIN CONTAINER --- */
+QWidget {
+    background-color: #f0f0f0; /* Matches your screenshot's light gray background */
+    font-family: &quot;Segoe UI&quot;, sans-serif; /* Or your preferred font */
+    font-size: 14px;
+}
+
+/* --- GROUP BOXES (The Containers) --- */
+QGroupBox {
+    background-color: white;
+    border: 2px solid #d4af37; /* Gold border */
+    border-radius: 10px;
+    margin-top: 20px; /* Leave space for the title */
+    padding-top: 25px; /* Push content down so title doesn't overlap */
+    color: #2b1f0e; /* Dark brown text */
+    font-weight: bold;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center; /* Center the title like a menu header */
+    padding: 5px 15px;
+    background-color: #2b1f0e; /* Dark brown background for title */
+    color: #d4af37; /* Gold text */
+    border: 2px solid #d4af37;
+    border-radius: 8px;
+    bottom: 0px; /* Tweak this if title overlaps border */
+}
+
+/* --- CHECKBOXES --- */
+QCheckBox {
+    spacing: 10px;
+    color: #2b1f0e;
+    font-weight: 600;
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #8c6c26; /* Darker gold/brown border */
+    border-radius: 4px;
+    background-color: white;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #d4af37; /* Gold fill when checked */
+    border-color: #2b1f0e;
+    /* You can add a checkmark image here if you have one, 
+       otherwise the color change is enough */
+    image: url(:/images/checkmark.png); /* Optional: Only if you have an icon */
+}
+
+QCheckBox::indicator:hover {
+    border-color: #d4af37; /* Bright gold on hover */
+}
+
+/* --- SPIN BOXES (Number Inputs) --- */
+QSpinBox, QDoubleSpinBox {
+    background-color: #fff;
+    border: 2px solid #8c6c26;
+    border-radius: 5px;
+    padding: 4px;
+    min-width: 60px;
+    color: #2b1f0e;
+    font-weight: bold;
+    selection-background-color: #d4af37;
+}
+
+QSpinBox:hover, QDoubleSpinBox:hover {
+    border-color: #d4af37;
+}
+
+/* Style the up/down arrows */
+QSpinBox::up-button, QDoubleSpinBox::up-button,
+QSpinBox::down-button, QDoubleSpinBox::down-button {
+    background-color: #2b1f0e; /* Dark brown buttons */
+    border-radius: 2px;
+    width: 16px;
+}
+
+QSpinBox::up-arrow, QDoubleSpinBox::up-arrow {
+    /* Qt draws a default arrow, but you can color it if using an image */
+    /* Alternatively, simple styling: */
+    width: 7px;
+    height: 7px;
+    border-image: none; /* Reset if needed */
+}
+
+/* --- YOUR EXISTING BUTTON STYLE (Keep this!) --- */
+QPushButton{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #2b1f0e,
+		stop:1 #8c6c26
+	);
+	color: white;
+	font-weight: bold;
+	border: 3px solid #d4af37;
+	border-radius: 15px;
+	padding: 10px;
+}
+
+QPushButton:hover{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #3b2f1c,
+		stop:1 #ad8c32
+	);
+}
+
+QPushButton:pressed {
+    background-color: #2b1f0e; /* Darken when clicked */
+    border-color: #8c6c26;
+}</string>
+  </property>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>0</y>
+     <y>30</y>
      <width>301</width>
-     <height>301</height>
+     <height>271</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
