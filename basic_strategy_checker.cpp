@@ -89,7 +89,7 @@ BasicStrategyChecker::PlayerAction BasicStrategyChecker::getSecondBestMove(const
         // manually.
         if (hand.size() == 2 && hand[0].rank == Card::Rank::Eight &&
             hand[1].rank == Card::Rank::Eight && dealerUpcard.rank == Card::Rank::Ace)
-            return BasicStrategyChecker::PlayerAction::Split;
+            return PlayerAction::Split;
 
         if (firstResult == BasicStrategyChecker::PlayerAction::Split ||
             firstResult == BasicStrategyChecker::PlayerAction::SplitIfDas) {
@@ -106,9 +106,9 @@ BasicStrategyChecker::PlayerAction BasicStrategyChecker::getSecondBestMove(const
             // cases that it's fine to check them all in here.
             if (isSoftTotal && ((handTotal == 18 && dealerUpcard.getBlackjackValue() <= 6) ||
                                 ( handTotal == 19 && dealerUpcard.getBlackjackValue() == 6)))
-                return BasicStrategyChecker::PlayerAction::Stand;
+                return PlayerAction::Stand;
             else
-                return BasicStrategyChecker::PlayerAction::Hit;
+                return PlayerAction::Hit;
         }
         else if (firstResult == BasicStrategyChecker::PlayerAction::Surrender) {
             // If best move was to surrender, but the player cannot do so, then hit
@@ -116,14 +116,13 @@ BasicStrategyChecker::PlayerAction BasicStrategyChecker::getSecondBestMove(const
             // 17) against the dealer's ace. Again, it's fine to hard-code these
             // rare exceptions instead of using an entire new table.
             if (handTotal == 17 && dealerUpcard.rank == Card::Rank::Ace)
-                return BasicStrategyChecker::PlayerAction::Stand;
+                return PlayerAction::Stand;
             else
-                return BasicStrategyChecker::PlayerAction::Hit;
+                return PlayerAction::Hit;
         }
     }
     else {
-        if (firstResult == BasicStrategyChecker::PlayerAction::Split ||
-            firstResult == BasicStrategyChecker::PlayerAction::SplitIfDas) {
+        if (firstResult == PlayerAction::Split || firstResult == PlayerAction::SplitIfDas) {
             // If the best move was to split or surrender, but the player can't do that,
             // then default to the hard/soft total tables
             if (isSoftTotal)
@@ -131,25 +130,25 @@ BasicStrategyChecker::PlayerAction BasicStrategyChecker::getSecondBestMove(const
             else
                 return S17_HARD_TOTALS[getHardTotalsRowIndex(handTotal)][getUpcardIndex(dealerUpcard)]; // NOLINT(clang-analyzer-security.ArrayBound)
         }
-        else if (firstResult == BasicStrategyChecker::PlayerAction::Double) {
+        else if (firstResult == PlayerAction::Double) {
             // If the best move was to double, the player should usually hit; but there
             // are a few cases where they should stand. There are few enough of these
             // cases that it's fine to check them all in here.
             if (isSoftTotal && handTotal == 18 && dealerUpcard.getBlackjackValue() >= 3 &&
                 dealerUpcard.getBlackjackValue() <= 6)
-                return BasicStrategyChecker::PlayerAction::Stand;
+                return PlayerAction::Stand;
             else
-                return BasicStrategyChecker::PlayerAction::Hit;
+                return PlayerAction::Hit;
         }
-        else if (firstResult == BasicStrategyChecker::PlayerAction::Surrender) {
+        else if (firstResult == PlayerAction::Surrender) {
             // If best move was to surrender, but the player cannot do so, then hit
             // unless the hand total is 17 (the only possibilities are 15, 16, and
             // 17) against the dealer's ace. Again, it's fine to hard-code these
             // rare exceptions instead of using an entire new table.
             if (handTotal == 17 && dealerUpcard.rank == Card::Rank::Ace)
-                return BasicStrategyChecker::PlayerAction::Stand;
+                return PlayerAction::Stand;
             else
-                return BasicStrategyChecker::PlayerAction::Hit;
+                return PlayerAction::Hit;
         }
     }
 
@@ -162,7 +161,7 @@ BasicStrategyChecker::PlayerAction BasicStrategyChecker::getThirdBestMove(const 
     // Check the one special case ([8, 8] against dealer's ace)
     if (hand.size() == 2 && hand[0].rank == Card::Rank::Eight &&
         hand[1].rank == Card::Rank::Eight && dealerUpcard.rank == Card::Rank::Ace)
-        return BasicStrategyChecker::PlayerAction::Hit;
+        return PlayerAction::Hit;
 
     // Otherwise the result is same as getSecondBestMove
     return getSecondBestMove(hand, dealerUpcard);
