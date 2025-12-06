@@ -23,9 +23,20 @@ public:
     ~MainWindow();
 
 private slots:
+    /// @brief When the practice button is selected in the main menu,
+    /// switches the central widget to game widget.
     void onPracticeButtonClicked();
+
+    /// @brief When the ruleset button is selected in the main menu,
+    /// switches the central widget to ruleset widget.
     void onRulesetButtonClicked();
+
+    /// @brief When the main menu button is selected in the ruleset menu,
+    /// switches the central widget to main menu widget.
     void onReturnToMainMenuClicked();
+
+    /// @brief When the save button is selected in the ruleset menu,
+    /// saves the current configuration as the new ruleset.
     void onRulesetSaved();
 
 private:
@@ -39,8 +50,10 @@ private:
     /// @brief The widget for the main menu.
     QWidget* menuWidget_;
 
+    /// @brief The widget for the ruleset selection menu.
     RulesetWidget* rulesetWidget_;
 
+    /// @brief The current rules.
     Ruleset currentRules_;
 
 };
