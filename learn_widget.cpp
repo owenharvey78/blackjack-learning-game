@@ -6,6 +6,8 @@ LearnWidget::LearnWidget(QWidget *parent)
     , ui_(new Ui::learn_widget)
 {
     ui_->setupUi(this);
+    ui_->answerBox->setVisible(false);
+    ui_->checkButton->setVisible(false);
 
     headerList_ = {"Welcome to Blackjack!",
                    "Basic Goal",
@@ -18,7 +20,7 @@ LearnWidget::LearnWidget(QWidget *parent)
                    "Surrender",
                    "End-of-Hand",
                    "Basic Strategies",
-                   "Card Counting,"
+                   "Card Counting,",
                    "What's The Count?"
     };
 
@@ -78,7 +80,7 @@ LearnWidget::LearnWidget(QWidget *parent)
                         "\n"
                         "It is strategic to increase your bet if the true count is positive.",
 
-                        ""
+                        "What would be the running count for: Ace, 2, and 6?"
     };
 
     updatePage();
@@ -88,6 +90,8 @@ LearnWidget::LearnWidget(QWidget *parent)
     connect(ui_->previousButton, &QPushButton::clicked, this, &LearnWidget::onPrevButtonClicked);
 
     connect(ui_->mainMenuButton, &QPushButton::clicked, this, &LearnWidget::returnToMainMenu);
+
+    connect(ui_->checkButton, &QPushButton::clicked, this, &LearnWidget::onCheckButtonClicked);
 }
 
 void LearnWidget::updatePage(){
@@ -109,6 +113,20 @@ void LearnWidget::updatePage(){
                                                      "}"));
     }else{
         ui_->instructionLabel->setStyleSheet(QString()); // This else feels redundant but helps. Trust
+    }
+
+    if(currentInstruction_ == 12){
+        ui_->answerBox->setVisible(true);
+        ui_->checkButton->setVisible(true);
+    }
+}
+
+void LearnWidget::onCheckButtonClicked(){
+    if(ui_->answerBox->value() == 1){
+        ui_->instructionLabel->setText(QString("Correct! The Ace give us -1, 2 and 6 gives +1.\n So we end up with 1!"));
+    }else{
+        ui_->instructionLabel->setText(QString("Not quite since and Ace gives us -1, then 2 and 6 give +1.\n"
+                                               "That then leaves us with 1.\n Good try tho"));
     }
 }
 
