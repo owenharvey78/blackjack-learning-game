@@ -21,7 +21,8 @@ LearnWidget::LearnWidget(QWidget *parent)
                    "End-of-Hand",
                    "Basic Strategies",
                    "Card Counting,",
-                   "What's The Count?"
+                   "What's The Count?",
+                   "Strategies:"
     };
 
     instructionList_ = {"",
@@ -80,7 +81,20 @@ LearnWidget::LearnWidget(QWidget *parent)
                         "\n"
                         "It is strategic to increase your bet if the true count is positive.",
 
-                        "What would be the running count for: Ace, 2, and 6?"
+                        "What would be the running count for: Ace, 2, and 6?",
+
+                        "Basic Strategy:\n"
+                        "- Always Stand on 17 or higher.\n"
+                        "- Always hit on anything 11 and lower.\n"
+                        "- Consider standing on 12 -16 if the dealer shows a weak upcard (2-6)\n"
+                        "since they are more likely to bust.\n"
+                        "- Consider on 12-16 if the dealer shows a strong upcard (7-Ace). \n\n"
+                        "Doubling Down:\n"
+                        "- Always double down on 11 against any dealers upcard.\n"
+                        "- Double Down on 10 against a dealer having a (2-9).\n"
+                        "- Always split Aces and 8's.\n"
+                        "- Never Split 5's or 10's, two 5's make 10, which is better to double down.\n"
+                        "Two 10's give you a stong 20."
     };
 
     updatePage();
@@ -118,6 +132,9 @@ void LearnWidget::updatePage(){
     if(currentInstruction_ == 12){
         ui_->answerBox->setVisible(true);
         ui_->checkButton->setVisible(true);
+    }else{
+        ui_->answerBox->setVisible(false);
+        ui_->checkButton->setVisible(false);
     }
 }
 
