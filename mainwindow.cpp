@@ -36,7 +36,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(rulesetWidget_, &RulesetWidget::saveRulesRequested, this, &MainWindow::onRulesetSaved);
 }
 
-MainWindow::~MainWindow() {
+MainWindow::~MainWindow()
+{
     delete ui_;
 }
 
@@ -56,23 +57,16 @@ void MainWindow::onPracticeButtonClicked()
     game->setRuleset(currentRules_);
 
     // Create a new GameWidget with the game
-    gameWidget_ = new GameWidget(game, this);
+    GameWidget* gameWidget = new GameWidget(game, this);
 
     // Add the game widget to the stacked widget
-    stackedWidget_->addWidget(gameWidget_);
+    stackedWidget_->addWidget(gameWidget);
 
     // Switch to the game widget
-    stackedWidget_->setCurrentWidget(gameWidget_);
+    stackedWidget_->setCurrentWidget(gameWidget);
 
     // Start the betting stage
-    gameWidget_->beginBetStage();
-
-    // Check for returning back to menu.
-    connect(gameWidget_, &GameWidget::returnToMainMenu, this, &MainWindow::onFromPracticeReturnToMenu);
-}
-
-void MainWindow::onFromPracticeReturnToMenu(){
-    stackedWidget_->setCurrentWidget(menuWidget_);
+    gameWidget->beginBetStage();
 }
 
 void MainWindow::onRulesetButtonClicked() {
