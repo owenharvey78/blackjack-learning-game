@@ -39,12 +39,35 @@ public:
     PlayerAction getSecondBestMove(const QVector<Card>& hand, Card dealerUpcard);
 
 private:
-    /// @brief The optimal actions for any hand with a hard total. The rows (first indices)
-    /// represent the player's hard total, while the columns represent the dealer's upcard
-    /// (2-10, then ace; face cards count as 10).
+    /// @brief The optimal actions for any hand with a hard total in the H17 ruleset. The
+    /// rows (first indices) represent the player's hard total (from 4 to 20, inclusive),
+    /// while the columns represent the dealer's upcard (2-10, then ace; face cards count
+    /// as 10).
     static constexpr PlayerAction H17_HARD_TOTALS[19][10] {
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::Hit, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double },
+        { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit },
+        { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit },
+        { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit },
+        { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit },
+        { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit,PlayerAction::Hit },
+        { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand },
+        { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand },
+        { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand },
+        { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand }
+    };
+
+    /// @brief The optimal actions for any hand with a hard total in the S17 ruleset. The
+    /// rows (first indices) represent the player's hard total (from 4 to 20, inclusive),
+    /// while the columns represent the dealer's upcard (2-10, then ace; face cards count
+    /// as 10).
+    static constexpr PlayerAction S17_HARD_TOTALS[19][10] {
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
