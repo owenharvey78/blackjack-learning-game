@@ -9,8 +9,8 @@ BasicStrategyChecker::BasicStrategyChecker(bool dealerHitsSoft17) :
     dealerHitsSoft17_(dealerHitsSoft17)
 {}
 
-int BasicStrategyChecker::getUpcardIndex(int upcardValue) {
-    return upcardValue - 2;
+int BasicStrategyChecker::getUpcardIndex(Card dealerUpcard) {
+    return dealerUpcard.getBlackjackValue() - 2;
 }
 
 int BasicStrategyChecker::getHardTotalsRowIndex(int handTotal) {
@@ -19,6 +19,10 @@ int BasicStrategyChecker::getHardTotalsRowIndex(int handTotal) {
 
 int BasicStrategyChecker::getSoftTotalsRowIndex(int softTotal) {
     return softTotal - 12;
+}
+
+int BasicStrategyChecker::getSplittingRowIndex(Card card) {
+    return card.getBlackjackValue() - 2;
 }
 
 tuple<int, bool> BasicStrategyChecker::getHandTotal(const QVector<Card>& hand) {
@@ -39,4 +43,33 @@ tuple<int, bool> BasicStrategyChecker::getHandTotal(const QVector<Card>& hand) {
     }
 
     return { total, aceCount > 0 };
+}
+
+bool BasicStrategyChecker::canSplit(const QVector<Card>& hand) {
+    return hand.size() == 2 && hand[0].getBlackjackValue() == hand[1].getBlackjackValue();
+}
+
+BasicStrategyChecker::PlayerAction BasicStrategyChecker::getBestMove(const QVector<Card>& hand, Card dealerUpcard) {
+    if (dealerHitsSoft17_) {
+        // Use H17 strategy
+        if (canSplit(hand))
+            return H17_SPLITTING[getSplittingRowIndex(hand[0])][getUpcardIndex(dealerUpcard)];
+
+        const auto [handTotal, isSoftTotal] = getHandTotal(hand);
+        if (isSoftTotal)
+            return H17_SOFT_TOTALS[getSoftTotalsRowIndex(handTotal)][getUpcardIndex(dealerUpcard)];
+        else
+            return H17_HARD_TOTALS[getHardTotalsRowIndex(handTotal)][getUpcardIndex(dealerUpcard)];
+    }
+    else {
+        // Use S17 strategy
+        if (canSplit(hand))
+            return S17_SPLITTING[getSplittingRowIndex(hand[0])][getUpcardIndex(dealerUpcard)];
+
+        const auto [handTotal, isSoftTotal] = getHandTotal(hand);
+        if (isSoftTotal)
+            return S17_SOFT_TOTALS[getSoftTotalsRowIndex(handTotal)][getUpcardIndex(dealerUpcard)];
+        else
+            return S17_HARD_TOTALS[getHardTotalsRowIndex(handTotal)][getUpcardIndex(dealerUpcard)];
+    }
 }
