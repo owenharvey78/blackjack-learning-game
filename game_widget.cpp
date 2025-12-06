@@ -120,7 +120,9 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
             msgBox.exec();
 
             if (msgBox.clickedButton() == restartButton) {
-                // GameWidget::resetGame();
+                balance_ = 1000;
+                ui_->balanceLabel->setText("$" + QString::number(balance_));
+                GameWidget::resetGame();
             }
             else if (msgBox.clickedButton() == menuButton) {
                 emit returnToMainMenu();

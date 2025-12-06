@@ -65,6 +65,8 @@ void MainWindow::onPracticeButtonClicked()
     // Switch to the game widget
     stackedWidget_->setCurrentWidget(gameWidget);
 
+    connect(gameWidget, &GameWidget::returnToMainMenu, this, &MainWindow::onReturnToMainMenuClicked);
+
     // Start the betting stage
     gameWidget->beginBetStage();
 }
