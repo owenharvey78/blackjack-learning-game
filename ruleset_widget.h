@@ -2,7 +2,6 @@
 #define RULESET_WIDGET_H
 
 #include <QWidget>
-#include "ruleset.h" // Assuming your struct is here
 #include <QCheckBox>
 #include <QSpinBox>
 #include <QDoubleSpinBox>

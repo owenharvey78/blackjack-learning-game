@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "ruleset_widget.h"
 #include <QMainWindow>
 #include <QStackedWidget>
 
@@ -22,7 +23,7 @@ public:
 
 private slots:
     void onPracticeButtonClicked();
-    void onRulsetButtonClicked();
+    void onRulesetButtonClicked();
 
 private:
     /// @brief The UI form object for this window.
@@ -35,8 +36,7 @@ private:
     /// @brief The widget for the main menu.
     QWidget* menuWidget_;
 
-
-    RulesetWidget* rulsetWidget_;
+    RulesetWidget* rulesetWidget_;
 
 };
 #endif // MAINWINDOW_H
