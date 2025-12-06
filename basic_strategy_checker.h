@@ -42,6 +42,19 @@ public:
     /// the best move if no second-best move is necessary.
     PlayerAction getSecondBestMove(const QVector<Card>& hand, Card dealerUpcard);
 
+    /// @brief Gets the third-best move for the given player hand against the dealer's
+    /// upcard. For almost every possible hand, the second-best move will always be
+    /// possible, so this method will return the same result as getSecondBestMove. The
+    /// only exception is [8, 8] against the dealer's ace, in which case the best move
+    /// is to surrender, the second-best is to split, and the third-best is to hit.
+    /// Thus, the only case where this method's result is different from
+    /// getSecondBestMove is if this scenario.
+    /// @param hand The lsit of cards in the player's hand.
+    /// @param dealerUpcard The dealer's first drawn card (the upcard).
+    /// @return The second-best move for the given hand against the dealer's upcard, or
+    /// the best move if no second-best move is necessary.
+    PlayerAction getThirdBestMove(const QVector<Card>& hand, Card dealerUpcard);
+
 private:
     /// @brief The optimal actions for any hand with a hard total in the H17 ruleset. The
     /// rows (first indices) represent the player's hard total (from 4 to 20, inclusive),
