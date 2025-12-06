@@ -2,6 +2,7 @@
 #include "card.h"
 #include <QVector>
 #include <tuple>
+#include <cassert>
 
 using std::tuple;
 
@@ -37,7 +38,7 @@ tuple<int, bool> BasicStrategyChecker::getHandTotal(const QVector<Card>& hand) {
     while (total > 21) {
         // Total will only be greater than 21 as long as there is at least one
         // ace currently being counted as 11 (if not, the hand was invalid when
-        // the function was called
+        // the function was called)
         total -= 10;
         aceCount--;
     }
@@ -56,10 +57,11 @@ BasicStrategyChecker::PlayerAction BasicStrategyChecker::getBestMove(const QVect
             return H17_SPLITTING[getSplittingRowIndex(hand[0])][getUpcardIndex(dealerUpcard)];
 
         const auto [handTotal, isSoftTotal] = getHandTotal(hand);
+
         if (isSoftTotal)
-            return H17_SOFT_TOTALS[getSoftTotalsRowIndex(handTotal)][getUpcardIndex(dealerUpcard)];
+            return H17_SOFT_TOTALS[getSoftTotalsRowIndex(handTotal)][getUpcardIndex(dealerUpcard)]; // NOLINT(clang-analyzer-security.ArrayBound)
         else
-            return H17_HARD_TOTALS[getHardTotalsRowIndex(handTotal)][getUpcardIndex(dealerUpcard)];
+            return H17_HARD_TOTALS[getHardTotalsRowIndex(handTotal)][getUpcardIndex(dealerUpcard)]; // NOLINT(clang-analyzer-security.ArrayBound)
     }
     else {
         // Use S17 strategy
@@ -67,9 +69,10 @@ BasicStrategyChecker::PlayerAction BasicStrategyChecker::getBestMove(const QVect
             return S17_SPLITTING[getSplittingRowIndex(hand[0])][getUpcardIndex(dealerUpcard)];
 
         const auto [handTotal, isSoftTotal] = getHandTotal(hand);
+
         if (isSoftTotal)
-            return S17_SOFT_TOTALS[getSoftTotalsRowIndex(handTotal)][getUpcardIndex(dealerUpcard)];
+            return S17_SOFT_TOTALS[getSoftTotalsRowIndex(handTotal)][getUpcardIndex(dealerUpcard)]; // NOLINT(clang-analyzer-security.ArrayBound)
         else
-            return S17_HARD_TOTALS[getHardTotalsRowIndex(handTotal)][getUpcardIndex(dealerUpcard)];
+            return S17_HARD_TOTALS[getHardTotalsRowIndex(handTotal)][getUpcardIndex(dealerUpcard)]; // NOLINT(clang-analyzer-security.ArrayBound)
     }
 }
