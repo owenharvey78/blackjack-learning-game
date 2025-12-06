@@ -184,26 +184,26 @@ private:
     /// getBlackjackValue method of the Card struct.
     /// @return A valid column index (0-9, inclusive) for any of the basic strategy tables
     /// based on the rank of the dealer's upcard.
-    static int getUpcardIndex(int upcardValue);
+    static inline int getUpcardIndex(int upcardValue);
 
     /// @brief Gets the row index (first index) for the H17/S17 hard totals table based on
     /// the hand total.
     /// @param handTotal The hard total of the hand (4-20, inclusive).
     /// @return The row index for the hard totals table (0-18, inclusive).
-    static int getHardTotalsRowIndex(int handTotal);
+    static inline int getHardTotalsRowIndex(int handTotal);
 
     /// @brief Gets the row index (first index) for either of the soft totals tables based
     /// on the soft total of the hand (the total if counting ace as 11).
     /// @param softTotal The total value of the hand if counting ace as 11 (12-20, inclusive).
     /// @return A valid row index for the soft totals table (0-8, inclusive).
-    static int getSoftTotalsRowIndex(int softTotal);
+    static inline int getSoftTotalsRowIndex(int softTotal);
 
     /// @brief Gets the row index (first index) for either of the splitting tables based
     /// on the value of the two cards in the player's hand.
     /// @param blackjackValue The value of the two cards in the player's hand, as defined
     /// by the getBlackjackValue method of the Card struct.
     /// @return A valid row index for the splitting table (0-9, inclusive).
-    static int getSplittingRowIndex(int blackjackValue);
+    static inline int getSplittingRowIndex(int blackjackValue);
 };
 
 #endif // BASIC_STRATEGY_CHECKER_H
