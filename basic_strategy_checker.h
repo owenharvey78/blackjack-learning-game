@@ -60,7 +60,7 @@ private:
     /// rows (first indices) represent the player's hard total (from 4 to 20, inclusive),
     /// while the columns represent the dealer's upcard (2-10, then ace; face cards count
     /// as 10).
-    static constexpr PlayerAction H17_HARD_TOTALS[19][10] {
+    static constexpr PlayerAction H17_HARD_TOTALS[17][10] {
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
@@ -118,7 +118,7 @@ private:
     /// rows (first indices) represent the player's hard total (from 4 to 20, inclusive),
     /// while the columns represent the dealer's upcard (2-10, then ace; face cards count
     /// as 10).
-    static constexpr PlayerAction S17_HARD_TOTALS[19][10] {
+    static constexpr PlayerAction S17_HARD_TOTALS[17][10] {
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
