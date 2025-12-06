@@ -34,5 +34,9 @@ private:
 
     /// @brief The widget for the main menu.
     QWidget* menuWidget_;
+
+
+    RulesetWidget* rulsetWidget_;
+
 };
 #endif // MAINWINDOW_H

@@ -14,40 +14,24 @@ namespace Ui {
 class ruleset_widget;
 }
 
-class ruleset_widget : public QWidget
+class RulesetWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ruleset_widget(QWidget *parent = nullptr);
-    ~ruleset_widget();
+    explicit RulesetWidget(QWidget *parent = nullptr);
+    ~RulesetWidget();
 
-    Ruleset getRuleset() const;
+    // Ruleset getRuleset() const;
 
-    void setRuleset(const Ruleset& rules);
+    // void setRuleset(const Ruleset& rules);
 
 private slots:
     // we will need a slot for each rule that can be changed
     //    - some will be toggled while some will be input
 
 signals:
-    void rulesChanged(Ruleset newRules);
-
-    // Dealer Rules Controls
-    QCheckBox* dealerHitsSoft17Box_;
-    QCheckBox* dealerPeeksBox_;
-    QCheckBox* pushOnDealer22Box_;
-
-    // Payouts/Decks Controls
-    QDoubleSpinBox* blackjackPayoutSpin_;
-    QSpinBox* numDecksSpin_;
-
-    // Restrictions Controls
-    QCheckBox* doubleAfterSplitBox_;
-    QCheckBox* resplitBox_;
-    QCheckBox* hitSplitAcesBox_;
-    QCheckBox* resplitAcesBox_;
-    QCheckBox* surrenderAllowedBox_;
+    // void rulesChanged(Ruleset newRules);
 
 private:
     Ui::ruleset_widget *ui;
