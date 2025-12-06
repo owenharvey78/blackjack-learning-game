@@ -2,7 +2,7 @@
 #define RULESET_WIDGET_H
 
 #include <QWidget>
-#include "ruleset.h" // Include your struct
+#include "ruleset.h"
 
 namespace Ui {
 class ruleset_widget;
@@ -24,13 +24,13 @@ public:
 
 signals:
     void returnToMainMenu();
-    // Signal to tell MainWindow to grab the new rules
     void saveRulesRequested();
 
 private slots:
-    // Auto-connected slots for UI buttons
-    void on_saveButton_clicked();
+    // Auto-connected Slots for UI buttons
     void on_menuButton_clicked();
+
+    void on_saveButton_clicked();
 
 private:
     Ui::ruleset_widget *ui_;

@@ -50,3 +50,5 @@ void RulesetWidget::on_saveButton_clicked() {
 void RulesetWidget::on_menuButton_clicked() {
     emit returnToMainMenu();   // Go back without saving
 }
+
+

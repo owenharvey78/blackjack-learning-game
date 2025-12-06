@@ -185,6 +185,9 @@ QPushButton:pressed {
      </item>
      <item>
       <widget class="QDoubleSpinBox" name="blackJackPayout">
+       <property name="suffix">
+        <string> * bet</string>
+       </property>
        <property name="maximum">
         <double>3.000000000000000</double>
        </property>
@@ -192,6 +195,9 @@ QPushButton:pressed {
      </item>
      <item>
       <widget class="QSpinBox" name="numDecks">
+       <property name="suffix">
+        <string> decks</string>
+       </property>
        <property name="maximum">
         <number>10</number>
        </property>

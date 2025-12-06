@@ -4,6 +4,7 @@
 #include "ruleset_widget.h"
 #include <QMainWindow>
 #include <QStackedWidget>
+#include "ruleset.h"
 
 class GameWidget;
 
@@ -25,6 +26,7 @@ private slots:
     void onPracticeButtonClicked();
     void onRulesetButtonClicked();
     void onReturnToMainMenuClicked();
+    void onRulesetSaved();
 
 private:
     /// @brief The UI form object for this window.
@@ -38,6 +40,8 @@ private:
     QWidget* menuWidget_;
 
     RulesetWidget* rulesetWidget_;
+
+    Ruleset currentRules_;
 
 };
 #endif // MAINWINDOW_H

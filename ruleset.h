@@ -1,8 +1,6 @@
 #ifndef RULESET_H
 #define RULESET_H
 
-#endif // RULESET_H
-
 struct Ruleset {
     // Dealer Rules
     bool dealerHitsSoft17 = true;     // true = dealer hits on soft 17.
@@ -22,3 +20,5 @@ struct Ruleset {
 
     // Add section for player assistances and hints in practice mode
 };
+
+#endif // RULESET_H

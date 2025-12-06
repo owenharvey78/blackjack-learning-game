@@ -7,6 +7,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui_(new Ui::MainWindow)
+    , currentRules_()
 {
     ui_->setupUi(this);
 
@@ -32,12 +33,17 @@ MainWindow::MainWindow(QWidget *parent)
     // Rulset menu connections
     connect(ui_->rulesetButton, &QPushButton::clicked, this, &MainWindow::onRulesetButtonClicked);
     connect(rulesetWidget_, &RulesetWidget::returnToMainMenu, this, &MainWindow::onReturnToMainMenuClicked);
-
+    connect(rulesetWidget_, &RulesetWidget::saveRulesRequested, this, &MainWindow::onRulesetSaved);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui_;
+}
+
+void MainWindow::onRulesetSaved() {
+    // Retrieve the configuration from the widget and store it
+    currentRules_ = rulesetWidget_->getRuleset();
 }
 
 void MainWindow::onReturnToMainMenuClicked(){
@@ -48,6 +54,7 @@ void MainWindow::onPracticeButtonClicked()
 {
     // Create a new BlackjackGame
     BlackjackGame* game = new BlackjackGame(this);
+    game->setRuleset(currentRules_);
 
     // Create a new GameWidget with the game
     GameWidget* gameWidget = new GameWidget(game, this);
@@ -63,5 +70,7 @@ void MainWindow::onPracticeButtonClicked()
 }
 
 void MainWindow::onRulesetButtonClicked() {
+    // Load the current stored rules into the widget before showing it
+    rulesetWidget_->setRuleset(currentRules_);
     stackedWidget_->setCurrentWidget(rulesetWidget_);
 }
