@@ -49,7 +49,7 @@ public:
     /// @brief Gets the value of this card.
     /// @return the value of this card. Most cards are valued the same as their rank.
     /// Face cards are valued 10. Aces are valued either 1 or 11, but this method will
-    /// return 1 if the card is an ace.
+    /// return 11 if the card is an ace.
     int getBlackjackValue() const;
 
     /// @brief Gets the value of this card according to the Hi-Lo card counting system.
