@@ -32,7 +32,7 @@ public:
     /// @param hand The list of cards in the player's hand.
     /// @param dealerUpcard The dealer's first drawn card (the upcard).
     /// @return The best move for the given hand against the dealer's upcard.
-    PlayerAction getBestMove(const QVector<Card>& hand, Card dealerUpcard);
+    PlayerAction getBestMove(const QVector<Card>& hand, Card dealerUpcard) const;
 
     /// @brief Gets the second-best move for the given player hand against the dealer's
     /// upcard. If there is no second-best move (i.e. the best move is always possible),
@@ -41,7 +41,7 @@ public:
     /// @param dealerUpcard The dealer's first drawn card (the upcard).
     /// @return The second-best move for the given hand against the dealer's upcard, or
     /// the best move if no second-best move is necessary.
-    PlayerAction getSecondBestMove(const QVector<Card>& hand, Card dealerUpcard);
+    PlayerAction getSecondBestMove(const QVector<Card>& hand, Card dealerUpcard) const;
 
     /// @brief Gets the third-best move for the given player hand against the dealer's
     /// upcard. For almost every possible hand, the second-best move will always be
@@ -54,7 +54,7 @@ public:
     /// @param dealerUpcard The dealer's first drawn card (the upcard).
     /// @return The second-best move for the given hand against the dealer's upcard, or
     /// the best move if no second-best move is necessary.
-    PlayerAction getThirdBestMove(const QVector<Card>& hand, Card dealerUpcard);
+    PlayerAction getThirdBestMove(const QVector<Card>& hand, Card dealerUpcard) const;
 
 private:
     /// @brief The optimal actions for any hand with a hard total in the H17 ruleset. The

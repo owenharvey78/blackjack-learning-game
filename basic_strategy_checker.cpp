@@ -50,7 +50,7 @@ bool BasicStrategyChecker::canSplit(const QVector<Card>& hand) {
     return hand.size() == 2 && hand[0].getBlackjackValue() == hand[1].getBlackjackValue();
 }
 
-BasicStrategyChecker::PlayerAction BasicStrategyChecker::getBestMove(const QVector<Card>& hand, Card dealerUpcard) {
+BasicStrategyChecker::PlayerAction BasicStrategyChecker::getBestMove(const QVector<Card>& hand, Card dealerUpcard) const {
     if (dealerHitsSoft17_) {
         // Use H17 strategy
         if (canSplit(hand))
@@ -77,7 +77,7 @@ BasicStrategyChecker::PlayerAction BasicStrategyChecker::getBestMove(const QVect
     }
 }
 
-BasicStrategyChecker::PlayerAction BasicStrategyChecker::getSecondBestMove(const QVector<Card>& hand, Card dealerUpcard) {
+BasicStrategyChecker::PlayerAction BasicStrategyChecker::getSecondBestMove(const QVector<Card>& hand, Card dealerUpcard) const {
     BasicStrategyChecker::PlayerAction firstResult = getBestMove(hand, dealerUpcard);
     const auto [handTotal, isSoftTotal] = getHandTotal(hand);
 
@@ -157,9 +157,9 @@ BasicStrategyChecker::PlayerAction BasicStrategyChecker::getSecondBestMove(const
     return firstResult;
 }
 
-BasicStrategyChecker::PlayerAction BasicStrategyChecker::getThirdBestMove(const QVector<Card>& hand, Card dealerUpcard) {
-    // Check the one special case ([8, 8] against dealer's ace)
-    if (hand.size() == 2 && hand[0].rank == Card::Rank::Eight &&
+BasicStrategyChecker::PlayerAction BasicStrategyChecker::getThirdBestMove(const QVector<Card>& hand, Card dealerUpcard) const {
+    // Check the one special case ([8, 8] against dealer's ace in H17)
+    if (dealerHitsSoft17_ && hand.size() == 2 && hand[0].rank == Card::Rank::Eight &&
         hand[1].rank == Card::Rank::Eight && dealerUpcard.rank == Card::Rank::Ace)
         return PlayerAction::Hit;
 
