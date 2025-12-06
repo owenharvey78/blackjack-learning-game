@@ -181,11 +181,10 @@ private:
 
     /// @brief Gets the column index for any of the basic strategy tables based on the
     /// dealer's upcard.
-    /// @param upcardValue The value of the dealer's upcard, as defined by the
-    /// getBlackjackValue method of the Card struct.
+    /// @param dealerUpcard The dealer's upcard.
     /// @return A valid column index (0-9, inclusive) for any of the basic strategy tables
     /// based on the rank of the dealer's upcard.
-    static inline int getUpcardIndex(int upcardValue);
+    static inline int getUpcardIndex(Card dealerUpcard);
 
     /// @brief Gets the row index (first index) for the H17/S17 hard totals table based on
     /// the hand total.
