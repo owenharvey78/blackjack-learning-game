@@ -157,3 +157,13 @@ BasicStrategyChecker::PlayerAction BasicStrategyChecker::getSecondBestMove(const
     // return that, because the player will always be able to do that
     return firstResult;
 }
+
+BasicStrategyChecker::PlayerAction BasicStrategyChecker::getThirdBestMove(const QVector<Card>& hand, Card dealerUpcard) {
+    // Check the one special case ([8, 8] against dealer's ace)
+    if (hand.size() == 2 && hand[0].rank == Card::Rank::Eight &&
+        hand[1].rank == Card::Rank::Eight && dealerUpcard.rank == Card::Rank::Ace)
+        return BasicStrategyChecker::PlayerAction::Hit;
+
+    // Otherwise the result is same as getSecondBestMove
+    return getSecondBestMove(hand, dealerUpcard);
+}
