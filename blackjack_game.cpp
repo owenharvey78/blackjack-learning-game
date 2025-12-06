@@ -312,7 +312,9 @@ void BlackjackGame::playerDouble() {
 void BlackjackGame::playerStand() {
     if (currentHandIndex_ < playerHands_.size() - 1) {
         currentHandIndex_++;
-        if (getHandValue(playerHands_[currentHandIndex_]) < 21)
+        if (getHandValue(playerHands_[currentHandIndex_]) < 21 &&
+            (rules_.hitSplitAces ||
+            playerHands_[currentHandIndex_][0].rank == Card::Rank::Ace))
             emit playerTurn(currentHandIndex_, canDouble(), canSplit());
     }
     else {
