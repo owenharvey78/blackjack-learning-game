@@ -5,7 +5,8 @@
 BlackjackGame::BlackjackGame(QObject *parent) : QObject{parent},
     rules_(), shoe_(new Shoe(rules_.numDecks, 0.2, this)),
     balance_(1000), currentBetAmount_(0), needsShuffling_(true), hasRoundStarted_(false),
-    currentHandIndex_(0), resultHandIndex_(0){ }
+    currentHandIndex_(0), resultHandIndex_(0), strategyChecker_(rules_.dealerHitsSoft17)
+{ }
 
 void BlackjackGame::setRuleset(Ruleset rules) {
     rules_ = rules;
@@ -419,4 +420,30 @@ bool BlackjackGame::allHandsBusted() const {
         }
     }
     return true;
+}
+
+BasicStrategyChecker::PlayerAction BlackjackGame::getBestMove() const {
+    BasicStrategyChecker::PlayerAction bestMove = strategyChecker_.getBestMove(playerHands_[currentHandIndex_], dealerHand_[0]);
+    if (!canMakeAction(bestMove)) {
+        BasicStrategyChecker::PlayerAction secondBestMove = strategyChecker_.getSecondBestMove(playerHands_[currentHandIndex_], dealerHand_[0]);
+        if (!canMakeAction(secondBestMove))
+            return strategyChecker_.getThirdBestMove(playerHands_[currentHandIndex_], dealerHand_[0]);
+        return secondBestMove;
+    }
+    return bestMove;
+}
+
+bool BlackjackGame::canMakeAction(BasicStrategyChecker::PlayerAction action) const {
+    switch (action) {
+    case BasicStrategyChecker::PlayerAction::Split:
+        return canSplit();
+    case BasicStrategyChecker::PlayerAction::SplitIfDas:
+        return rules_.doubleAfterSplit && canSplit();
+    case BasicStrategyChecker::PlayerAction::Double:
+        return canDouble();
+    case BasicStrategyChecker::PlayerAction::Surrender:
+        return canSurrender();
+    default:
+        return true;
+    }
 }

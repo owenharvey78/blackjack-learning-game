@@ -4,6 +4,7 @@
 #include "card.h"
 #include "ruleset.h"
 #include "shoe.h"
+#include "basic_strategy_checker.h"
 #include <QObject>
 #include <QTimer>
 
@@ -161,6 +162,20 @@ private:
     /// @return true if all hands are busted, false otherwise.
     bool allHandsBusted() const;
 
+    /// @brief Finds the best move for the given hand, dealer upcard, and ruleset.
+    /// @return One of Hit, Double, Stand, Split, or Surrender, depending on which
+    /// is the most optimal for the current ruleset, hand, and dealer upcard.
+    BasicStrategyChecker::PlayerAction getBestMove() const;
+
+    /// @brief Returns true if the player can play the given action with the current
+    /// hand and ruleset. Otherwise, returns false. In the case where action is
+    /// BasicStrategyChecker::PlayerAction::SplitIfDas, but double after split (DAS)
+    /// is not allowed, returns false.
+    /// @param action The action to check for playability.
+    /// @returns A bool indicating whether the player is able to play (and should play)
+    /// the given action.
+    bool canMakeAction(BasicStrategyChecker::PlayerAction action) const;
+
     // Static game state methods.
     /// @brief gets the total value of the hand.
     /// Handles logic of ace being 1 or 11.
@@ -225,6 +240,9 @@ private:
 
     /// @brief Holds the running count of all the cards dealt
     int runningCount_;
+
+    /// @brief Allows for finding the best move in a given scenario.
+    BasicStrategyChecker strategyChecker_;
 };
 
 #endif // BLACKJACK_GAME_H
