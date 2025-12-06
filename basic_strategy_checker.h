@@ -19,7 +19,7 @@ public:
         Double,
         Split,
         SplitIfDas,
-        Surrendur
+        Surrender
     };
 
     /// @brief Initializes a new BasicStrategyChecker.
@@ -45,10 +45,10 @@ public:
     /// @brief Gets the third-best move for the given player hand against the dealer's
     /// upcard. For almost every possible hand, the second-best move will always be
     /// possible, so this method will return the same result as getSecondBestMove. The
-    /// only exception is [8, 8] against the dealer's ace, in which case the best move
-    /// is to surrender, the second-best is to split, and the third-best is to hit.
-    /// Thus, the only case where this method's result is different from
-    /// getSecondBestMove is if this scenario.
+    /// only exception is [8, 8] against the dealer's ace in the H17 ruleset, in which
+    /// case the best move is to surrender, the second-best is to split, and the third-
+    /// best is to hit. Thus, the only case where this method's result is different
+    /// from getSecondBestMove is in this scenario.
     /// @param hand The lsit of cards in the player's hand.
     /// @param dealerUpcard The dealer's first drawn card (the upcard).
     /// @return The second-best move for the given hand against the dealer's upcard, or
@@ -81,10 +81,12 @@ private:
     };
 
     /// @brief The optimal actions for any hand with a soft total in the H17 ruleset. The
-    /// rows (first indices) represent the player's soft total, from 13 (A, 2) to 20 (A,
-    /// 9) inclusive. The columns (second indices) represent the dealer's upcard (2-10,
-    /// then ace; face cards count as 10).
-    static constexpr PlayerAction H17_SOFT_TOTALS[8][10] {
+    /// rows (first indices) represent the player's soft total, from 12 (A, A) to 20 (A,
+    /// 9) inclusive (soft 12 is included in case the player cannot split). The columns
+    /// (second indices) represent the dealer's upcard (2-10, then ace; face cards count
+    /// as 10).
+    static constexpr PlayerAction H17_SOFT_TOTALS[9][10] {
+        { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit,PlayerAction::Hit },
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit,PlayerAction::Hit },
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit,PlayerAction::Hit },
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit,PlayerAction::Hit },
@@ -106,7 +108,7 @@ private:
         { PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit },
         { PlayerAction::SplitIfDas, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
         { PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
-        { PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split },
+        { PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Surrender },
         { PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Stand, PlayerAction::Split, PlayerAction::Split, PlayerAction::Stand, PlayerAction::Stand },
         { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Double, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand },
         { PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split },
@@ -137,10 +139,12 @@ private:
     };
 
     /// @brief The optimal actions for any hand with a soft total in the S17 ruleset. The
-    /// rows (first indices) represent the player's soft total, from 13 (A, 2) to 20 (A,
-    /// 9) inclusive. The columns (second indices) represent the dealer's upcard (2-10,
-    /// then ace; face cards count as 10).
-    static constexpr PlayerAction S17_SOFT_TOTALS[8][10] {
+    /// rows (first indices) represent the player's soft total, from 12 (A, A) to 20 (A,
+    /// 9) inclusive (soft 12 is included in case the player cannot split). The columns
+    /// (second indices) represent the dealer's upcard (2-10, then ace; face cards count
+    /// as 10).
+    static constexpr PlayerAction S17_SOFT_TOTALS[9][10] {
+        { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit,PlayerAction::Hit },
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit,PlayerAction::Hit },
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit,PlayerAction::Hit },
         { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit,PlayerAction::Hit },
@@ -150,6 +154,26 @@ private:
         { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand },
         { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand }
     };
+
+    /// @brief The optimal actions for any hand with two cards of the same rank in the S17
+    /// ruleset. The rows (first indices) represent the rank of card (2-10, then ace; face
+    /// cards count as 10), and the columns (second indices) represent the dealer's upcard
+    /// (2-10, then ace, with face cards counting as 10.
+    ///
+    /// S17 splitting strategy is the same as H17 except for [8, 8] against a dealer's ace,
+    /// in which case the player should stand in S17 but surrender in H17.
+    static constexpr PlayerAction S17_SPLITTING[10][10] {
+        { PlayerAction::SplitIfDas, PlayerAction::SplitIfDas, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::SplitIfDas, PlayerAction::SplitIfDas, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::SplitIfDas, PlayerAction::SplitIfDas, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand },
+        { PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::SplitIfDas, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit },
+        { PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split },
+        { PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Stand, PlayerAction::Split, PlayerAction::Split, PlayerAction::Stand, PlayerAction::Stand },
+        { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Double, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand },
+        { PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split, PlayerAction::Split },
+        };
 };
 
 #endif // BASIC_STRATEGY_CHECKER_H
