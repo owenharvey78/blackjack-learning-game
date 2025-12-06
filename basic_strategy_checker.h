@@ -67,6 +67,21 @@ private:
         { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand }
     };
 
+    /// @brief The optimal actions for any hand with a soft total in the H17 ruleset. The
+    /// rows (first indices) represent the player's soft total, from 13 (A, 2) to 20 (A,
+    /// 9) inclusive. The columns (second indices) represent the dealer's upcard (2-10,
+    /// then ace; face cards count as 10).
+    static constexpr PlayerAction H17_SOFT_TOTALS[8][10] {
+        { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit,PlayerAction::Hit },
+        { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit,PlayerAction::Hit },
+        { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit,PlayerAction::Hit },
+        { PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit,PlayerAction::Hit },
+        { PlayerAction::Hit, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit, PlayerAction::Hit,PlayerAction::Hit },
+        { PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Double, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Hit, PlayerAction::Hit,PlayerAction::Hit },
+        { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Double, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand },
+        { PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand, PlayerAction::Stand }
+    };
+
     /// @brief The optimal actions for any hand with a hard total in the S17 ruleset. The
     /// rows (first indices) represent the player's hard total (from 4 to 20, inclusive),
     /// while the columns represent the dealer's upcard (2-10, then ace; face cards count
