@@ -88,6 +88,44 @@
        </item>
       </layout>
      </item>
+     <item>
+      <widget class="QPushButton" name="returnButton">
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #2b1f0e
+		stop:1 #8c6c26
+	);
+
+	color: white;
+	font-weight: bold;
+	border: 3px solid #d4af37;
+	border-radius: 15px;
+	padding: 10px;
+}
+
+QPushButton:hover{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #3b2f1c,
+		stop:1 #ad8c32
+	);
+}</string>
+       </property>
+       <property name="text">
+        <string>Return to Main Menu</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

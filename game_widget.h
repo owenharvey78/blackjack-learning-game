@@ -97,6 +97,9 @@ private slots:
     /// @param handIndex The index of the hand being split.
     void onHandSplit(int handIndex);
 
+    /// @brief Handles when the user wants to return to the main menu.
+    void onReturnToMainMenu();
+
 private:
     /// @brief The UI form associated with this widget.
     Ui::GameWidget* ui_;

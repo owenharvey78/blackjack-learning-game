@@ -71,6 +71,7 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(ui_->standButton, &QPushButton::clicked, game_, &BlackjackGame::playerStand);
     connect(ui_->doubleButton, &QPushButton::clicked, game_, &BlackjackGame::playerDouble);
     connect(ui_->splitButton, &QPushButton::clicked, game_, &BlackjackGame::playerSplit);
+    connect(ui_->returnButton, &QPushButton::clicked, this, &GameWidget::onReturnToMainMenu);
 }
 
 GameWidget::~GameWidget()
@@ -726,4 +727,15 @@ void GameWidget::onBetPlaced(int betAmount) {
         ui_->balanceLabel->setText("$" + QString::number(balance_));
         ui_->betLabel->setText("");
     });
+}
+
+void GameWidget::onReturnToMainMenu(){
+ QMessageBox::StandardButton reply = QMessageBox::question(this, "Exiting main menu?", "Are you sure you want to return to the main menu?",
+                                                                QMessageBox::Yes | QMessageBox::No);
+    if (reply == QMessageBox::Yes) {
+        emit returnToMainMenu();
+    }
+    else if (reply == QMessageBox::No) {
+        // Do nothing pretty much.
+    }
 }
