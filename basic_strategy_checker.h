@@ -212,6 +212,11 @@ private:
     /// @return A tuple containing and int, representing the total of the hand, and a bool,
     /// representing whether that total is a soft total.
     static std::tuple<int, bool> getHandTotal(const QVector<Card>& hand);
+
+    /// @brief Returns true if the hand can be split; i.e., it consts of only two cards,
+    /// each of which are the same rank. Otherwise, returns false.
+    /// @return True if the hand can be split, false otherwise.
+    static inline bool canSplit(const QVector<Card>& hand);
 };
 
 #endif // BASIC_STRATEGY_CHECKER_H
