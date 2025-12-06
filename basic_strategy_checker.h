@@ -200,10 +200,10 @@ private:
 
     /// @brief Gets the row index (first index) for either of the splitting tables based
     /// on the value of the two cards in the player's hand.
-    /// @param blackjackValue The value of the two cards in the player's hand, as defined
-    /// by the getBlackjackValue method of the Card struct.
+    /// @param card A card from the player's hand (which card it is should not matter, as
+    /// they should both have the same value).
     /// @return A valid row index for the splitting table (0-9, inclusive).
-    static inline int getSplittingRowIndex(int blackjackValue);
+    static inline int getSplittingRowIndex(Card card);
 
     /// @brief Gets the total of the given hand and whether or not that total is a soft
     /// total.
