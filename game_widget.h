@@ -52,7 +52,6 @@ public slots:
     void onBetPlaced(int betAmount);
 
 private slots:
-
     /// @brief During the betting stage, adds a chip of the given value to the
     /// current bet.
     void addChip(int value);
