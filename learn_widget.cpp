@@ -17,7 +17,9 @@ LearnWidget::LearnWidget(QWidget *parent)
                    "Splitting Pairs",
                    "Surrender",
                    "End-of-Hand",
-                   "Basic Strategies"
+                   "Basic Strategies",
+                   "Card Counting,"
+                   "What's The Count?"
     };
 
     instructionList_ = {"",
@@ -56,7 +58,27 @@ LearnWidget::LearnWidget(QWidget *parent)
                         "The no one busts the total closer to 21 wins.\n"
                         "If there is a tie you keep your bet.",
 
-                        "If you would like to learn basic strategies press next."
+                        "If you would like to learn basic strategies press next.\n"
+                        "Else head to the practice section to get some practice in!",
+
+                        "Card counting helps you track whether a deck is rich in high cards (10's & Ace's)\n"
+                        "or low cards. High cards are going to favor you.\n"
+                        "\n"
+                        "The counting system we implemented is called the Hi-Low Count: \n"
+                        "\n"
+                        "\t - Cards 2-6 -> +1\n"
+                        "\t - Cards 7-9 ->  0\n"
+                        "\t - 10, J, Q, K, A -> -1\n"
+                        "\n"
+                        "Running Count: \n \t Add the values of all visible cards.\n"
+                        "True Count: \n \t The running count divided my the number of remaining decks.\n"
+                        "\n"
+                        "- A high true count tells us the deck is rich in 10's and Ace's.\n"
+                        "- A negative true count tells us low cards mostly remain.\n"
+                        "\n"
+                        "It is strategic to increase your bet if the true count is positive.",
+
+                        ""
     };
 
     updatePage();
