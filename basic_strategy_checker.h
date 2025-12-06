@@ -3,6 +3,7 @@
 
 #include <QVector>
 #include "card.h"
+#include <tuple>
 
 /// @brief Holds the BlackJack basic strategy plays for H17 and S17, allowing one to
 /// find the optimal play for a given hand and dealer upcard.
@@ -204,6 +205,13 @@ private:
     /// by the getBlackjackValue method of the Card struct.
     /// @return A valid row index for the splitting table (0-9, inclusive).
     static inline int getSplittingRowIndex(int blackjackValue);
+
+    /// @brief Gets the total of the given hand and whether or not that total is a soft
+    /// total.
+    /// @param hand The hand to get the total of.
+    /// @return A tuple containing and int, representing the total of the hand, and a bool,
+    /// representing whether that total is a soft total.
+    static std::tuple<int, bool> getHandTotal(const QVector<Card>& hand);
 };
 
 #endif // BASIC_STRATEGY_CHECKER_H
