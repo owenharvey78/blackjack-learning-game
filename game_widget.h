@@ -12,6 +12,7 @@
 #include "blackjack_game.h"
 #include "card.h"
 #include "card_sprites.h"
+#include "strategy_chart_dialog.h"
 
 namespace Ui {
 class GameWidget;
@@ -106,6 +107,9 @@ private slots:
     /// @brief Handles when the user wants to return to the main menu.
     void onReturnToMainMenu();
 
+    /// @brief Displays the strategy chart for the current ruleset.
+    void onStrategyChartButtonClicked();
+
 private:
     /// @brief The UI form associated with this widget.
     Ui::GameWidget* ui_;
@@ -198,6 +202,9 @@ private:
 
     /// @brief The dealer's hole card that will be flipped after the player is done.
     Card holeCard_;
+
+    /// @brief The strategy chart overlay widget.
+    StrategyChartDialog* strategyOverlay_;
 
     // Static ConstExpr:
 

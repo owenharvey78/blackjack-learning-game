@@ -1,10 +1,12 @@
 #include "game_widget.h"
 #include "ui_game_widget.h"
+#include "strategy_chart_dialog.h"
 
 GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     : QWidget(parent), ui_(new Ui::GameWidget), game_(game),
     cardSprites_(":/images/cards.png", 2.0), balance_(1000),
-    currentBetTotal_(0), holeCard_(Card::Rank::Cut, Card::Suit::Cut) {
+    currentBetTotal_(0), holeCard_(Card::Rank::Cut, Card::Suit::Cut)
+{
     ui_->setupUi(this);
 
     ui_->hitButton->setVisible(false);
@@ -38,6 +40,12 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     currentBet_[25] = 0;
     currentBet_[50] = 0;
     currentBet_[100] = 0;
+
+    // Initialize strategy chart overlay
+    strategyOverlay_ = new StrategyChartDialog(game_->dealerHitsSoft17(), this);
+
+    // Strategy chart button
+    connect(ui_->strategyChartButton, &QPushButton::clicked, this, &GameWidget::onStrategyChartButtonClicked);
 
     // Set up connections for chip buttons
     connect(ui_->chip1Button, &QPushButton::clicked, this, [this]() { addChip(1); });
@@ -78,6 +86,9 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(ui_->doubleButton, &QPushButton::clicked, game_, &BlackjackGame::playerDouble);
     connect(ui_->splitButton, &QPushButton::clicked, game_, &BlackjackGame::playerSplit);
     connect(ui_->returnButton, &QPushButton::clicked, this, &GameWidget::onReturnToMainMenu);
+
+    // Tells QT to use the background color from the stylesheet
+    setAttribute(Qt::WA_StyledBackground, true);
 }
 
 GameWidget::~GameWidget()
@@ -501,6 +512,11 @@ void GameWidget::flipCard(QGraphicsPixmapItem* item, const Card& card) {
 void GameWidget::resizeEvent(QResizeEvent* event) {
     QWidget::resizeEvent(event);
     updateViewScale();
+
+    // Resize overlay if visible
+    if (strategyOverlay_ && strategyOverlay_->isVisible()) {
+        strategyOverlay_->setGeometry(rect());
+    }
 }
 
 void GameWidget::updateViewScale() {
@@ -783,4 +799,8 @@ void GameWidget::onAllIn() {
             remaining -= value;
         }
     }
+}
+
+void GameWidget::onStrategyChartButtonClicked() {
+    strategyOverlay_->showOverlay();
 }

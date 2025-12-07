@@ -18,7 +18,8 @@ SOURCES += \
     mainwindow.cpp \
     card.cpp \
     ruleset_widget.cpp \
-    shoe.cpp
+    shoe.cpp \
+    strategy_chart_dialog.cpp
 
 HEADERS += \
     basic_strategy_checker.h \
@@ -30,13 +31,15 @@ HEADERS += \
     ruleset.h \
     card.h \
     ruleset_widget.h \
-    shoe.h
+    shoe.h \
+    strategy_chart_dialog.h
 
 FORMS += \
     game_widget.ui \
     learn_widget.ui \
     mainwindow.ui \
-    ruleset_widget.ui
+    ruleset_widget.ui \
+    strategy_chart_dialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
