@@ -1,9 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "ruleset_widget.h"
 #include <QMainWindow>
 #include <QStackedWidget>
 #include "learn_widget.h"
+#include "ruleset.h"
 
 class GameWidget;
 
@@ -13,8 +15,7 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -23,8 +24,22 @@ public:
 
 private slots:
     void onPracticeButtonClicked();
-    void onReturnToMainMenuClicked();
     void onLearnButtonClicked();
+    /// @brief When the practice button is selected in the main menu,
+    /// switches the central widget to game widget.
+    void onPracticeButtonClicked();
+
+    /// @brief When the ruleset button is selected in the main menu,
+    /// switches the central widget to ruleset widget.
+    void onRulesetButtonClicked();
+
+    /// @brief When the main menu button is selected in the ruleset menu,
+    /// switches the central widget to main menu widget.
+    void onReturnToMainMenuClicked();
+
+    /// @brief When the save button is selected in the ruleset menu,
+    /// saves the current configuration as the new ruleset.
+    void onRulesetSaved();
 
 private:
     /// @brief The UI form object for this window.
@@ -39,5 +54,11 @@ private:
 
     /// @brief The widget for the learn window.
     LearnWidget* learnWidget_;
+    /// @brief The widget for the ruleset selection menu.
+    RulesetWidget* rulesetWidget_;
+
+    /// @brief The current rules.
+    Ruleset currentRules_;
+
 };
 #endif // MAINWINDOW_H

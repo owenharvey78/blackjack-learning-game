@@ -7,8 +7,7 @@
 #include "card.h"
 
 /// @brief A class representing the shoe that holds the cards to be drawn.
-class Shoe : public QObject
-{
+class Shoe : public QObject {
     Q_OBJECT
 public:
     /// @brief Constructs a new Shoe.

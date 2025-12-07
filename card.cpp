@@ -2,10 +2,10 @@
 #include <algorithm>
 
 Card::Card(Rank rank, Suit suit)
-    : rank(rank), suit(suit)
-{}
+    : rank(rank), suit(suit) {}
 
 int Card::getBlackjackValue() const {
+    if (rank == Rank::Ace) return 11;
     return std::min(static_cast<int>(rank), 10);
 }
 
