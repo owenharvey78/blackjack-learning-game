@@ -12,6 +12,10 @@ void BlackjackGame::setRuleset(Ruleset rules) {
     rules_ = rules;
 }
 
+void BlackjackGame::setShuffling(bool needsShuffling){
+    needsShuffling_ = needsShuffling;
+}
+
 // Game start and Animation
 
 void BlackjackGame::beginRound(int betAmount) {

@@ -8,6 +8,7 @@
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QVariantAnimation>
+#include <QMessageBox>
 #include "blackjack_game.h"
 #include "card.h"
 #include "card_sprites.h"
@@ -39,6 +40,9 @@ signals:
     /// @param betAmount The bet the player placed.
     void beginRound(int betAmount);
 
+    /// @brief Signals to return to main menu.
+    void returnToMainMenu();
+
 protected:
     /// @brief Handles window/widget resize events to maintain aspect ratio.
     void resizeEvent(QResizeEvent* event) override;
@@ -55,7 +59,6 @@ public slots:
     void displayCountingLabel();
 
 private slots:
-
     /// @brief During the betting stage, adds a chip of the given value to the
     /// current bet.
     void addChip(int value);
@@ -63,6 +66,9 @@ private slots:
     /// @brief During the betting stage, removes a chip of the given value from
     /// the current bet.
     void removeChip(int value);
+
+    /// @brief During the betting stage, adds chips until the bet matches the balance.
+    void onAllIn();
 
     /// @brief Starts the game, enables displays.
     void onStartButtonClicked();
@@ -97,13 +103,10 @@ private slots:
     /// @param handIndex The index of the hand being split.
     void onHandSplit(int handIndex);
 
+    /// @brief Handles when the user wants to return to the main menu.
+    void onReturnToMainMenu();
+
 private:
-    /// @brief The width of the QGraphicsScene used to display the cards.
-    static constexpr int SCENE_WIDTH = 1600;
-
-    /// @brief The height of the QGraphicsScene used to display the cards.
-    static constexpr int SCENE_HEIGHT = 900;
-
     /// @brief The UI form associated with this widget.
     Ui::GameWidget* ui_;
 
@@ -195,6 +198,32 @@ private:
 
     /// @brief The dealer's hole card that will be flipped after the player is done.
     Card holeCard_;
+
+    // Static ConstExpr:
+
+    /// @brief The width of the QGraphicsScene used to display the cards.
+    static constexpr int SCENE_WIDTH = 1600;
+
+    /// @brief The height of the QGraphicsScene used to display the cards.
+    static constexpr int SCENE_HEIGHT = 900;
+
+    /// @brief The Y position for player hands.
+    static constexpr int PLAYER_HAND_Y = 375;
+
+    /// @brief The Y position for dealer hand.
+    static constexpr int DEALER_HAND_Y = 100;
+
+    /// @brief The offset for which to animate the card draw "gathering point".
+    static constexpr int DECK_DRAW_OFFSET = 60;
+
+    /// @brief The duration for the draw animation.
+    static constexpr int DECK_DRAW_DURATION = 150;
+
+    /// @brief The duration for the deal animation.
+    static constexpr int DEAL_TO_HAND_DURATION = 300;
+
+    /// @brief The duration for the card flip animation.
+    static constexpr int FLIP_DURATION = 150;
 };
 
 #endif // GAME_WIDGET_H

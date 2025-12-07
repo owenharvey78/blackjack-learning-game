@@ -34,6 +34,9 @@ public:
     /// @brief Gets the true count for the game.
     int getTrueCount();
 
+    /// @brief Setter for the needsShuffling_ bool.
+    void setShuffling(bool needsShuffling);
+
 public slots:
     /// @brief Signals that the player's balance has changed, then starts a new
     /// round.
