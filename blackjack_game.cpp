@@ -451,3 +451,7 @@ bool BlackjackGame::canMakeAction(BasicStrategyChecker::PlayerAction action) con
         return true;
     }
 }
+
+bool BlackjackGame::dealerHitsSoft17() const {
+    return rules_.dealerHitsSoft17;
+}

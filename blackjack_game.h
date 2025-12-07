@@ -37,6 +37,12 @@ public:
     /// @brief Setter for the needsShuffling_ bool.
     void setShuffling(bool needsShuffling);
 
+    /// @brief Returns true if the dealer hits on soft 17 in the current ruleset;
+    /// false otherwise.
+    /// @return A bool indicating whether the dealer hits (true) or stands (false)
+    /// on soft 17 in the current ruleset.
+    bool dealerHitsSoft17() const;
+
 public slots:
     /// @brief Signals that the player's balance has changed, then starts a new
     /// round.
