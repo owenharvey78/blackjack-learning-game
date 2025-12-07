@@ -33,7 +33,7 @@ LearnWidget::LearnWidget(QWidget *parent)
 
         "Number cards are worth their number.\n"
         "Face cards (J, Q, K) are worth 10.\n"
-        "Aces can be worth 1 or 10, depends on which helps your hand.",
+        "Aces can be worth 1 or 11, depends on which helps your hand.",
 
         "If your first two cards total 21, that is Blackjack!\n"
         "Blackjack pays 3:2 (1.5x of what you bid)",
