@@ -21,6 +21,7 @@ private slots:
     void onNextButtonClicked();
     void onPrevButtonClicked();
     void onCheckButtonClicked();
+    void onMainMenuClicked();
 
 signals:
     void returnToMainMenu();

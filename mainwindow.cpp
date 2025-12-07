@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Learn connection
     connect(ui_->learnButton, &QPushButton::clicked, this, &MainWindow::onLearnButtonClicked);
+    connect(learnWidget_, &LearnWidget::returnToMainMenu, this, &MainWindow::onReturnToMainMenuClicked);
 }
 
 MainWindow::~MainWindow()

@@ -159,6 +159,10 @@ void LearnWidget::onPrevButtonClicked(){
     updatePage();
 }
 
+void LearnWidget::onMainMenuClicked(){
+    emit returnToMainMenu();
+}
+
 LearnWidget::~LearnWidget()
 {
     delete ui_;
