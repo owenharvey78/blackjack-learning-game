@@ -27,6 +27,9 @@ public:
     /// @param rules The new ruleset.
     void setRuleset(Ruleset rules);
 
+    /// @brief Setter for the needsShuffling_ bool.
+    void setShuffling(bool needsShuffling);
+
 public slots:
     /// @brief Signals that the player's balance has changed, then starts a new
     /// round.
