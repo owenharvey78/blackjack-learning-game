@@ -4,6 +4,7 @@
 #include "ruleset_widget.h"
 #include <QMainWindow>
 #include <QStackedWidget>
+#include "learn_widget.h"
 #include "ruleset.h"
 
 class GameWidget;
@@ -22,6 +23,8 @@ public:
     ~MainWindow();
 
 private slots:
+    void onPracticeButtonClicked();
+    void onLearnButtonClicked();
     /// @brief When the practice button is selected in the main menu,
     /// switches the central widget to game widget.
     void onPracticeButtonClicked();
@@ -49,6 +52,8 @@ private:
     /// @brief The widget for the main menu.
     QWidget* menuWidget_;
 
+    /// @brief The widget for the learn window.
+    LearnWidget* learnWidget_;
     /// @brief The widget for the ruleset selection menu.
     RulesetWidget* rulesetWidget_;
 

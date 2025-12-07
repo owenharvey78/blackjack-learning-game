@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "learn_widget.h"
 #include "game_widget.h"
 #include "blackjack_game.h"
 #include "ui_mainwindow.h"
@@ -24,12 +25,18 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(stackedWidget_);
 
     // Initialize and add learn widget to stacked widget
+    learnWidget_ = new LearnWidget(this);
+    stackedWidget_->addWidget(learnWidget_);
     rulesetWidget_ = new RulesetWidget(this);
     stackedWidget_->addWidget(rulesetWidget_);
 
     // Connect the practice button to the slot
     connect(ui_->practiceButton, &QPushButton::clicked, this, &MainWindow::onPracticeButtonClicked);
 
+    // Connect the learn button to the slot
+    connect(ui_->learnButton, &QPushButton::clicked, this, &MainWindow::onLearnButtonClicked);
+
+    connect(learnWidget_, &LearnWidget::returnToMainMenu, this, &MainWindow::onReturnToMainMenuClicked);
     // Rulset menu connections
     connect(ui_->rulesetButton, &QPushButton::clicked, this, &MainWindow::onRulesetButtonClicked);
     connect(rulesetWidget_, &RulesetWidget::returnToMainMenu, this, &MainWindow::onReturnToMainMenuClicked);
@@ -41,6 +48,16 @@ MainWindow::~MainWindow()
     delete ui_;
 }
 
+void MainWindow::onReturnToMainMenuClicked(){
+    stackedWidget_->setCurrentIndex(0);
+}
+
+void MainWindow::onPracticeButtonClicked(){
+
+}
+
+void MainWindow::onLearnButtonClicked(){
+    stackedWidget_->setCurrentIndex(1);
 void MainWindow::onRulesetSaved() {
     // Retrieve the configuration from the widget and store it
     currentRules_ = rulesetWidget_->getRuleset();
