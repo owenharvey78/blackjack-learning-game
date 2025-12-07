@@ -29,16 +29,16 @@ LearnWidget::LearnWidget(QWidget *parent)
     instructionList_ = {"",
 
         "Your goal is simple, get as close to 21 without going over.\n "
-        "Beat the dealers cards to win!",
+        "Beat the dealer's cards to win!",
 
         "Number cards are worth their number.\n"
         "Face cards (J, Q, K) are worth 10.\n"
-        "Aces can be worth 1 or 10, depends on which helps your hand.",
+        "Aces can be worth 1 or 11, depends on whichever helps your hand best.",
 
         "If your first two cards total 21, that is Blackjack!\n"
         "Blackjack pays 3:2 (1.5x of what you bid)",
 
-        "If the dealers first card is an Ace, the dealer checks for\n Blackjack before you make a choice\n"
+        "If the dealer's first card is an Ace, the dealer checks for\n Blackjack before you make a choice\n"
         "This prevents you from running into a guarenteed loss",
 
         "If you Hit, you get another card.\n"
@@ -91,7 +91,7 @@ LearnWidget::LearnWidget(QWidget *parent)
         "since they are more likely to bust.\n"
         "- Consider on 12-16 if the dealer shows a strong upcard (7-Ace). \n\n"
         "Doubling Down:\n"
-        "- Always double down on 11 against any dealers upcard.\n"
+        "- Always double down on 11 against any dealer's upcard.\n"
         "- Double Down on 10 against a dealer having a (2-9).\n"
         "- Always split Aces and 8's.\n"
         "- Never Split 5's or 10's, two 5's make 10, which is better to double down.\n"
