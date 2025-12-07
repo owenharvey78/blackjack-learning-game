@@ -12,6 +12,7 @@ SOURCES += \
     card_sprites.cpp \
     game_widget.cpp \
     blackjack_game.cpp \
+    learn_widget.cpp \
     main.cpp \
     mainwindow.cpp \
     card.cpp \
@@ -22,6 +23,7 @@ HEADERS += \
     card_sprites.h \
     game_widget.h \
     blackjack_game.h \
+    learn_widget.h \
     mainwindow.h \
     ruleset.h \
     card.h \
@@ -30,6 +32,7 @@ HEADERS += \
 
 FORMS += \
     game_widget.ui \
+    learn_widget.ui \
     mainwindow.ui \
     ruleset_widget.ui
 
