@@ -23,9 +23,13 @@ MainWindow::MainWindow(QWidget *parent)
     // Set the stacked widget as the central widget
     setCentralWidget(stackedWidget_);
 
-    // Initialize and add learn widget to stacked widget
+    // Initialize and add rule set widget to stacked widget
     rulesetWidget_ = new RulesetWidget(this);
     stackedWidget_->addWidget(rulesetWidget_);
+
+    // Initialize and add learn widget to stacked widget
+    learnWidget_ = new LearnWidget(this);
+    stackedWidget_->addWidget(learnWidget_);
 
     // Connect the practice button to the slot
     connect(ui_->practiceButton, &QPushButton::clicked, this, &MainWindow::onPracticeButtonClicked);
@@ -34,11 +38,18 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui_->rulesetButton, &QPushButton::clicked, this, &MainWindow::onRulesetButtonClicked);
     connect(rulesetWidget_, &RulesetWidget::returnToMainMenu, this, &MainWindow::onReturnToMainMenuClicked);
     connect(rulesetWidget_, &RulesetWidget::saveRulesRequested, this, &MainWindow::onRulesetSaved);
+
+    // Learn connection
+    connect(ui_->learnButton, &QPushButton::clicked, this, &MainWindow::onLearnButtonClicked);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui_;
+}
+
+void MainWindow::onLearnButtonClicked(){
+    stackedWidget_->setCurrentIndex(2);
 }
 
 void MainWindow::onRulesetSaved() {
