@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 #include "ruleset.h"
+#include "learn_widget.h"
 
 class GameWidget;
 
@@ -38,6 +39,9 @@ private slots:
     /// saves the current configuration as the new ruleset.
     void onRulesetSaved();
 
+    /// @brief When the learn button is pressed the learn widget becomes the cental widget.
+    void onLearnButtonClicked();
+
 private:
     /// @brief The UI form object for this window.
     Ui::MainWindow* ui_;
@@ -51,6 +55,9 @@ private:
 
     /// @brief The widget for the ruleset selection menu.
     RulesetWidget* rulesetWidget_;
+
+    /// @brief The widget for the learn page
+    LearnWidget* learnWidget_;
 
     /// @brief The current rules.
     Ruleset currentRules_;
