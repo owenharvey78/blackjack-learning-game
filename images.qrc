@@ -2,5 +2,7 @@
     <qresource prefix="/images">
         <file>BJbackground.png</file>
         <file>cards.png</file>
+        <file>h17_strategy_chart.png</file>
+        <file>s17_strategy_chart.png</file>
     </qresource>
 </RCC>
