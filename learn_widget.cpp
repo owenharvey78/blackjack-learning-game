@@ -2,8 +2,9 @@
 #include "ui_learn_widget.h"
 
 LearnWidget::LearnWidget(QWidget *parent)
-    : QWidget(parent)
-    , ui_(new Ui::LearnWidget)
+    : QWidget(parent),
+    ui_(new Ui::LearnWidget),
+    currentInstruction_(0)
 {
     ui_->setupUi(this);
     ui_->spinBox->setVisible(false);
