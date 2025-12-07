@@ -91,6 +91,13 @@
     </layout>
    </item>
    <item>
+    <widget class="QPushButton" name="surrenderButton">
+     <property name="text">
+      <string>Surrender</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QGraphicsView" name="graphicsView">
      <property name="minimumSize">
       <size>

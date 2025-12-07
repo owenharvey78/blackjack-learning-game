@@ -71,6 +71,8 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(ui_->standButton, &QPushButton::clicked, game_, &BlackjackGame::playerStand);
     connect(ui_->doubleButton, &QPushButton::clicked, game_, &BlackjackGame::playerDouble);
     connect(ui_->splitButton, &QPushButton::clicked, game_, &BlackjackGame::playerSplit);
+
+    connect(ui_->surrenderButton, &QPushButton::clicked, game_, &BlackjackGame::playerSurrender);
 }
 
 GameWidget::~GameWidget()

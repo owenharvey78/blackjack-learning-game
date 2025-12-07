@@ -44,6 +44,9 @@ public slots:
     /// @brief The player doubles their current bet and draws only one more card.
     void playerDouble();
 
+    /// @brief Player surrenders: gives up the hand and gets half the bet back.
+    void playerSurrender();
+
 signals:
     // Signals used by game widget.
 
