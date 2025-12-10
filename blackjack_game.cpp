@@ -328,13 +328,8 @@ int BlackjackGame::getRunningCount(){
     return runningCount_;
 }
 
-int BlackjackGame::getTrueCount(){
-    double floatingNumber = static_cast<double>(shoe_->getSize()) / 52.0;
-
-    if(floatingNumber == 0)
-        return 0;
-
-    return static_cast<double>(runningCount_) / floatingNumber;
+float BlackjackGame::getTrueCount(){
+    return (float)runningCount_ * 52 / shoe_->getSize();
 }
 
 void BlackjackGame::playerStand() {

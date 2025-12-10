@@ -32,7 +32,7 @@ public:
     int getRunningCount();
 
     /// @brief Gets the true count for the game.
-    int getTrueCount();
+    float getTrueCount();
 
     /// @brief Setter for the needsShuffling_ bool.
     void setShuffling(bool needsShuffling);
