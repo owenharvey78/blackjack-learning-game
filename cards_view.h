@@ -59,26 +59,27 @@ private:
     static constexpr double PLAYER_Y_PERCENT = 0.78;
 
     /// @brief Deck X margin from right edge (pixels).
-    static constexpr int DECK_MARGIN_RIGHT = 100;
+    static constexpr int DECK_RIGHT_MARGIN = 10;
 
-    /// @brief Deck Y position from top edge (pixels).
-    static constexpr int DECK_Y_POS = 80;
+    /// @brief Deck Y margin from top edge (pixels).
+    static constexpr int DECK_TOP_MARGIN = 50;
 
     /// @brief Offset below deck for cut card display (pixels).
     static constexpr int CUT_CARD_OFFSET_Y = 30;
 
-    /// @brief Width of card sprites at the default scene width (1600) in pixels.
-    /// This value is more of a suggestion for how large the cards should be with
-    /// respect to the scene than a strict value.
-    static constexpr int CARD_WIDTH = 70;
+    /// @brief The width of the card sprites in the resource file.
+    static constexpr int CARD_WIDTH = 71;
+
+    /// @brief The height of the card sprites in the resource file.
+    static constexpr int CARD_HEIGHT = 95;
 
     /// @brief Horizontal gap between cards in the same hand as a percentage of
     /// the card width (0.0-1.0).
     static constexpr float CARD_GAP = 0.3;
 
-    /// @brief The amount (in pixels) that cards should move down by during the
-    /// draw animation.
-    static constexpr int DECK_DRAW_OFFSET = 60;
+    /// @brief The amount that cards should move down by during the draw
+    /// animation as a percentage of the card width (0.0+).
+    static constexpr float DECK_DRAW_OFFSET = 1.0;
 
     /// @brief The duration of the draw animation, in milliseconds.
     static constexpr int DECK_DRAW_DURATION = 150;
@@ -116,19 +117,15 @@ private:
     /// @param card The card data (for determining the face pixmap).
     void flipCard(QGraphicsPixmapItem* item, const Card& card);
 
-    /// @brief Calculates centered X positions for cards in a single hand.
-    /// @param numCards Number of cards in the hand.
-    /// @return Vector of absolute X positions based on current scene width.
-    QVector<int> calculateCenteredPositions(int numCards) const;
-
     /// @brief Calculates base X position for each hand when multiple hands exist.
     /// @param totalHands Total number of player hands.
     /// @return Vector of center X positions for each hand section.
     QVector<int> calculateHandBaseXPositions(int totalHands) const;
 
-    /// @brief Calculates card positions relative to a hand's center.
+    /// @brief Calculates card positions relative to a hand's center, treating
+    /// the center as 0 so the hand center can be added to the offsets.
     /// @param numCards Number of cards in the hand.
-    /// @return Vector of X offsets from hand center.
+    /// @return Vector of X offsets from 0.
     QVector<int> calculateRelativeCardPositions(int numCards) const;
 
     /// @brief Animates repositioning of all cards in a hand to maintain centering.

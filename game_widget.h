@@ -13,6 +13,7 @@
 #include "card.h"
 #include "card_sprites.h"
 #include "strategy_chart_dialog.h"
+#include "cards_view.h"
 
 namespace Ui {
 class GameWidget;
@@ -114,23 +115,8 @@ private:
     /// @brief The UI form associated with this widget.
     Ui::GameWidget* ui_;
 
-    /// @brief The graphics/animation scene this widget holds.
-    QGraphicsScene* scene_;
-
-    /// @brief The view of the animation scene.
-    QGraphicsView* view_;
-
-    /// @brief The deck, unmoving (TBD).
-    QGraphicsPixmapItem* deckItem_;
-
-    /// @brief The deck position.
-    QPoint deckPos_;
-
     /// @brief The game currently being played.
     BlackjackGame* game_;
-
-    /// @brief The card as a class for easy access.
-    CardSprites cardSprites_;
 
     /// @brief Timer for delaying animations and such.
     QTimer timer_;
@@ -141,12 +127,6 @@ private:
 
     /// @brief The cards the dealer currently has.
     QVector<Card> dealerHand_;
-
-    /// @brief The graphics items representing the cards in the player's hands.
-    QVector<QVector<QGraphicsPixmapItem*>> playerHandCards_;
-
-    /// @brief List of dealer's card items.
-    QVector<QGraphicsPixmapItem*> dealerHandCards_;
 
     /// @brief Keeps track of the currently active hand during play.
     int currentHandIndex_;
@@ -166,71 +146,14 @@ private:
     /// than they have.
     void setChipButtonsEnabled();
 
-    /// @brief Helper for flipping a card.
-    /// @param card The card to flip.
-    void flipCard(QGraphicsPixmapItem* item, const Card& card);
-
-    /// @brief Updates the view scaling to maintain aspect ratio.
-    void updateViewScale();
-
     /// @brief Resets the game.
     void resetGame();
-
-    /// @brief Calculates centered X positions for all cards in a hand.
-    /// @param numCards Number of cards in the hand.
-    /// @return Vector of X positions (Y position depends on hand type).
-    QVector<int> calculateCenteredPositions(int numCards) const;
-
-    /// @brief Calculates center X position for each hand in horizontal distribution.
-    /// @param totalHands Total number of player hands.
-    /// @return Vector of base X positions for each hand.
-    QVector<int> calculateHandBaseXPositions(int totalHands) const;
-
-    /// @brief Calculates card positions relative to hand center.
-    /// @param numCards Number of cards in the hand.
-    /// @return Vector of X offsets from hand center.
-    QVector<int> calculateRelativeCardPositions(int numCards) const;
-
-    /// @brief Animates repositioning of all cards in a hand to maintain centering.
-    /// @param handIndex The hand to reposition (-1 for dealer).
-    /// @param duration Animation duration in milliseconds.
-    void repositionHandCards(int handIndex, int duration = 200);
-
-    /// @brief The graphics item for the dealer's hole card that will be flipped
-    /// after the player is done.
-    QGraphicsPixmapItem* holeCardItem_;
-
-    /// @brief The dealer's hole card that will be flipped after the player is done.
-    Card holeCard_;
 
     /// @brief The strategy chart overlay widget.
     StrategyChartDialog* strategyOverlay_;
 
-    // Static ConstExpr:
-
-    /// @brief The width of the QGraphicsScene used to display the cards.
-    static constexpr int SCENE_WIDTH = 1600;
-
-    /// @brief The height of the QGraphicsScene used to display the cards.
-    static constexpr int SCENE_HEIGHT = 900;
-
-    /// @brief The Y position for player hands.
-    static constexpr int PLAYER_HAND_Y = 375;
-
-    /// @brief The Y position for dealer hand.
-    static constexpr int DEALER_HAND_Y = 100;
-
-    /// @brief The offset for which to animate the card draw "gathering point".
-    static constexpr int DECK_DRAW_OFFSET = 60;
-
-    /// @brief The duration for the draw animation.
-    static constexpr int DECK_DRAW_DURATION = 150;
-
-    /// @brief The duration for the deal animation.
-    static constexpr int DEAL_TO_HAND_DURATION = 300;
-
-    /// @brief The duration for the card flip animation.
-    static constexpr int FLIP_DURATION = 150;
+    /// @brief The graphics view for displaying the cards.
+    CardsView* cardsView_;
 };
 
 #endif // GAME_WIDGET_H

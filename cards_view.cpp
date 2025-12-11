@@ -1,9 +1,9 @@
 #include "cards_view.h"
 #include <QResizeEvent>
 
-CardsView::CardsView(QWidget *parent)
-    : QWidget(parent), cardSprites_(":/images/cards.png", 2.0),
-    cutCardItem_(nullptr), holeCardItem_(nullptr),
+CardsView::CardsView(QWidget* parent)
+    : QWidget(parent), cardSprites_(":/images/cards.png", 1.0),
+    deckItem_(nullptr), cutCardItem_(nullptr), holeCardItem_(nullptr),
     holeCard_(Card::Rank::Cut, Card::Suit::Cut), // Card doesn't matter
     cardScale_(1.0)
 {
@@ -32,6 +32,7 @@ CardsView::CardsView(QWidget *parent)
 
     // Create deck item at calculated position
     deckItem_ = scene_->addPixmap(cardSprites_.back());
+    deckItem_->setTransformOriginPoint(deckItem_->boundingRect().center());
     deckItem_->setPos(deckPos_);
 
     // Calculate and apply initial card scale
@@ -55,8 +56,8 @@ float CardsView::calculateCardScale() const
 {
     // Reference dimensions (what card sizes are designed for)
     // TODO: design a cleaner implementation that doesn't need arbitrary reference dimensions
-    const float refWidth = 1600.0;
-    const float refHeight = 900.0;
+    const float refWidth = 800.0;
+    const float refHeight = 450.0;
 
     // Calculate scale based on current scene size
     float scaleX = scene_->sceneRect().width() / refWidth;
@@ -91,9 +92,16 @@ void CardsView::scaleAllCards()
 
 void CardsView::updateDeckPosition()
 {
-    // Deck positioned at top-right with margins
-    int sceneWidth = static_cast<int>(scene_->sceneRect().width());
-    deckPos_ = QPoint(sceneWidth - DECK_MARGIN_RIGHT, DECK_Y_POS);
+    // Calculate where we want the center of the scaled card to appear in scene coordinates
+    float desiredCenterX = scene_->width() - DECK_RIGHT_MARGIN - (CARD_WIDTH * cardScale_ / 2.0);
+    float desiredCenterY = DECK_TOP_MARGIN + (CARD_HEIGHT * cardScale_ / 2.0);
+
+    // Transform origin is at (CARD_WIDTH/2, CARD_HEIGHT/2) in unscaled item coordinates
+    // setPos() positions the item's (0,0) point, so we must offset by the transform origin
+    deckPos_ = QPoint(
+        static_cast<int>(desiredCenterX - CARD_WIDTH / 2.0),
+        static_cast<int>(desiredCenterY - CARD_HEIGHT / 2.0)
+    );
 
     // Update deck item position if it exists
     if (deckItem_) {
@@ -104,27 +112,6 @@ void CardsView::updateDeckPosition()
     if (cutCardItem_) {
         cutCardItem_->setPos(deckPos_.x(), deckPos_.y() + CUT_CARD_OFFSET_Y);
     }
-}
-
-QVector<int> CardsView::calculateCenteredPositions(int numCards) const
-{
-    if (numCards == 0) return QVector<int>();
-
-    // Use scaled card dimensions
-    int scaledCardWidth = static_cast<int>(CARD_WIDTH * cardScale_);
-
-    int cardGap = scaledCardWidth * CARD_GAP;
-
-    int totalWidth = (numCards * scaledCardWidth) + ((numCards - 1) * cardGap);
-    int sceneWidth = static_cast<int>(scene_->sceneRect().width());
-    int startX = (sceneWidth - totalWidth) / 2;
-
-    QVector<int> positions;
-    for (int i = 0; i < numCards; i++) {
-        positions.append(startX + (i * (scaledCardWidth + cardGap)));
-    }
-
-    return positions;
 }
 
 QVector<int> CardsView::calculateHandBaseXPositions(int totalHands) const
@@ -149,17 +136,17 @@ QVector<int> CardsView::calculateRelativeCardPositions(int numCards) const
 
     // Use scaled card dimensions
     int scaledCardWidth = static_cast<int>(CARD_WIDTH * cardScale_);
-    int scaledGap = static_cast<int>(CARD_GAP * cardScale_);
+    int scaledGap = static_cast<int>(CARD_GAP * scaledCardWidth);
 
-    // Total width of all cards plus gaps
-    int totalWidth = (numCards * scaledCardWidth) + ((numCards - 1) * scaledGap);
+    // Gap between center of leftmost card and center of rightmost card
+    int totalWidth = (numCards - 1) * scaledGap;
 
     // Starting offset from hand center (negative = left of center)
     int startOffset = -totalWidth / 2;
 
     QVector<int> relativePositions;
     for (int i = 0; i < numCards; i++) {
-        relativePositions.append(startOffset + (i * (scaledCardWidth + scaledGap)));
+        relativePositions.append(startOffset + (i * scaledGap));
     }
 
     return relativePositions;
@@ -186,22 +173,48 @@ void CardsView::resizeEvent(QResizeEvent* event)
 
     // Reposition all hands with scaled card dimensions
     repositionAllHands();
-
-    // Fit view to scene
-    view_->fitInView(scene_->sceneRect(), Qt::IgnoreAspectRatio);
 }
 
 void CardsView::repositionAllHands()
 {
     // Reposition dealer hand (centered at dynamic Y position)
     if (!dealerHandCards_.isEmpty()) {
-        repositionHandCards(-1, 0); // Reposition instantly
+        QVector<int> newXPositions = calculateRelativeCardPositions(dealerHandCards_.size());
+        int centerX = scene_->width() / 2;
+        int dealerY = getDealerHandY();
+
+        for (int i = 0; i < dealerHandCards_.size(); i++) {
+            // newXPositions[i] + centerX is the desired center position in scene coords
+            // Offset by transform origin to position the (0,0) point correctly
+            dealerHandCards_[i]->setPos(
+                newXPositions[i] + centerX - CARD_WIDTH / 2,
+                dealerY - CARD_HEIGHT / 2
+            );
+        }
     }
 
     // Reposition all player hands (distributed horizontally at dynamic Y position)
-    for (int i = 0; i < playerHandCards_.size(); i++) {
-        if (!playerHandCards_[i].isEmpty()) {
-            repositionHandCards(i, 0); // Reposition instantly
+    for (int handIndex = 0; handIndex < playerHandCards_.size(); handIndex++) {
+        if (playerHandCards_[handIndex].isEmpty()) continue;
+
+        // Calculate horizontal distribution
+        int totalHands = playerHandCards_.size();
+        QVector<int> handBasePositions = calculateHandBaseXPositions(totalHands);
+        int handBaseX = handBasePositions[handIndex];
+
+        // Calculate relative card positions
+        QVector<int> relativePositions = calculateRelativeCardPositions(playerHandCards_[handIndex].size());
+        int playerY = getPlayerHandY();
+
+        // Set each card position directly
+        for (int i = 0; i < playerHandCards_[handIndex].size(); i++) {
+            // finalX is the desired center X position in scene coords
+            int finalX = handBaseX + relativePositions[i];
+            // Offset by transform origin to position the (0,0) point correctly
+            playerHandCards_[handIndex][i]->setPos(
+                finalX - CARD_WIDTH / 2,
+                playerY - CARD_HEIGHT / 2
+            );
         }
     }
 }
@@ -215,13 +228,19 @@ void CardsView::repositionHandCards(int handIndex, int duration)
         cards = dealerHandCards_;
         if (cards.isEmpty()) return;
 
-        QVector<int> newXPositions = calculateCenteredPositions(cards.size());
+        QVector<int> newXPositions = calculateRelativeCardPositions(cards.size() + 1);
+        int centerX = scene_->width() / 2;
         int dealerY = getDealerHandY();
 
         for (int i = 0; i < cards.size(); i++) {
             QGraphicsPixmapItem* card = cards[i];
             QPointF currentPos = card->pos();
-            QPointF newPos(newXPositions[i], dealerY);
+            // newXPositions[i] + centerX is desired center position
+            // Offset by transform origin to position the (0,0) point correctly
+            QPointF newPos(
+                newXPositions[i] + centerX - CARD_WIDTH / 2,
+                dealerY - CARD_HEIGHT / 2
+            );
 
             if (currentPos == newPos) continue;
 
@@ -251,7 +270,7 @@ void CardsView::repositionHandCards(int handIndex, int duration)
         int handBaseX = handBasePositions[handIndex];
 
         // Calculate relative card positions
-        QVector<int> relativePositions = calculateRelativeCardPositions(cards.size());
+        QVector<int> relativePositions = calculateRelativeCardPositions(cards.size() + 1);
         int playerY = getPlayerHandY();
 
         // Animate each card
@@ -259,9 +278,13 @@ void CardsView::repositionHandCards(int handIndex, int duration)
             QGraphicsPixmapItem* card = cards[i];
             QPointF currentPos = card->pos();
 
-            // Combine hand base position with card offset
+            // Combine hand base position with card offset to get desired center position
             int finalX = handBaseX + relativePositions[i];
-            QPointF newPos(finalX, playerY);
+            // Offset by transform origin to position the (0,0) point correctly
+            QPointF newPos(
+                finalX - CARD_WIDTH / 2,
+                playerY - CARD_HEIGHT / 2
+            );
 
             if (currentPos == newPos) continue;
 
@@ -283,17 +306,14 @@ void CardsView::repositionHandCards(int handIndex, int duration)
 
 void CardsView::flipCard(QGraphicsPixmapItem* item, const Card& card)
 {
-    // Set transform origin to center for proper flipping effect
-    item->setTransformOriginPoint(item->boundingRect().center());
-
     // Animate shrinking card
     QVariantAnimation* shrink = new QVariantAnimation(this);
     shrink->setDuration(FLIP_DURATION);
     shrink->setStartValue(1.0);
     shrink->setEndValue(0.0);
 
-    connect(shrink, &QVariantAnimation::valueChanged, this, [item](const QVariant& v) {
-        item->setScale(v.toReal());
+    connect(shrink, &QVariantAnimation::valueChanged, this, [this, item](const QVariant& v) {
+        item->setScale(v.toReal() * cardScale_);
     });
 
     // Replace card back with front, animate growing card
@@ -305,8 +325,8 @@ void CardsView::flipCard(QGraphicsPixmapItem* item, const Card& card)
         grow->setStartValue(0.0);
         grow->setEndValue(1.0);
 
-        connect(grow, &QVariantAnimation::valueChanged, this, [item](const QVariant& v) {
-            item->setScale(v.toReal());
+        connect(grow, &QVariantAnimation::valueChanged, this, [this, item](const QVariant& v) {
+            item->setScale(v.toReal() * cardScale_);
         });
 
         grow->start(QAbstractAnimation::DeleteWhenStopped);
@@ -320,6 +340,7 @@ void CardsView::dealPlayerCard(const Card& card, int handIndex, bool isLastCard)
     // Create card item at deck position
     QPixmap backPix = cardSprites_.back();
     QGraphicsPixmapItem* item = scene_->addPixmap(backPix);
+    item->setTransformOriginPoint(item->boundingRect().center());
     item->setPos(deckPos_);
     item->setScale(cardScale_);
 
@@ -332,6 +353,13 @@ void CardsView::dealPlayerCard(const Card& card, int handIndex, bool isLastCard)
     while (playerHandCards_.size() <= handIndex) {
         playerHandCards_.append(QVector<QGraphicsPixmapItem*>());
     }
+
+    // Reposition existing cards in this hand BEFORE adding the new card
+    // This way only existing cards are repositioned, not the new one being dealt
+    if (!playerHandCards_[handIndex].isEmpty()) {
+        repositionHandCards(handIndex, DEAL_TO_HAND_DURATION);
+    }
+
     playerHandCards_[handIndex].append(item);
 
     // Calculate final position
@@ -342,11 +370,15 @@ void CardsView::dealPlayerCard(const Card& card, int handIndex, bool isLastCard)
     int handBaseX = handBasePositions[handIndex];
 
     QVector<int> relativePositions = calculateRelativeCardPositions(numCards);
-    int finalX = handBaseX + relativePositions.last();
-    int playerY = getPlayerHandY();
+    int finalCenterX = handBaseX + relativePositions.last();
+    int finalCenterY = getPlayerHandY();
 
-    QPoint handPosition(finalX, playerY);
-    QPoint drawPoint(deckPos_.x(), deckPos_.y() + DECK_DRAW_OFFSET);
+    // Offset by transform origin to position the (0,0) point correctly
+    QPoint handPosition(
+        finalCenterX - CARD_WIDTH / 2,
+        finalCenterY - CARD_HEIGHT / 2
+    );
+    QPoint drawPoint(deckPos_.x(), deckPos_.y() + DECK_DRAW_OFFSET * cardScale_ * CARD_WIDTH);
 
     // Animate drawing from deck to draw point (right below deck)
     QVariantAnimation* drawCard = new QVariantAnimation(this);
@@ -373,11 +405,9 @@ void CardsView::dealPlayerCard(const Card& card, int handIndex, bool isLastCard)
         dealCard->start(QAbstractAnimation::DeleteWhenStopped);
     });
 
-    // On completion: flip card and reposition hand (simultaneously)
-    connect(dealCard, &QVariantAnimation::finished, this, [this, item, card, handIndex]() {
+    // On completion: flip card
+    connect(dealCard, &QVariantAnimation::finished, this, [this, item, card]() {
         flipCard(item, card);
-        // Reposition happens simultaneously with the last part of dealing
-        repositionHandCards(handIndex, DEAL_TO_HAND_DURATION);
     });
 
     drawCard->start(QAbstractAnimation::DeleteWhenStopped);
@@ -388,19 +418,31 @@ void CardsView::dealDealerCard(const Card& card)
     // Create card item at deck position
     QPixmap backPix = cardSprites_.back();
     QGraphicsPixmapItem* item = scene_->addPixmap(backPix);
+    item->setTransformOriginPoint(item->boundingRect().center());
     item->setPos(deckPos_);
     item->setScale(cardScale_);
+
+    // Reposition existing cards as new card is dealt
+    if (!dealerHandCards_.isEmpty()) {
+        repositionHandCards(-1, DEAL_TO_HAND_DURATION);
+    }
 
     // Add to dealer hand tracking
     dealerHandCards_.append(item);
 
     // Calculate final centered position for dealer hand
     int numCards = dealerHandCards_.size();
-    QVector<int> xPositions = calculateCenteredPositions(numCards);
-    int dealerY = getDealerHandY();
+    QVector<int> xOffsets = calculateRelativeCardPositions(numCards);
+    int centerX = scene_->width() / 2;
+    int dealerCenterY = getDealerHandY();
 
-    QPoint handPosition(xPositions.last(), dealerY);
-    QPoint drawPoint(deckPos_.x(), deckPos_.y() + DECK_DRAW_OFFSET);
+    // xOffsets.last() + centerX is the desired center position
+    // Offset by transform origin to position the (0,0) point correctly
+    QPoint handPosition(
+        xOffsets.last() + centerX - CARD_WIDTH / 2,
+        dealerCenterY - CARD_HEIGHT / 2
+    );
+    QPoint drawPoint(deckPos_.x(), deckPos_.y() + DECK_DRAW_OFFSET * cardScale_ * CARD_WIDTH);
 
     // Animate drawing from deck to draw point (right below deck)
     QVariantAnimation* drawCard = new QVariantAnimation(this);
@@ -440,8 +482,6 @@ void CardsView::dealDealerCard(const Card& card)
             // Flip regular dealer card
             flipCard(item, card);
         }
-        // Reposition dealer cards to maintain centering
-        repositionHandCards(-1, DEAL_TO_HAND_DURATION);
     });
 
     drawCard->start(QAbstractAnimation::DeleteWhenStopped);
@@ -478,6 +518,7 @@ void CardsView::drawCutCard()
     // Create cut card item at deck position
     QPixmap cutCardPix = cardSprites_.cutCard();
     cutCardItem_ = scene_->addPixmap(cutCardPix);
+    cutCardItem_->setTransformOriginPoint(cutCardItem_->boundingRect().center());
     cutCardItem_->setPos(deckPos_);
     cutCardItem_->setScale(cardScale_);
 
@@ -521,13 +562,15 @@ void CardsView::cleanUp()
     playerHandCards_.clear();
     dealerHandCards_.clear();
 
-    // Reset pointers
+    // Reset pointers (must be done after scene_->clear() to avoid dangling pointers)
+    deckItem_ = nullptr;
     cutCardItem_ = nullptr;
     holeCardItem_ = nullptr;
 
     // Recreate deck at current position
-    updateDeckPosition(); // Recalculate position based on current scene size
+    updateDeckPosition();
     deckItem_ = scene_->addPixmap(cardSprites_.back());
+    deckItem_->setTransformOriginPoint(deckItem_->boundingRect().center());
     deckItem_->setPos(deckPos_);
     deckItem_->setScale(cardScale_);
 }
