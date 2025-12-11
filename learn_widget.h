@@ -3,6 +3,10 @@
 
 #include <QWidget>
 #include <QStringList>
+#include <QGraphicsScene>
+#include <QGraphicsPixmapItem>
+#include "card_sprites.h"
+#include "card.h"
 
 namespace Ui {
 class LearnWidget;
@@ -22,6 +26,7 @@ private slots:
     void onPrevButtonClicked();
     void onCheckButtonClicked();
     void onMainMenuClicked();
+    void showCountingExampleCards();
 
 signals:
     void returnToMainMenu();
@@ -34,6 +39,10 @@ private:
 
     /// @brief stores the header strings in a String List
     QStringList headerList_;
+
+    QGraphicsScene* scene_;
+
+    CardSprites cardSprites_;
 
     /// @brief keeps track of where we are in the instructions/header
     int currentInstruction_;

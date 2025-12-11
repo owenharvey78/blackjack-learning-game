@@ -4,9 +4,14 @@
 LearnWidget::LearnWidget(QWidget *parent)
     : QWidget(parent),
     ui_(new Ui::LearnWidget),
-    currentInstruction_(0)
+    currentInstruction_(0),
+    cardSprites_(":/images/cards.png", 2.0)
 {
     ui_->setupUi(this);
+
+    scene_ = new QGraphicsScene(this);
+    ui_->graphicsView->setScene(scene_);
+
     ui_->spinBox->setVisible(false);
     ui_->checkButton->setVisible(false);
 
@@ -133,10 +138,38 @@ void LearnWidget::updatePage(){
     if(currentInstruction_ == 12){
         ui_->spinBox->setVisible(true);
         ui_->checkButton->setVisible(true);
+        showCountingExampleCards();
     }else{
         ui_->spinBox->setVisible(false);
         ui_->checkButton->setVisible(false);
+
+        ui_->graphicsView->setVisible(false);
+        scene_->clear();
     }
+}
+
+void LearnWidget::showCountingExampleCards(){
+    scene_->clear();
+
+    QVector<Card> exampleCards{
+        Card(Card::Rank::Ace, Card::Suit::Spades),
+        Card(Card::Rank::Two, Card::Suit::Hearts),
+        Card(Card::Rank::Six, Card::Suit::Clubs)
+    };
+
+    const int width = 71;
+    const int gap = 20;
+
+    int totalWidth = exampleCards.size() * width + (exampleCards.size() - 1) * gap;
+    int startX = (400 - totalWidth) / 2;
+
+    for(int i = 0; i < exampleCards.size(); i++){
+        QPixmap face = cardSprites_.faceFor(exampleCards[i]);
+        QGraphicsPixmapItem* item = scene_->addPixmap(face);
+        item->setPos(startX + i * (width + gap), 0);
+    }
+
+    ui_->graphicsView->setVisible(true);
 }
 
 void LearnWidget::onCheckButtonClicked(){

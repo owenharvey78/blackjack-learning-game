@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft">
     <widget class="QPushButton" name="mainMenuButton">
@@ -166,6 +169,9 @@ QPushButton:hover{
       <string/>
      </property>
     </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QGraphicsView" name="graphicsView"/>
    </item>
   </layout>
  </widget>
