@@ -23,9 +23,6 @@ public:
     /// @param parent The parent widget of this CardsView
     explicit CardsView(QWidget* parent = nullptr);
 
-    /// @brief Frees resources associated with this CardsView.
-    ~CardsView();
-
     /// @brief Animates dealing a card to a player hand.
     /// @param card The card to deal.
     /// @param handIndex The index of the hand receiving the card.
@@ -70,11 +67,14 @@ private:
     /// @brief Offset below deck for cut card display (pixels).
     static constexpr int CUT_CARD_OFFSET_Y = 30;
 
-    /// @brief Width of card sprites (pixels).
-    static constexpr int CARD_WIDTH = 71;
+    /// @brief Width of card sprites at the default scene width (1600) in pixels.
+    /// This value is more of a suggestion for how large the cards should be with
+    /// respect to the scene than a strict value.
+    static constexpr int CARD_WIDTH = 70;
 
-    /// @brief Horizontal gap between cards in same hand (pixels).
-    static constexpr int CARD_GAP = 10;
+    /// @brief Horizontal gap between cards in the same hand as a percentage of
+    /// the card width (0.0-1.0).
+    static constexpr float CARD_GAP = 0.3;
 
     /// @brief The amount (in pixels) that cards should move down by during the
     /// draw animation.
@@ -103,6 +103,13 @@ private:
 
     /// @brief Repositions all hands (dealer and player) based on current scene dimensions.
     void repositionAllHands();
+
+    /// @brief Calculates the appropriate scale factor for cards based on current scene size.
+    /// @return Scale factor (1.0 = normal size, <1.0 = smaller, >1.0 = larger).
+    float calculateCardScale() const;
+
+    /// @brief Applies current card scale to all existing card items.
+    void scaleAllCards();
 
     /// @brief Flips a card item from back to face with shrink/grow animation.
     /// @param item The graphics item to flip.
@@ -159,6 +166,9 @@ private:
 
     /// @brief The dealer's hole card data (stored for delayed flip).
     Card holeCard_;
+
+    /// @brief Current scale factor for card items.
+    float cardScale_;
 };
 
 #endif // CARDS_VIEW_H
