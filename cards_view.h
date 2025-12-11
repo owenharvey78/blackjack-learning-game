@@ -2,17 +2,163 @@
 #define CARDS_VIEW_H
 
 #include <QWidget>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QGraphicsPixmapItem>
+#include <QVariantAnimation>
+#include <QVector>
+#include <QPoint>
+#include "card.h"
+#include "card_sprites.h"
 
-/// @brief Displays the cards for a Blackjack game.
+/// @brief A specialized widget for rendering and animating blackjack cards.
+/// Uses an internal QGraphicsView/QGraphicsScene with dynamic resizing.
+/// Scene dimensions match widget dimensions for optimal space usage.
 class CardsView : public QWidget
 {
     Q_OBJECT
+
 public:
     /// @brief Creates a new CardsView object.
     /// @param parent The parent widget of this CardsView
     explicit CardsView(QWidget* parent = nullptr);
 
-signals:
+    /// @brief Frees resources associated with this CardsView.
+    ~CardsView();
+
+    /// @brief Animates dealing a card to a player hand.
+    /// @param card The card to deal.
+    /// @param handIndex The index of the hand receiving the card.
+    /// @param isLastCard True if this card should be dealt sideways (doubled/split aces).
+    void dealPlayerCard(const Card& card, int handIndex, bool isLastCard);
+
+    /// @brief Animates dealing a card to the dealer.
+    /// @param card The card to deal.
+    void dealDealerCard(const Card& card);
+
+    /// @brief Flips the dealer's hole card (second card).
+    void flipDealerHoleCard();
+
+    /// @brief Handles hand split by redistributing cards across the scene.
+    /// @param handIndex The index of the hand being split.
+    void handleHandSplit(int handIndex);
+
+    /// @brief Animates the cut card being drawn and displayed below the deck.
+    void drawCutCard();
+
+    /// @brief Clears all cards and resets the view for a new round.
+    void cleanUp();
+
+protected:
+    /// @brief Handles resize events - dynamically adjusts scene and repositions all cards.
+    /// @param event The resize event.
+    void resizeEvent(QResizeEvent* event) override;
+
+private:
+    /// @brief Dealer hand Y position as percentage of scene height (0.0 to 1.0).
+    static constexpr double DEALER_Y_PERCENT = 0.12;
+
+    /// @brief Player hand(s) Y position as percentage of scene height (0.0 to 1.0).
+    static constexpr double PLAYER_Y_PERCENT = 0.78;
+
+    /// @brief Deck X margin from right edge (pixels).
+    static constexpr int DECK_MARGIN_RIGHT = 100;
+
+    /// @brief Deck Y position from top edge (pixels).
+    static constexpr int DECK_Y_POS = 80;
+
+    /// @brief Offset below deck for cut card display (pixels).
+    static constexpr int CUT_CARD_OFFSET_Y = 30;
+
+    /// @brief Width of card sprites (pixels).
+    static constexpr int CARD_WIDTH = 71;
+
+    /// @brief Horizontal gap between cards in same hand (pixels).
+    static constexpr int CARD_GAP = 10;
+
+    /// @brief The amount (in pixels) that cards should move down by during the
+    /// draw animation.
+    static constexpr int DECK_DRAW_OFFSET = 60;
+
+    /// @brief The duration of the draw animation, in milliseconds.
+    static constexpr int DECK_DRAW_DURATION = 150;
+
+    /// @brief The duration of the animation moving cards from the deck to the
+    /// dealer's/player's hand after they are drawn.
+    static constexpr int DEAL_TO_HAND_DURATION = 300;
+
+    /// @brief The duration of the card flip animation.
+    static constexpr int FLIP_DURATION = 150;
+
+    /// @brief Calculates dealer hand Y position based on current scene height.
+    /// @return Y position in scene coordinates.
+    int getDealerHandY() const;
+
+    /// @brief Calculates player hand Y position based on current scene height.
+    /// @return Y position in scene coordinates.
+    int getPlayerHandY() const;
+
+    /// @brief Updates deck and cut card positions based on current scene size.
+    void updateDeckPosition();
+
+    /// @brief Repositions all hands (dealer and player) based on current scene dimensions.
+    void repositionAllHands();
+
+    /// @brief Flips a card item from back to face with shrink/grow animation.
+    /// @param item The graphics item to flip.
+    /// @param card The card data (for determining the face pixmap).
+    void flipCard(QGraphicsPixmapItem* item, const Card& card);
+
+    /// @brief Calculates centered X positions for cards in a single hand.
+    /// @param numCards Number of cards in the hand.
+    /// @return Vector of absolute X positions based on current scene width.
+    QVector<int> calculateCenteredPositions(int numCards) const;
+
+    /// @brief Calculates base X position for each hand when multiple hands exist.
+    /// @param totalHands Total number of player hands.
+    /// @return Vector of center X positions for each hand section.
+    QVector<int> calculateHandBaseXPositions(int totalHands) const;
+
+    /// @brief Calculates card positions relative to a hand's center.
+    /// @param numCards Number of cards in the hand.
+    /// @return Vector of X offsets from hand center.
+    QVector<int> calculateRelativeCardPositions(int numCards) const;
+
+    /// @brief Animates repositioning of all cards in a hand to maintain centering.
+    /// @param handIndex The hand to reposition (-1 for dealer).
+    /// @param duration Animation duration in milliseconds.
+    void repositionHandCards(int handIndex, int duration);
+
+    /// @brief The internal graphics view for rendering cards (fills entire widget).
+    QGraphicsView* view_;
+
+    /// @brief The graphics scene containing all card items (dynamically resized to match view).
+    QGraphicsScene* scene_;
+
+    /// @brief Sprite sheet manager for card rendering.
+    CardSprites cardSprites_;
+
+    /// @brief The deck item graphic (positioned at top-right with margins).
+    QGraphicsPixmapItem* deckItem_;
+
+    /// @brief The cut card item graphic (displayed below deck when drawn).
+    QGraphicsPixmapItem* cutCardItem_;
+
+    /// @brief The current deck position in scene coordinates.
+    QPoint deckPos_;
+
+    /// @brief Graphics items for each player hand's cards.
+    /// Outer vector = hands, inner vector = cards in each hand.
+    QVector<QVector<QGraphicsPixmapItem*>> playerHandCards_;
+
+    /// @brief Graphics items for the dealer's cards.
+    QVector<QGraphicsPixmapItem*> dealerHandCards_;
+
+    /// @brief The dealer's hole card item (second card, flipped later).
+    QGraphicsPixmapItem* holeCardItem_;
+
+    /// @brief The dealer's hole card data (stored for delayed flip).
+    Card holeCard_;
 };
 
 #endif // CARDS_VIEW_H
