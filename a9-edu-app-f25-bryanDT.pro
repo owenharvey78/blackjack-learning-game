@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     basic_strategy_checker.cpp \
     card_sprites.cpp \
+    cards_view.cpp \
     game_widget.cpp \
     blackjack_game.cpp \
     learn_widget.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
 HEADERS += \
     basic_strategy_checker.h \
     card_sprites.h \
+    cards_view.h \
     game_widget.h \
     blackjack_game.h \
     learn_widget.h \
