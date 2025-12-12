@@ -392,6 +392,8 @@ void BlackjackGame::playerSurrender() {
 void BlackjackGame::playerStand() {
     if (currentHandIndex_ < playerHands_.size() - 1) {
         currentHandIndex_++;
+        if (is21(playerHands_[currentHandIndex_]))
+            playerStand();
         if (getHandValue(playerHands_[currentHandIndex_]) < 21 &&
             (rules_.hitSplitAces ||
             playerHands_[currentHandIndex_][0].rank == Card::Rank::Ace))
@@ -426,7 +428,9 @@ void BlackjackGame::playerSplit() {
     dealPlayerCard(currentHandIndex_, isLastCard);
     dealPlayerCard(currentHandIndex_ + 1, isLastCard);
 
-    if (isLastCard) {
+    if (is21(playerHands_[currentHandIndex_])) {
+        QTimer::singleShot(500, this, &BlackjackGame::playerStand);
+    } else if (isLastCard) {
         // Stand after a short delay
         QTimer::singleShot(500, this, &BlackjackGame::playerStand);
     } else {
