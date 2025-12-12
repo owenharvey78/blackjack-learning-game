@@ -12,6 +12,7 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     ui_->standButton->setVisible(false);
     ui_->showCountLabel->setVisible(false);
     ui_->showCountButton->setVisible(false);
+    ui_->surrenderButton->setVisible(false);
 
     scene_ = new QGraphicsScene(this);
     scene_->setSceneRect(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
@@ -80,7 +81,10 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(ui_->showCountButton, &QPushButton::clicked, this, &GameWidget::displayCountingLabel);
 
     // Button presses.
-    connect(ui_->hitButton, &QPushButton::clicked, game_, &BlackjackGame::playerHit);
+    connect(ui_->hitButton, &QPushButton::clicked, this, [this]{
+        game_->playerHit();
+        ui_->surrenderButton->setVisible(false);
+    });
     connect(ui_->standButton, &QPushButton::clicked, game_, &BlackjackGame::playerStand);
     connect(ui_->doubleButton, &QPushButton::clicked, game_, &BlackjackGame::playerDouble);
     connect(ui_->splitButton, &QPushButton::clicked, game_, &BlackjackGame::playerSplit);
@@ -183,6 +187,7 @@ void GameWidget::beginBetStage() {
     // Hide gameplay buttons
     ui_->hitButton->setVisible(false);
     ui_->standButton->setVisible(false);
+    ui_->surrenderButton->setVisible(false);
     ui_->doubleButton->setVisible(false);
     ui_->splitButton->setVisible(false);
     ui_->showCountButton->setVisible(false);
@@ -699,6 +704,7 @@ void GameWidget::onPlayerTurn(int handIndex, bool canDouble, bool canSplit) {
     ui_->hitButton->setVisible(true);
     ui_->standButton->setVisible(true);
     ui_->showCountButton->setVisible(true);
+    ui_->surrenderButton->setVisible(true);
 
     // Show double/split buttons based on game logic decision
     ui_->doubleButton->setVisible(canDouble);
@@ -709,6 +715,7 @@ void GameWidget::onDealerTurnStarted() {
     // Hide all gameplay buttons during dealer's turn
     ui_->hitButton->setVisible(false);
     ui_->standButton->setVisible(false);
+    ui_->surrenderButton->setVisible(false);
     ui_->doubleButton->setVisible(false);
     ui_->splitButton->setVisible(false);
 

@@ -173,13 +173,6 @@ QPushButton:hover{
     </layout>
    </item>
    <item>
-    <widget class="QPushButton" name="surrenderButton">
-     <property name="text">
-      <string>Surrender</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QGraphicsView" name="graphicsView">
      <property name="minimumSize">
       <size>
@@ -676,6 +669,29 @@ background-color: rgb(61, 56, 70);</string>
          </property>
          <property name="text">
           <string>STAND</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="surrenderButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font-size: 16pt; font-weight: bold;
+background-color: rgb(61, 56, 70);</string>
+         </property>
+         <property name="text">
+          <string>Surrender</string>
          </property>
         </widget>
        </item>
