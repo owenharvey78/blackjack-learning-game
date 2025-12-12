@@ -112,6 +112,15 @@ private:
     /// as necessary.
     void updateCountingLabel();
 
+    /// @brief Updates the player's balance by udpateAmount. Then, displays
+    /// text showing the change to the player's balance for updateDelay
+    /// milliseconds; then animates the balance changing by that amount for
+    /// animationDuration milliseconds.
+    /// @param updateAmount The amount to be added to the balance.
+    /// @param updateDelay The time to wait before animating the balance change.
+    /// @param animationDuration The length of the balance update animation.
+    void updateBalance(int updateAmount, int updateDelay, int animationDuration);
+
     /// @brief The size of the chip icons.
     static constexpr int CHIP_ICON_SIZE = 128;
 

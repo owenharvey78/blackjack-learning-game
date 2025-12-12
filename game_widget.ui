@@ -68,7 +68,7 @@
         </widget>
        </item>
        <item alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignBottom">
-        <widget class="QLabel" name="betLabel">
+        <widget class="QLabel" name="balanceUpdateLabel">
          <property name="minimumSize">
           <size>
            <width>0</width>

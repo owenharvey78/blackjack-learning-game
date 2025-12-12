@@ -1,6 +1,7 @@
 #include "game_widget.h"
 #include "ui_game_widget.h"
 #include "strategy_chart_dialog.h"
+#include <QVariantAnimation>
 
 GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     : QWidget(parent), ui_(new Ui::GameWidget), game_(game), balance_(1000),
@@ -230,31 +231,32 @@ GameWidget::~GameWidget()
 
 void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
                                int handIndex, int totalHands) {
-    QString message;
+    // QString message;
 
-    switch (result) {
-    case BlackjackGame::GameResult::Win:
-        message = "Win";
-        break;
-    case BlackjackGame::GameResult::Lose:
-        message = "Lose";
-        break;
-    case BlackjackGame::GameResult::Push:
-        message = "Push";
-        break;
-    case BlackjackGame::GameResult::Blackjack:
-        message = "Blackjack";
-        break;
-    }
+    // switch (result) {
+    // case BlackjackGame::GameResult::Win:
+    //     message = "Win";
+    //     break;
+    // case BlackjackGame::GameResult::Lose:
+    //     message = "Lose";
+    //     break;
+    // case BlackjackGame::GameResult::Push:
+    //     message = "Push";
+    //     break;
+    // case BlackjackGame::GameResult::Blackjack:
+    //     message = "Blackjack";
+    //     break;
+    // }
 
-    // Add hand number if multiple hands
-    if (totalHands > 1) {
-        message = QString("Hand %1: %2").arg(handIndex + 1).arg(message);
-    }
+    // // Add hand number if multiple hands
+    // if (totalHands > 1) {
+    //     message = QString("Hand %1: %2").arg(handIndex + 1).arg(message);
+    // }
 
     // Update balance label.
-    balance_ += payout;
-    ui_->balanceLabel->setText("$" + QString::number(balance_));
+    // balance_ += payout;
+    // ui_->balanceLabel->setText("$" + QString::number(balance_));
+    updateBalance(payout, 1000, 500);
 
     if (balance_ == 0) {
         timer_.singleShot(2000, this, [this]() {
@@ -282,8 +284,8 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
     }
 
     // Indicate results in bet label.
-    ui_->betLabel->show();
-    ui_->betLabel->setText(message);
+    // ui_->balanceUpdateLabel->show();
+    // ui_->balanceUpdateLabel->setText(message);
 
     // Only reset game after the LAST hand is processed
     if (handIndex == totalHands - 1) {
@@ -306,8 +308,8 @@ void GameWidget::beginBetStage() {
     setChipButtonsEnabled();
 
     // Hide bet text (without shifting layout)
-    ui_->betLabel->show();
-    ui_->betLabel->setText("");
+    ui_->balanceUpdateLabel->show();
+    ui_->balanceUpdateLabel->setText("");
 
     // Hide gameplay buttons
     ui_->hitButton->hide();
@@ -360,9 +362,6 @@ void GameWidget::addChip(int value) {
     default:
         break;  // Should never run
     }
-
-    // Update current bet label
-    ui_->betLabel->setText("-$" + QString::number(currentBetTotal_));
 
     // Disable any necessary buttons
     setChipButtonsEnabled();
@@ -429,12 +428,9 @@ void GameWidget::removeChip(int value) {
 
     // Update current bet label and disable start button if necessary
     if (currentBetTotal_ == 0) {
-        ui_->betLabel->setText("");
         ui_->startRoundButton->setEnabled(false);
         flashAnimationTimer_->stop();
     }
-    else
-        ui_->betLabel->setText("-$" + QString::number(currentBetTotal_));
 
     // Enable any necessary chip buttons
     setChipButtonsEnabled();
@@ -475,10 +471,6 @@ void GameWidget::onStartButtonClicked() {
     ui_->betDisplay50CountLabel->hide();
     ui_->betDisplay100Button->hide();
     ui_->betDisplay100CountLabel->hide();
-
-    // Hide bet label
-    ui_->betLabel->setText("");
-
     emit beginRound(currentBetTotal_);
 
     // Update balance label with current balance after bet
@@ -591,12 +583,7 @@ void GameWidget::onHandSplit(int handIndex) {
 }
 
 void GameWidget::onBetPlaced(int betAmount) {
-    balance_ -= betAmount;
-    ui_->betLabel->setText("-$" + QString::number(betAmount));
-    timer_.singleShot(2000, [this]() {
-        ui_->balanceLabel->setText("$" + QString::number(balance_));
-        ui_->betLabel->setText("");
-    });
+    updateBalance(-betAmount, 1000, 500);
 }
 
 void GameWidget::toggleCountingLabel() {
@@ -635,4 +622,43 @@ void GameWidget::updateCountingLabel() {
         countLabel_->adjustSize();  // Force Qt to calculate the label size based on text
         countLabel_->move(width() - countLabel_->width() - 10, height() / 2 - countLabel_->height());
     }
+}
+
+void GameWidget::updateBalance(int updateAmount, int updateDelay, int animationDuration) {
+    if (updateAmount == 0) return;
+    int originalBalance = balance_;
+    balance_ += updateAmount;
+
+    if (updateAmount < 0) {
+        ui_->balanceUpdateLabel->setStyleSheet("font-size: 14pt; font-weight: bold; color: #ff4444;");
+        ui_->balanceUpdateLabel->setText("-$" + QString::number(-updateAmount));
+    }
+    else {
+        ui_->balanceUpdateLabel->setStyleSheet("font-size: 14pt; font-weight: bold; color: #008f15;");
+        ui_->balanceUpdateLabel->setText("+$" + QString::number(updateAmount));
+    }
+
+    QVariantAnimation* labelUpdateAnimation = new QVariantAnimation(this);
+    labelUpdateAnimation->setDuration(animationDuration);
+    labelUpdateAnimation->setStartValue(0);
+    labelUpdateAnimation->setEndValue(updateAmount);
+
+    connect(labelUpdateAnimation, &QVariantAnimation::valueChanged, this,
+            [this, originalBalance] (const QVariant& v) {
+        const int amountToUpdate = v.toInt();
+        if (amountToUpdate < 0) {
+            ui_->balanceUpdateLabel->setText("-$" + QString::number(-amountToUpdate));
+        }
+        else {
+            ui_->balanceUpdateLabel->setText("+$" + QString::number(amountToUpdate));
+        }
+        ui_->balanceLabel->setText("$" + QString::number(originalBalance + amountToUpdate));
+    });
+    connect(labelUpdateAnimation, &QVariantAnimation::finished, this,
+            [this] () {
+        ui_->balanceUpdateLabel->setText("");
+        ui_->balanceLabel->setText("$" + QString::number(balance_));
+    });
+
+    QTimer::singleShot(updateDelay, [labelUpdateAnimation] () { labelUpdateAnimation->start(QAbstractAnimation::DeleteWhenStopped); });
 }
