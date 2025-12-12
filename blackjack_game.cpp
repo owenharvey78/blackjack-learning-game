@@ -89,20 +89,19 @@ void BlackjackGame::dealDealerCard() {
 
     // If this is the last card (2nd round, dealer), check for BJ
     if (dealerHand_.size() == 2) {
-        // TODO: add a signal (and a slot in GameWidget) to show a small animation
-        // with the dealer checking their other card if their upcard is an ace or
-        // 10-valued
+        QTimer::singleShot(600, this, [this]() {
+            bool playerHasBJ = isBlackJack(playerHands_[0]);
+            bool dealerHasBJ = isBlackJack(dealerHand_);
 
-        // Check Immediate Blackjack after animation finishes
-        bool playerHasBJ = isBlackJack(playerHands_[0]);
-        bool dealerHasBJ = isBlackJack(dealerHand_);
-
-        if (playerHasBJ || dealerHasBJ) {
-            checkCardsAndRound(0, determineWinner(playerHands_[0], dealerHand_));
-        } else {
-            // Player's turn - check if double/split allowed
-            emit playerTurn(0, canDouble(), canSplit());
-        }
+            if (playerHasBJ || dealerHasBJ) {
+                // Now that the animation is done, it is safe to flip the hole card
+                emit dealerTurnStarted();
+                checkCardsAndRound(0, determineWinner(playerHands_[0], dealerHand_));
+            } else {
+                // Player's turn - check if double/split allowed
+                emit playerTurn(0, canDouble(), canSplit());
+            }
+        });
     }
 }
 
