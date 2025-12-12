@@ -3,7 +3,7 @@
 #include "card.h"
 
 BlackjackGame::BlackjackGame(QObject *parent) : QObject{parent},
-    rules_(), shoe_(new Shoe(rules_.numDecks, 0.99, this)),
+    rules_(), shoe_(new Shoe()),
     balance_(1000), currentBetAmount_(0), needsShuffling_(true), hasRoundStarted_(false),
     currentHandIndex_(0), resultHandIndex_(0), strategyChecker_(rules_.dealerHitsSoft17)
 {}

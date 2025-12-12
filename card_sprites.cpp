@@ -22,7 +22,7 @@ QRect CardSprites::rectFor(Card::Suit suit, Card::Rank rank) const {
             row = 3;
             break;
         case Card::Suit::Cut:
-            row = 0; // Using clubs row for cut.
+            row = 2; // Using hearts row for cut.
             break;
     }
 

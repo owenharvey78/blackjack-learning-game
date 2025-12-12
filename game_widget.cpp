@@ -233,7 +233,6 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(ui_->hitButton, &QPushButton::clicked, this, [this]{
         checkBasicStrategy(BasicStrategyChecker::PlayerAction::Hit);
         game_->playerHit();
-        ui_->surrenderButton->setEnabled(false);
     });
     connect(ui_->standButton, &QPushButton::clicked, this, [this]{
         checkBasicStrategy(BasicStrategyChecker::PlayerAction::Stand);
