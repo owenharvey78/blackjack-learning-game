@@ -187,7 +187,6 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(ui_->chip25Button, &QPushButton::clicked, this, [this]() { addChip(25); });
     connect(ui_->chip50Button, &QPushButton::clicked, this, [this]() { addChip(50); });
     connect(ui_->chip100Button, &QPushButton::clicked, this, [this]() { addChip(100); });
-    connect(ui_->betAllButton, &QPushButton::clicked, this, &GameWidget::onAllIn);
 
     connect(ui_->betDisplay1Button, &QPushButton::clicked, this, [this]() { removeChip(1); });
     connect(ui_->betDisplay5Button, &QPushButton::clicked, this, [this]() { removeChip(5); });
@@ -297,13 +296,13 @@ void GameWidget::beginBetStage() {
     // Show betting buttons
     ui_->startRoundButton->show();
     ui_->startRoundButton->setEnabled(false);
+    flashAnimationTimer_->stop();
     ui_->chip1Button->show();
     ui_->chip5Button->show();
     ui_->chip10Button->show();
     ui_->chip25Button->show();
     ui_->chip50Button->show();
     ui_->chip100Button->show();
-    ui_->betAllButton->show();
     setChipButtonsEnabled();
 
     // Hide bet text (without shifting layout)
@@ -324,6 +323,7 @@ void GameWidget::addChip(int value) {
 
     // Enable "Start Round" button
     ui_->startRoundButton->setEnabled(true);
+    flashAnimationTimer_->start();
 
     // Add button to view so players can remove chip from bet and show count
     switch (value) {
@@ -431,6 +431,7 @@ void GameWidget::removeChip(int value) {
     if (currentBetTotal_ == 0) {
         ui_->betLabel->setText("");
         ui_->startRoundButton->setEnabled(false);
+        flashAnimationTimer_->stop();
     }
     else
         ui_->betLabel->setText("-$" + QString::number(currentBetTotal_));
@@ -462,7 +463,6 @@ void GameWidget::onStartButtonClicked() {
     ui_->chip25Button->hide();
     ui_->chip50Button->hide();
     ui_->chip100Button->hide();
-    ui_->betAllButton->hide();
     ui_->betDisplay1Button->hide();
     ui_->betDisplay1CountLabel->hide();
     ui_->betDisplay5Button->hide();
@@ -613,22 +613,6 @@ void GameWidget::onReturnToMainMenu() {
     }
     else if (reply == QMessageBox::No) {
         // Do nothing pretty much.
-    }
-}
-
-void GameWidget::onAllIn() {
-    int remaining = balance_ - currentBetTotal_;
-    if (remaining <= 0) {
-        return;
-    }
-
-    const int chipValues[] = {100, 50, 25, 10, 5, 1};
-
-    for (int value : chipValues) {
-        while (remaining >= value) {
-            addChip(value);
-            remaining -= value;
-        }
     }
 }
 
