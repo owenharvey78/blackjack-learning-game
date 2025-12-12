@@ -346,19 +346,12 @@ void BlackjackGame::playerHit() {
         return;
     }
 
-    if (getHandValue(playerHands_[currentHandIndex_]) == 21 &&
-        !isBlackJack(playerHands_[currentHandIndex_])) {
-        resolve21(currentHandIndex_);
+    int value = getHandValue(playerHands_[currentHandIndex_]);
+
+    if (value == 21) {
+        playerStand();
         return;
     }
-}
-
-void BlackjackGame::resolve21(int handIndex) {
-    int bet = betAmounts_[handIndex];
-    int payout = bet * 2;  // treat as a normal win
-    balance_ += payout;
-    hasRoundStarted_ = false;
-    emit roundEnded(GameResult::Win, payout, handIndex, playerHands_.size());
 }
 
 void BlackjackGame::playerDouble() {
@@ -436,8 +429,7 @@ void BlackjackGame::playerSplit() {
     if (isLastCard) {
         // Stand after a short delay
         QTimer::singleShot(500, this, &BlackjackGame::playerStand);
-    }
-    else {
+    } else {
         // Normal split: emit playerTurn for the first split hand
         emit playerTurn(currentHandIndex_, canDouble(), canSplit(), canSurrender());
     }
