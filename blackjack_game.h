@@ -12,7 +12,6 @@ class BlackjackGame : public QObject {
     Q_OBJECT
 
 public:
-
     /// @brief
     explicit BlackjackGame(QObject *parent = nullptr);
 
@@ -44,6 +43,14 @@ public:
     /// on soft 17 in the current ruleset.
     bool dealerHitsSoft17() const;
 
+    /// @brief Gets the current active player hand.
+    /// @return The current hand being played.
+    const QVector<Card>& getCurrentHand() const;
+
+    /// @brief Gets the dealer's upcard (first card).
+    /// @return The dealer's upcard.
+    Card getDealerUpcard() const;
+
     /// @brief Helper to draw card from shoe.
     Card drawCardFromShoe();
 
@@ -52,6 +59,11 @@ public:
 
     /// getter method for the hand value.
     int playerHandValue(QVector<Card> hand) const;
+
+    /// @brief Finds the best move for the given hand, dealer upcard, and ruleset.
+    /// @return One of Hit, Double, Stand, Split, or Surrender, depending on which
+    /// is the most optimal for the current ruleset, hand, and dealer upcard.
+    BasicStrategyChecker::PlayerAction getBestMove() const;
 
 public slots:
     /// @brief Signals that the player's balance has changed, then starts a new
@@ -74,8 +86,6 @@ public slots:
     void playerSurrender();
 
 signals:
-    // Signals used by game widget.
-
     /// @brief Emitted when a card is dealt to the player (for animation).
     /// @param card The card that is dealt.
     /// @param handIndex The hand that is dealt to the player.
@@ -93,8 +103,6 @@ signals:
     /// @param handIndex Which hand this result is for (0-based index).
     /// @param totalHands Total number of hands in this round.
     void roundEnded(BlackjackGame::GameResult result, int payout, int handIndex, int totalHands);
-
-    // Internal logic signals.
 
     /// @brief Emitted when a hand splits (to update UI hand count).
     /// @param handIndex The index of the hand that will be split.
@@ -123,7 +131,6 @@ private slots:
     void processNextHandResult();
 
 private:
-    // Internal helper methods.
     /// @brief Resets state and calls dealCards().
     void dealNewHand();
 
@@ -142,10 +149,6 @@ private:
 
     /// @brief Helper to resolve the round and emit roundEnded.
     void checkCardsAndRound(int handIndex, GameResult currentState);
-
-    /// @brief Helper to resolve a player hand that reaches 21.
-    /// @param Current player hand
-    void resolve21(int handIndex);
 
     /// @brief determines the winner of the hand.
     /// @param playerHand vector holding player's hand.
@@ -186,11 +189,6 @@ private:
     /// @return true if all hands are busted, false otherwise.
     bool allHandsBusted() const;
 
-    /// @brief Finds the best move for the given hand, dealer upcard, and ruleset.
-    /// @return One of Hit, Double, Stand, Split, or Surrender, depending on which
-    /// is the most optimal for the current ruleset, hand, and dealer upcard.
-    BasicStrategyChecker::PlayerAction getBestMove() const;
-
     /// @brief Returns true if the player can play the given action with the current
     /// hand and ruleset. Otherwise, returns false. In the case where action is
     /// BasicStrategyChecker::PlayerAction::SplitIfDas, but double after split (DAS)
@@ -200,6 +198,7 @@ private:
     /// the given action.
     bool canMakeAction(BasicStrategyChecker::PlayerAction action) const;
 
+public:
     // Static game state methods.
     /// @brief gets the total value of the hand.
     /// Handles logic of ace being 1 or 11.
@@ -227,6 +226,8 @@ private:
     /// @param hand vector holding the cards.
     /// @return true if is soft hand.
     static bool isSoftHand(const QVector<Card>& hand);
+
+private:
 
     // Member variables.
     /// @brief Holds the ruleset.

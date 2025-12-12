@@ -154,7 +154,7 @@ bool BlackjackGame::isSoftHand(const QVector<Card>& hand) {
         }
     }
 
-    return hasAce && (value + 10) <= 21;
+    return hasAce && value <= 21;
 }
 
 bool BlackjackGame::canDouble() const {
@@ -299,7 +299,11 @@ void BlackjackGame::processNextHandResult() {
             payout = betAmounts_[resultHandIndex_];
             break;
         case GameResult::Blackjack:
-            payout = static_cast<int>(betAmounts_[resultHandIndex_] * (1 + rules_.blackjackPayout));
+            if (playerHands_.size() == 1) { // only payout with multiplier for natural blackjack
+                payout = static_cast<int>(betAmounts_[resultHandIndex_] * (1 + rules_.blackjackPayout));
+            } else {
+                payout = betAmounts_[resultHandIndex_] * 2;
+            }
             break;
         default:
             // Lose: payout = 0
@@ -342,19 +346,12 @@ void BlackjackGame::playerHit() {
         return;
     }
 
-    if (getHandValue(playerHands_[currentHandIndex_]) == 21 &&
-        !isBlackJack(playerHands_[currentHandIndex_])) {
-        resolve21(currentHandIndex_);
+    int value = getHandValue(playerHands_[currentHandIndex_]);
+
+    if (value == 21) {
+        playerStand();
         return;
     }
-}
-
-void BlackjackGame::resolve21(int handIndex) {
-    int bet = betAmounts_[handIndex];
-    int payout = bet * 2;  // treat as a normal win
-    balance_ += payout;
-    hasRoundStarted_ = false;
-    emit roundEnded(GameResult::Win, payout, handIndex, playerHands_.size());
 }
 
 void BlackjackGame::playerDouble() {
@@ -362,6 +359,9 @@ void BlackjackGame::playerDouble() {
     if (!canDouble()) return;
 
     dealPlayerCard(currentHandIndex_, true);
+    balance_ -= betAmounts_[currentHandIndex_];
+    emit betPlaced(betAmounts_[currentHandIndex_]);
+    betAmounts_[currentHandIndex_] *= 2;
 
     // Wait a short delay before the dealer's turn
     QTimer::singleShot(500, this, &BlackjackGame::playerStand);
@@ -395,6 +395,8 @@ void BlackjackGame::playerSurrender() {
 void BlackjackGame::playerStand() {
     if (currentHandIndex_ < playerHands_.size() - 1) {
         currentHandIndex_++;
+        if (is21(playerHands_[currentHandIndex_]))
+            playerStand();
         if (getHandValue(playerHands_[currentHandIndex_]) < 21 &&
             (rules_.hitSplitAces ||
             playerHands_[currentHandIndex_][0].rank == Card::Rank::Ace))
@@ -429,11 +431,12 @@ void BlackjackGame::playerSplit() {
     dealPlayerCard(currentHandIndex_, isLastCard);
     dealPlayerCard(currentHandIndex_ + 1, isLastCard);
 
-    if (isLastCard) {
+    if (is21(playerHands_[currentHandIndex_])) {
+        QTimer::singleShot(500, this, &BlackjackGame::playerStand);
+    } else if (isLastCard) {
         // Stand after a short delay
         QTimer::singleShot(500, this, &BlackjackGame::playerStand);
-    }
-    else {
+    } else {
         // Normal split: emit playerTurn for the first split hand
         emit playerTurn(currentHandIndex_, canDouble(), canSplit(), canSurrender());
     }
@@ -512,4 +515,12 @@ bool BlackjackGame::canMakeAction(BasicStrategyChecker::PlayerAction action) con
 
 bool BlackjackGame::dealerHitsSoft17() const {
     return rules_.dealerHitsSoft17;
+}
+
+const QVector<Card>& BlackjackGame::getCurrentHand() const {
+    return playerHands_[currentHandIndex_];
+}
+
+Card BlackjackGame::getDealerUpcard() const {
+    return dealerHand_[0];
 }

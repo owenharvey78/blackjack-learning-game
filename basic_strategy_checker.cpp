@@ -1,4 +1,5 @@
 #include "basic_strategy_checker.h"
+#include "blackjack_game.h"
 #include "card.h"
 #include <QVector>
 #include <tuple>
@@ -26,26 +27,6 @@ int BasicStrategyChecker::getSplittingRowIndex(Card card) {
     return card.getBlackjackValue() - 2;
 }
 
-tuple<int, bool> BasicStrategyChecker::getHandTotal(const QVector<Card>& hand) {
-    int total = 0;
-    int aceCount = 0;
-    for (auto const& card : hand) {
-        total += card.getBlackjackValue();
-        if (card.rank == Card::Rank::Ace)
-            aceCount++;
-    }
-
-    while (total > 21) {
-        // Total will only be greater than 21 as long as there is at least one
-        // ace currently being counted as 11 (if not, the hand was invalid when
-        // the function was called)
-        total -= 10;
-        aceCount--;
-    }
-
-    return { total, aceCount > 0 };
-}
-
 bool BasicStrategyChecker::canSplit(const QVector<Card>& hand) {
     return hand.size() == 2 && hand[0].getBlackjackValue() == hand[1].getBlackjackValue();
 }
@@ -56,7 +37,8 @@ BasicStrategyChecker::PlayerAction BasicStrategyChecker::getBestMove(const QVect
         if (canSplit(hand))
             return H17_SPLITTING[getSplittingRowIndex(hand[0])][getUpcardIndex(dealerUpcard)];
 
-        const auto [handTotal, isSoftTotal] = getHandTotal(hand);
+        int handTotal = BlackjackGame::getHandValue(const_cast<QVector<Card>&>(hand));
+        bool isSoftTotal = BlackjackGame::isSoftHand(hand);
 
         if (isSoftTotal)
             return H17_SOFT_TOTALS[getSoftTotalsRowIndex(handTotal)][getUpcardIndex(dealerUpcard)]; // NOLINT(clang-analyzer-security.ArrayBound)
@@ -68,7 +50,8 @@ BasicStrategyChecker::PlayerAction BasicStrategyChecker::getBestMove(const QVect
         if (canSplit(hand))
             return S17_SPLITTING[getSplittingRowIndex(hand[0])][getUpcardIndex(dealerUpcard)];
 
-        const auto [handTotal, isSoftTotal] = getHandTotal(hand);
+        int handTotal = BlackjackGame::getHandValue(const_cast<QVector<Card>&>(hand));
+        bool isSoftTotal = BlackjackGame::isSoftHand(hand);
 
         if (isSoftTotal)
             return S17_SOFT_TOTALS[getSoftTotalsRowIndex(handTotal)][getUpcardIndex(dealerUpcard)]; // NOLINT(clang-analyzer-security.ArrayBound)
@@ -79,7 +62,8 @@ BasicStrategyChecker::PlayerAction BasicStrategyChecker::getBestMove(const QVect
 
 BasicStrategyChecker::PlayerAction BasicStrategyChecker::getSecondBestMove(const QVector<Card>& hand, Card dealerUpcard) const {
     BasicStrategyChecker::PlayerAction firstResult = getBestMove(hand, dealerUpcard);
-    const auto [handTotal, isSoftTotal] = getHandTotal(hand);
+    int handTotal = BlackjackGame::getHandValue(const_cast<QVector<Card>&>(hand));
+    bool isSoftTotal = BlackjackGame::isSoftHand(hand);
 
     if (dealerHitsSoft17_) {
         // Use H17 strategy

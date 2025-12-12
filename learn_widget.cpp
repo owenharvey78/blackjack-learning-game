@@ -41,79 +41,96 @@ LearnWidget::LearnWidget(QWidget *parent)
 
     instructionList_ = {
         "",
-        "Your goal is simple, get as close to 21 without going over.\n "
+        "Your goal is simple: get as close to 21 as possible without going over.\n "
         "Beat the dealer's cards to win!",
 
         "Number cards are worth their number.\n"
         "Face cards (J, Q, K) are worth 10.\n"
-        "Aces can be worth 1 or 11, depends on whichever helps your hand best.",
+        "Aces can be worth 1 or 11—whichever helps your hand the most.",
 
-        "If your first two cards total 21, that is Blackjack!\n"
-        "Blackjack pays 3:2 (1.5x of what you bid)",
+        "If your first two cards total 21, that's a Blackjack!\n"
+        "Usually, a Blackjack pays 3:2 ($3 for every $2 you bet).\n"
+        "However, some casinos will offer something like a 6:5 payout instead.\n"
+        "If the casino offers anything less than a 3:2 payout, DON'T PLAY AT THAT TABLE.\n"
+        "These lowered payouts make it much more difficult for you to gain an advantage.",
 
-        "If the dealer's first card is an Ace, the dealer checks for\n Blackjack before you make a choice\n"
-        "This prevents you from running into a guarenteed loss",
+        "If the dealer's first card is an Ace, the dealer checks for Blackjack before you make a choice.\n"
+        "This prevents you from running into a guaranteed loss.",
 
-        "If you Hit, you get another card.\n"
-        "If you Stand, you keep the total in your hand.",
+        "If you Hit, another card will be dealt to your hand.\n"
+        "If you Stand, you will keep the total in your hand.",
 
         "After you get your first two cards you can Double Down.\n"
-        "You double your bet.\n"
-        "Then you receive exactly on card and stand with the total you have.",
+        "You double your bet, then receive exactly one card and stand with the total you have.\n"
+        "Some casinos allow you to double for less than your original bet, but if you're"
+        " following basic strategy, you shouldn't do this.",
 
-        "If your first two cards are the same you can Split into two hands.\n"
-        "Doubling after Splitting is allowed.\n"
-        "You cannot try and resplit aces.",
+        "If your first two cards have the same value, you can Split into two hands.\n"
+        "The rules for what you can do after splitting depend on the casino you're playing at.\n"
+        "In this simulator, by default:\n"
+        "\t- You can split any pair other than aces as many times as you want\n"
+        "\t- Double after split (DAS) is allowed\n"
+        "\t- After splitting aces, you only receive one card for each of the new hands",
 
-        "You are able to Surrender, this means you will give up half your bet and end"
-        "the hand early.\n"
-        "This is only allowed before the dealer checks for BlackJack.",
+        "Some casinos allow you to Surrender. This means you will give up half your bet and end"
+        " the hand early.\n"
+        "Most casinos only offer Late Surrender, meaning you can only surrender after the dealer"
+        " checks for blackjack.",
 
         "The round ends when you and the dealer stand or bust.\n"
         "If you bust (go over 21), you lose.\n"
         "If the dealer busts, you win.\n"
-        "The no one busts the total closer to 21 wins.\n"
-        "If there is a tie you keep your bet.",
+        "If no one busts, whoevers hand total is closest to 21 wins.\n"
+        "If your hand total is the same as the dealer's you keep your bet (this is called a \"push\").",
 
-        "If you would like to learn basic strategies press next.\n"
-        "Else head to the practice section to get some practice in!",
+        "Head back to the menu to get some practice in!\n"
+        "Once you're done, come back to learn about basic strategy and card counting.",
 
-        "Card counting helps you track whether a deck is rich in high cards (10's & Ace's)\n"
+        "Card counting helps you track whether a deck is rich in high cards (10s and aces)\n"
         "or low cards. High cards are going to favor you.\n"
         "\n"
-        "The counting system we implemented is called the Hi-Low Count: \n"
+        "The counting system we implemented is called the Hi-Lo system. In this system: \n"
         "\n"
-        "\t - Cards 2-6 -> +1\n"
-        "\t - Cards 7-9 ->  0\n"
-        "\t - 10, J, Q, K, A -> -1\n"
+        "\t - Cards 2-6 count as +1\n"
+        "\t - Cards 7-9 count as +0\n"
+        "\t - 10, J, Q, K, A count as -1\n"
         "\n"
-        "Running Count: \n \t Add the values of all visible cards.\n"
-        "True Count: \n \t The running count divided my the number of remaining decks.\n"
+        "As you see cards being dealt, you'll add these values to a number in your head. That"
+        " number is called the \"running count\".\n"
+        "In contrast to the running count, the \"true count\" is the running count divided by"
+        " the number of decks remaining.\n"
+        "A high true count tells us the deck is rich in 10s and aces, while a negative true count"
+        " tells us that the deck contains mostly low cards.\n"
         "\n"
-        "- A high true count tells us the deck is rich in 10's and Ace's.\n"
-        "- A negative true count tells us low cards mostly remain.\n"
-        "\n"
-        "It is strategic to increase your bet if the true count is positive.",
+        "Generally, you should bet the minimum amount if the true count is below one. If the true"
+        " count is above 1, a common betting spread is to bet one \"betting unit\" for each positive"
+        " true count. You can choose how much you want a betting unit to be based on the size of"
+        " your bankroll. Larger betting units make you money at a faster rate, but increase the risk"
+        " of ruin (ROR)—the chance of losing your entire bankroll. Smaller betting units are less"
+        " profitable, but safer.",
 
-        "What would be the running count for: Ace, 2, and 6?",
+        "If the current running count is a 0, and the current round shows an ace, a 2, and a 6,"
+        " what will be the new running count?",
 
-        "Basic Strategy:\n"
+        "You can press the question mark icon in the practice section for a more detailed"
+        " basic strategy chart. However, here are some basics to remember:\n"
         "- Always Stand on 17 or higher.\n"
-        "- Always hit on anything 11 and lower.\n"
+        "- Always hit on anything 8 and lower.\n"
         "- Consider standing on 12 -16 if the dealer shows a weak upcard (2-6)\n"
         "since they are more likely to bust.\n"
         "- Consider on 12-16 if the dealer shows a strong upcard (7-Ace). \n\n"
+        "- If insurance or even money is offered, never take it"
         "Doubling Down:\n"
-        "- Always double down on 11 against any dealer's upcard.\n"
-        "- Double Down on 10 against a dealer having a (2-9).\n"
-        "- Always split Aces and 8's.\n"
-        "- Never Split 5's or 10's, two 5's make 10, which is better to double down.\n"
-        "Two 10's give you a stong 20.",
+        "- In H17 (dealer hits soft 17), always double down on 11 against any dealer's upcard.\n"
+        "- Double on a 10 against a dealer's 2-9.\n"
+        "- Always split aces and 8s.\n"
+        "- Never split 5s or 10s. Two 5s make 10, which is better to double down, and"
+        "two 10's give you a stong 20, which is a good hand to stand on.",
 
         "Here you will be dealt a hand.\n"
         "Decide wether you should hit or stand.\n\n"
         "This is not a full Blackjack game; just practice for you.\n\n"
-        "Your cards on on the top row."
+        "Your cards are on the top row."
     };
 
     updatePage();
