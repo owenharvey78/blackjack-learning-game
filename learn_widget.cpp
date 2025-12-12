@@ -54,7 +54,7 @@ LearnWidget::LearnWidget(QWidget *parent)
         "If the casino offers anything less than a 3:2 payout, DON'T PLAY AT THAT TABLE.\n"
         "These lowered payouts make it much more difficult for you to gain an advantage.",
 
-        "If the dealer's first card is an Ace, the dealer checks for\n Blackjack before you make a choice.\n"
+        "If the dealer's first card is an Ace, the dealer checks for Blackjack before you make a choice.\n"
         "This prevents you from running into a guaranteed loss.",
 
         "If you Hit, another card will be dealt to your hand.\n"
@@ -63,19 +63,19 @@ LearnWidget::LearnWidget(QWidget *parent)
         "After you get your first two cards you can Double Down.\n"
         "You double your bet, then receive exactly one card and stand with the total you have.\n"
         "Some casinos allow you to double for less than your original bet, but if you're"
-        "following basic strategy, you shouldn't do this.",
+        " following basic strategy, you shouldn't do this.",
 
         "If your first two cards have the same value, you can Split into two hands.\n"
         "The rules for what you can do after splitting depend on the casino you're playing at.\n"
         "In this simulator, by default:\n"
-        "- You can split any pair other than aces as many times as you want\n"
-        "- Double after split (DAS) is allowed\n"
-        "- After splitting aces, you only receive one card for each of the new hands",
+        "\t- You can split any pair other than aces as many times as you want\n"
+        "\t- Double after split (DAS) is allowed\n"
+        "\t- After splitting aces, you only receive one card for each of the new hands",
 
         "Some casinos allow you to Surrender. This means you will give up half your bet and end"
-        "the hand early.\n"
+        " the hand early.\n"
         "Most casinos only offer Late Surrender, meaning you can only surrender after the dealer"
-        "checks for blackjack.",
+        " checks for blackjack.",
 
         "The round ends when you and the dealer stand or bust.\n"
         "If you bust (go over 21), you lose.\n"
@@ -96,29 +96,30 @@ LearnWidget::LearnWidget(QWidget *parent)
         "\t - 10, J, Q, K, A count as -1\n"
         "\n"
         "As you see cards being dealt, you'll add these values to a number in your head. That"
-        "number is called the \"running count\".\n"
+        " number is called the \"running count\".\n"
         "In contrast to the running count, the \"true count\" is the running count divided by"
-        "the number of decks remaining.\n"
+        " the number of decks remaining.\n"
         "A high true count tells us the deck is rich in 10s and aces, while a negative true count"
-        "tells us that the deck contains mostly low cards.\n"
+        " tells us that the deck contains mostly low cards.\n"
         "\n"
-        "Generally, you should bet the minimum amount if the true count is below one. If the true,"
-        "count is above 1, a common betting spread is to bet one \"betting unit\" for each positive"
-        "true count above 0. You can choose how much you want a betting unit to be based on the size"
-        "of your bankroll. Larger betting units make you money at a faster rate, but increase the"
-        "risk of ruin (ROR)—the chance of losing your entire bankroll. Smaller betting units are less"
-        "profitable, but safer.",
+        "Generally, you should bet the minimum amount if the true count is below one. If the true"
+        " count is above 1, a common betting spread is to bet one \"betting unit\" for each positive"
+        " true count. You can choose how much you want a betting unit to be based on the size of"
+        " your bankroll. Larger betting units make you money at a faster rate, but increase the risk"
+        " of ruin (ROR)—the chance of losing your entire bankroll. Smaller betting units are less"
+        " profitable, but safer.",
 
         "If the current running count is a 0, and the current round shows an ace, a 2, and a 6,"
-        "what will be the new running count?",
+        " what will be the new running count?",
 
         "You can press the question mark icon in the practice section for a more detailed"
-        "basic strategy chart. However, here are some basics to remember:\n"
+        " basic strategy chart. However, here are some basics to remember:\n"
         "- Always Stand on 17 or higher.\n"
         "- Always hit on anything 8 and lower.\n"
         "- Consider standing on 12 -16 if the dealer shows a weak upcard (2-6)\n"
         "since they are more likely to bust.\n"
         "- Consider on 12-16 if the dealer shows a strong upcard (7-Ace). \n\n"
+        "- If insurance or even money is offered, never take it"
         "Doubling Down:\n"
         "- In H17 (dealer hits soft 17), always double down on 11 against any dealer's upcard.\n"
         "- Double on a 10 against a dealer's 2-9.\n"
@@ -129,7 +130,7 @@ LearnWidget::LearnWidget(QWidget *parent)
         "Here you will be dealt a hand.\n"
         "Decide wether you should hit or stand.\n\n"
         "This is not a full Blackjack game; just practice for you.\n\n"
-        "Your cards on on the top row."
+        "Your cards are on the top row."
     };
 
     updatePage();
