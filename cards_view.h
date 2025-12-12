@@ -46,6 +46,14 @@ public:
     /// @brief Clears all cards and resets the view for a new round.
     void cleanUp();
 
+    /// @brief Sets the hand index for tracking splitting to the given parameter.
+    /// @param index The index to be used for setting.
+    void setCurrentHandIndex(int index);
+
+    /// @brief Sets the hasSplit_ bool to the passed in bool.
+    /// @param newState The bool to set it to.
+    void setHasSplit(bool newState);
+
 protected:
     /// @brief Handles resize events - dynamically adjusts scene and repositions all cards.
     /// @param event The resize event.
@@ -102,6 +110,9 @@ private:
     /// @brief Updates deck and cut card positions based on current scene size.
     void updateDeckPosition();
 
+    /// @brief Updates the hand selection position based on split index.
+    void updateHandSelectionPosition();
+
     /// @brief Repositions all hands (dealer and player) based on current scene dimensions.
     void repositionAllHands();
 
@@ -147,6 +158,16 @@ private:
 
     /// @brief The cut card item graphic (displayed below deck when drawn).
     QGraphicsPixmapItem* cutCardItem_;
+
+    /// @brief The handSelection item graphic (displayed below selected hand once split).
+    QGraphicsPixmapItem* handSelectionItem_;
+
+    /// @brief The hand index of the handSelection item.
+    int currentHandIndex_;
+
+    /// @brief Checks to see if the hand has split.
+    /// @return True if has split, false otherwise.
+    bool hasSplit_;
 
     /// @brief The current deck position in scene coordinates.
     QPoint deckPos_;

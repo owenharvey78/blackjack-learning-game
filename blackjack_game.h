@@ -198,6 +198,12 @@ private:
     /// the given action.
     bool canMakeAction(BasicStrategyChecker::PlayerAction action) const;
 
+    /// @brief Looks for the next playable hand so that it can correctly be transmitted
+    /// to the visuals.
+    /// @param startIndex The passed in original index from which to start looking.
+    /// @return The index of the next playable hand, -1 if none found.
+    int findNextPlayableHand(int startIndex) const;
+
 public:
     // Static game state methods.
     /// @brief gets the total value of the hand.

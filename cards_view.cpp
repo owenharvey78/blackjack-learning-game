@@ -3,9 +3,9 @@
 
 CardsView::CardsView(QWidget* parent)
     : QWidget(parent), cardSprites_(":/images/cards.png", 1.0),
-    deckItem_(nullptr), cutCardItem_(nullptr), holeCardItem_(nullptr),
-    holeCard_(Card::Rank::Cut, Card::Suit::Cut), // Card doesn't matter
-    cardScale_(1.0) {
+    deckItem_(nullptr), cutCardItem_(nullptr), currentHandIndex_(0),
+    hasSplit_(false), holeCardItem_(nullptr), // Card doesn't matter
+    holeCard_(Card::Rank::Cut, Card::Suit::Cut), cardScale_(1.0) {
     // Create internal graphics view and scene
     view_ = new QGraphicsView(this);
     scene_ = new QGraphicsScene(this);
@@ -164,6 +164,9 @@ void CardsView::resizeEvent(QResizeEvent* event) {
 
     // Reposition all hands with scaled card dimensions
     repositionAllHands();
+
+    // Reposition hand selection.
+    updateHandSelectionPosition();
 }
 
 void CardsView::repositionAllHands() {
@@ -491,6 +494,16 @@ void CardsView::handleHandSplit(int handIndex) {
     QGraphicsPixmapItem* splitCardItem = playerHandCards_[handIndex].takeAt(1);
     playerHandCards_[handIndex + 1].append(splitCardItem);
 
+    hasSplit_ = true;
+
+    if (!handSelectionItem_) {
+        QPixmap selectionPixmap(":/images/handSelection.png");
+        handSelectionItem_ = scene_->addPixmap(selectionPixmap);
+        handSelectionItem_->setTransformOriginPoint(handSelectionItem_->boundingRect().center());
+        handSelectionItem_->setScale(cardScale_);
+        handSelectionItem_->setZValue(-1); // behind cards just in case.
+    }
+
     // Reposition all player hands to distribute horizontally across the scene
     for (int i = 0; i < playerHandCards_.size(); i++) {
         repositionHandCards(i, 400); // Longer duration for split animation
@@ -535,6 +548,48 @@ void CardsView::drawCutCard() {
 
     drawCut->start(QAbstractAnimation::DeleteWhenStopped);
 }
+
+void CardsView::updateHandSelectionPosition() {
+    if (!hasSplit_ || !handSelectionItem_) {
+        return;
+    }
+
+    if (currentHandIndex_ < 0 || currentHandIndex_ >= playerHandCards_.size() ||
+        playerHandCards_[currentHandIndex_].isEmpty()) {
+        handSelectionItem_->setVisible(false);
+        return;
+    }
+
+    handSelectionItem_->setVisible(true);
+
+    int totalHands = playerHandCards_.size();
+    QVector<int> handBasePositions = calculateHandBaseXPositions(totalHands);
+    int handBaseX = handBasePositions[currentHandIndex_];
+
+    QVector<int> relativePositions =
+        calculateRelativeCardPositions(playerHandCards_[currentHandIndex_].size());
+
+    int handCenterX = handBaseX + relativePositions[relativePositions.size() / 2];
+    int playerY = getPlayerHandY();
+
+    // Place the selection under the hand
+    int selectionY = playerY + CARD_HEIGHT * 0.85 * cardScale_; // tweak offset?
+
+    handSelectionItem_->setPos(
+        handCenterX - handSelectionItem_->boundingRect().width() / 2,
+        selectionY - handSelectionItem_->boundingRect().height() / 2
+        );
+}
+
+void CardsView::setCurrentHandIndex(int index) {
+    currentHandIndex_ = index;
+    updateHandSelectionPosition();
+}
+
+void CardsView::setHasSplit(bool newState){
+    hasSplit_ = newState;
+}
+
 
 void CardsView::cleanUp() {
     // Clear the scene

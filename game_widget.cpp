@@ -411,6 +411,9 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
         // Add extra delay after last hand before reset
         timer_.singleShot(2000, this, &GameWidget::resetGame);
     }
+
+    // Remove split hand selection.
+    cardsView_->setHasSplit(false);
 }
 
 void GameWidget::beginBetStage() {
@@ -670,6 +673,7 @@ void GameWidget::resetGame() {
 void GameWidget::onPlayerTurn(int handIndex, bool canDouble, bool canSplit, bool canSurrender) {
     // Track which hand is active to support multi-hand logic
     currentHandIndex_ = handIndex;
+    cardsView_->setCurrentHandIndex(handIndex);
 
     // Show gameplay buttons for player's turn
     ui_->hitButton->show();
