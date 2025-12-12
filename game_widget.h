@@ -112,6 +112,24 @@ private:
     /// as necessary.
     void updateCountingLabel();
 
+    /// @brief Converts a PlayerAction enum to a readable string for display
+    /// @param action The action to convert
+    /// @return String representation like "Hit", "Stand", "Double Down", etc.
+    QString actionToString(BasicStrategyChecker::PlayerAction action) const;
+
+    /// @brief Generates an educational explanation for why a move is recommended
+    /// @param recommendedAction The action basic strategy recommends
+    /// @param hand The player's hand
+    /// @param dealerUpcard The dealer's upcard value
+    /// @return Explanation string describing the recommended action for the specific situation
+    QString generateStrategyExplanation(BasicStrategyChecker::PlayerAction recommendedAction,
+                                       const QVector<Card>& hand, int dealerUpcard) const;
+
+    /// @brief Checks if the player's action matches basic strategy and shows warning if not
+    /// @param chosenAction The action the player chose to take
+    /// @return True if should proceed (always true, but shows warning first if wrong)
+    bool checkBasicStrategy(BasicStrategyChecker::PlayerAction chosenAction);
+
     /// @brief Updates the player's balance by udpateAmount. Then, displays
     /// text showing the change to the player's balance for updateDelay
     /// milliseconds; then animates the balance changing by that amount for

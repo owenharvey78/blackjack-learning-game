@@ -204,13 +204,6 @@ private:
     /// @return A valid row index for the splitting table (0-9, inclusive).
     static inline int getSplittingRowIndex(Card card);
 
-    /// @brief Gets the total of the given hand and whether or not that total is a soft
-    /// total.
-    /// @param hand The hand to get the total of.
-    /// @return A tuple containing and int, representing the total of the hand, and a bool,
-    /// representing whether that total is a soft total.
-    static std::tuple<int, bool> getHandTotal(const QVector<Card>& hand);
-
     /// @brief Returns true if the hand can be split; i.e., it consts of only two cards,
     /// each of which are the same rank. Otherwise, returns false.
     /// @return True if the hand can be split, false otherwise.

@@ -230,23 +230,120 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
 
     // Button presses.
     connect(ui_->hitButton, &QPushButton::clicked, this, [this]{
+        checkBasicStrategy(BasicStrategyChecker::PlayerAction::Hit);
         game_->playerHit();
         ui_->surrenderButton->setEnabled(false);
     });
-    connect(ui_->standButton, &QPushButton::clicked, game_, &BlackjackGame::playerStand);
-    connect(ui_->doubleButton, &QPushButton::clicked, game_, &BlackjackGame::playerDouble);
-    connect(ui_->splitButton, &QPushButton::clicked, game_, &BlackjackGame::playerSplit);
+    connect(ui_->standButton, &QPushButton::clicked, this, [this]{
+        checkBasicStrategy(BasicStrategyChecker::PlayerAction::Stand);
+        game_->playerStand();
+    });
+    connect(ui_->doubleButton, &QPushButton::clicked, this, [this]{
+        checkBasicStrategy(BasicStrategyChecker::PlayerAction::Double);
+        game_->playerDouble();
+    });
+    connect(ui_->splitButton, &QPushButton::clicked, this, [this]{
+        checkBasicStrategy(BasicStrategyChecker::PlayerAction::Split);
+        game_->playerSplit();
+    });
     connect(ui_->returnButton, &QPushButton::clicked, this, &GameWidget::onReturnToMainMenu);
-    connect(ui_->surrenderButton, &QPushButton::clicked, game_, &BlackjackGame::playerSurrender);
+    connect(ui_->surrenderButton, &QPushButton::clicked, this, [this]{
+        checkBasicStrategy(BasicStrategyChecker::PlayerAction::Surrender);
+        game_->playerSurrender();
+    });
 
     // Tells QT to use the background color from the stylesheet
     setAttribute(Qt::WA_StyledBackground, true);
-
-    connect(ui_->surrenderButton, &QPushButton::clicked, game_, &BlackjackGame::playerSurrender);
 }
 
 GameWidget::~GameWidget() {
     delete ui_;
+}
+
+QString GameWidget::actionToString(BasicStrategyChecker::PlayerAction action) const {
+    switch (action) {
+    case BasicStrategyChecker::PlayerAction::Hit:
+        return "Hit";
+    case BasicStrategyChecker::PlayerAction::Stand:
+        return "Stand";
+    case BasicStrategyChecker::PlayerAction::Double:
+        return "Double Down";
+    case BasicStrategyChecker::PlayerAction::Split:
+        return "Split";
+    case BasicStrategyChecker::PlayerAction::SplitIfDas:
+        return "Split (if DAS allowed)";
+    case BasicStrategyChecker::PlayerAction::Surrender:
+        return "Surrender";
+    }
+    return "Unknown";
+}
+
+QString GameWidget::generateStrategyExplanation(BasicStrategyChecker::PlayerAction recommendedAction,
+                                                const QVector<Card>& hand, int dealerUpcard) const {
+    QString action = actionToString(recommendedAction).toLower();
+    QString handDescription;
+    QString dealerCard;
+
+    // Convert dealer upcard to readable string
+    if (dealerUpcard == 11) dealerCard = "Ace";
+    else if (dealerUpcard == 10) dealerCard = "10";
+    else dealerCard = QString::number(dealerUpcard);
+
+    // Determine hand description
+    if (hand.size() == 2 && hand[0].getBlackjackValue() == hand[1].getBlackjackValue()) {
+        // It's a pair
+        QString rankName;
+        if (hand[0].rank == Card::Rank::Ace) rankName = "Aces";
+        else if (hand[0].rank == Card::Rank::Two) rankName = "2s";
+        else if (hand[0].rank == Card::Rank::Three) rankName = "3s";
+        else if (hand[0].rank == Card::Rank::Four) rankName = "4s";
+        else if (hand[0].rank == Card::Rank::Five) rankName = "5s";
+        else if (hand[0].rank == Card::Rank::Six) rankName = "6s";
+        else if (hand[0].rank == Card::Rank::Seven) rankName = "7s";
+        else if (hand[0].rank == Card::Rank::Eight) rankName = "8s";
+        else if (hand[0].rank == Card::Rank::Nine) rankName = "9s";
+        else rankName = "10s"; // 10, J, Q, K all have value 10
+
+        handDescription = QString("a pair of %1").arg(rankName);
+    } else {
+        // Not a pair - check if soft or hard
+        int handValue = BlackjackGame::getHandValue(const_cast<QVector<Card>&>(hand));
+        bool isSoft = BlackjackGame::isSoftHand(hand);
+        QString handType = isSoft ? "soft" : "hard";
+        handDescription = QString("%1 %2").arg(handType).arg(handValue);
+    }
+
+    return QString("basic strategy recommends %1ing with %2 against a dealer %3")
+        .arg(action, handDescription, dealerCard);
+}
+
+bool GameWidget::checkBasicStrategy(BasicStrategyChecker::PlayerAction chosenAction) {
+    // Get the recommended move from basic strategy
+    BasicStrategyChecker::PlayerAction recommendedAction = game_->getBestMove();
+
+    // If player's choice matches recommendation, proceed without warning
+    if (chosenAction == recommendedAction) {
+        return true;
+    }
+
+    // Get hand information for detailed explanation
+    const QVector<Card>& currentHand = game_->getCurrentHand();
+    int dealerUpcard = game_->getDealerUpcard().getBlackjackValue();
+
+    // Generate detailed explanation
+    QString chosenStr = actionToString(chosenAction);
+    QString explanation = generateStrategyExplanation(recommendedAction, currentHand, dealerUpcard);
+
+    QMessageBox messageBox(this);
+    messageBox.setWindowTitle("Basic Strategy Mistake");
+    messageBox.setText(QString("You chose to %1, but %2.")
+                   .arg(chosenStr.toLower(), explanation));
+    messageBox.setIcon(QMessageBox::Warning);
+    messageBox.setStandardButtons(QMessageBox::Ok);
+    messageBox.exec();
+
+    // Always return true - we still execute their chosen action
+    return true;
 }
 
 void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
@@ -299,7 +396,7 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
 
             if (msgBox.clickedButton() == restartButton) {
                 balance_ = 1000;
-                ui_->balanceLabel->setText("$" + QString::number(balance_));
+                ui_->balanceLabel->setText(QString("$%1").arg(balance_));
                 game_->setShuffling(true);
                 GameWidget::resetGame();
             }
@@ -355,32 +452,32 @@ void GameWidget::addChip(int value) {
     case 1:
         ui_->betDisplay1Button->show();
         ui_->betDisplay1CountLabel->show();
-        ui_->betDisplay1CountLabel->setText("x" + QString::number(currentBet_[value]));
+        ui_->betDisplay1CountLabel->setText(QString("x%1").arg(currentBet_[value]));
         break;
     case 5:
         ui_->betDisplay5Button->show();
         ui_->betDisplay5CountLabel->show();
-        ui_->betDisplay5CountLabel->setText("x" + QString::number(currentBet_[value]));
+        ui_->betDisplay5CountLabel->setText(QString("x%1").arg(currentBet_[value]));
         break;
     case 10:
         ui_->betDisplay10Button->show();
         ui_->betDisplay10CountLabel->show();
-        ui_->betDisplay10CountLabel->setText("x" + QString::number(currentBet_[value]));
+        ui_->betDisplay10CountLabel->setText(QString("x%1").arg(currentBet_[value]));
         break;
     case 25:
         ui_->betDisplay25Button->show();
         ui_->betDisplay25CountLabel->show();
-        ui_->betDisplay25CountLabel->setText("x" + QString::number(currentBet_[value]));
+        ui_->betDisplay25CountLabel->setText(QString("x%1").arg(currentBet_[value]));
         break;
     case 50:
         ui_->betDisplay50Button->show();
         ui_->betDisplay50CountLabel->show();
-        ui_->betDisplay50CountLabel->setText("x" + QString::number(currentBet_[value]));
+        ui_->betDisplay50CountLabel->setText(QString("x%1").arg(currentBet_[value]));
         break;
     case 100:
         ui_->betDisplay100Button->show();
         ui_->betDisplay100CountLabel->show();
-        ui_->betDisplay100CountLabel->setText("x" + QString::number(currentBet_[value]));
+        ui_->betDisplay100CountLabel->setText(QString("x%1").arg(currentBet_[value]));
         break;
     default:
         break;  // Should never run
@@ -402,7 +499,7 @@ void GameWidget::removeChip(int value) {
             ui_->betDisplay1Button->hide();
             ui_->betDisplay1CountLabel->hide();
         } else {
-            ui_->betDisplay1CountLabel->setText("x" + QString::number(newChipCount));
+            ui_->betDisplay1CountLabel->setText(QString("x%1").arg(newChipCount));
         }
         break;
     case 5:
@@ -410,7 +507,7 @@ void GameWidget::removeChip(int value) {
             ui_->betDisplay5Button->hide();
             ui_->betDisplay5CountLabel->hide();
         } else {
-            ui_->betDisplay5CountLabel->setText("x" + QString::number(newChipCount));
+            ui_->betDisplay5CountLabel->setText(QString("x%1").arg(newChipCount));
         }
         break;
     case 10:
@@ -418,7 +515,7 @@ void GameWidget::removeChip(int value) {
             ui_->betDisplay10Button->hide();
             ui_->betDisplay10CountLabel->hide();
         } else {
-            ui_->betDisplay10CountLabel->setText("x" + QString::number(newChipCount));
+            ui_->betDisplay10CountLabel->setText(QString("x%1").arg(newChipCount));
         }
         break;
     case 25:
@@ -426,7 +523,7 @@ void GameWidget::removeChip(int value) {
             ui_->betDisplay25Button->hide();
             ui_->betDisplay25CountLabel->hide();
         } else {
-            ui_->betDisplay25CountLabel->setText("x" + QString::number(newChipCount));
+            ui_->betDisplay25CountLabel->setText(QString("x%1").arg(newChipCount));
         }
         break;
     case 50:
@@ -434,7 +531,7 @@ void GameWidget::removeChip(int value) {
             ui_->betDisplay50Button->hide();
             ui_->betDisplay50CountLabel->hide();
         } else {
-            ui_->betDisplay50CountLabel->setText("x" + QString::number(newChipCount));
+            ui_->betDisplay50CountLabel->setText(QString("x%1").arg(newChipCount));
         }
         break;
     case 100:
@@ -442,7 +539,7 @@ void GameWidget::removeChip(int value) {
             ui_->betDisplay100Button->hide();
             ui_->betDisplay100CountLabel->hide();
         } else {
-            ui_->betDisplay100CountLabel->setText("x" + QString::number(newChipCount));
+            ui_->betDisplay100CountLabel->setText(QString("x%1").arg(newChipCount));
         }
         break;
     default:
@@ -645,11 +742,8 @@ void GameWidget::updateCountingLabel() {
         QString runningCount = QString::number(game_->getRunningCount());
         QString trueCount = QString::number(std::round(game_->getTrueCount() * 100)/100); // Round to 2 decimal places
 
-        QString labelText = QString("Running Count: ") +
-                            runningCount +
-                            QString("\n") +
-                            QString("True Count: ") +
-                            trueCount;
+        QString labelText = QString("Running Count: %1\nTrue Count: %2")
+                                .arg(runningCount, trueCount);
 
         countLabel_->setText(labelText);
         countLabel_->adjustSize();  // Force Qt to calculate the label size based on text
@@ -664,11 +758,11 @@ void GameWidget::updateBalance(int updateAmount, int updateDelay, int animationD
 
     if (updateAmount < 0) {
         ui_->balanceUpdateLabel->setStyleSheet("font-size: 14pt; font-weight: bold; color: #ff4444;");
-        ui_->balanceUpdateLabel->setText("-$" + QString::number(-updateAmount));
+        ui_->balanceUpdateLabel->setText(QString("-$%1").arg(-updateAmount));
     }
     else {
         ui_->balanceUpdateLabel->setStyleSheet("font-size: 14pt; font-weight: bold; color: #008f15;");
-        ui_->balanceUpdateLabel->setText("+$" + QString::number(updateAmount));
+        ui_->balanceUpdateLabel->setText(QString("+$%1").arg(updateAmount));
     }
 
     QVariantAnimation* labelUpdateAnimation = new QVariantAnimation(this);
@@ -680,17 +774,17 @@ void GameWidget::updateBalance(int updateAmount, int updateDelay, int animationD
             [this, originalBalance] (const QVariant& v) {
         const int amountToUpdate = v.toInt();
         if (amountToUpdate < 0) {
-            ui_->balanceUpdateLabel->setText("-$" + QString::number(-amountToUpdate));
+            ui_->balanceUpdateLabel->setText(QString("-$%1").arg(-amountToUpdate));
         }
         else {
-            ui_->balanceUpdateLabel->setText("+$" + QString::number(amountToUpdate));
+            ui_->balanceUpdateLabel->setText(QString("+$%1").arg(amountToUpdate));
         }
-        ui_->balanceLabel->setText("$" + QString::number(originalBalance + amountToUpdate));
+        ui_->balanceLabel->setText(QString("$%1").arg(originalBalance + amountToUpdate));
     });
     connect(labelUpdateAnimation, &QVariantAnimation::finished, this,
             [this] () {
         ui_->balanceUpdateLabel->setText("");
-        ui_->balanceLabel->setText("$" + QString::number(balance_));
+        ui_->balanceLabel->setText(QString("$%1").arg(balance_));
     });
 
     QTimer::singleShot(updateDelay, [labelUpdateAnimation] () { labelUpdateAnimation->start(QAbstractAnimation::DeleteWhenStopped); });

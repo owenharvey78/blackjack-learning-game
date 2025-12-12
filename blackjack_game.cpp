@@ -154,7 +154,7 @@ bool BlackjackGame::isSoftHand(const QVector<Card>& hand) {
         }
     }
 
-    return hasAce && (value + 10) <= 21;
+    return hasAce && value <= 21;
 }
 
 bool BlackjackGame::canDouble() const {
@@ -515,4 +515,12 @@ bool BlackjackGame::canMakeAction(BasicStrategyChecker::PlayerAction action) con
 
 bool BlackjackGame::dealerHitsSoft17() const {
     return rules_.dealerHitsSoft17;
+}
+
+const QVector<Card>& BlackjackGame::getCurrentHand() const {
+    return playerHands_[currentHandIndex_];
+}
+
+Card BlackjackGame::getDealerUpcard() const {
+    return dealerHand_[0];
 }
