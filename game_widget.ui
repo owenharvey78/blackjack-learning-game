@@ -92,31 +92,49 @@
       <widget class="QPushButton" name="showCountButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
+         <horstretch>64</horstretch>
+         <verstretch>64</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>64</width>
+         <height>64</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>64</width>
+         <height>64</height>
+        </size>
        </property>
        <property name="styleSheet">
         <string notr="true">font-size: 14pt; font-weight: bold;
 background-color: rgb(61, 56, 70);</string>
        </property>
        <property name="text">
-        <string>ShowCount</string>
+        <string>Ct</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="strategyChartButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimumSize">
         <size>
-         <width>200</width>
-         <height>0</height>
+         <width>64</width>
+         <height>64</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>200</width>
-         <height>16777215</height>
+         <width>64</width>
+         <height>64</height>
         </size>
        </property>
        <property name="styleSheet">
@@ -145,16 +163,28 @@ QPushButton:hover{
 }</string>
        </property>
        <property name="text">
-        <string>Show Strategy Chart</string>
+        <string>hint</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="returnButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>64</horstretch>
+         <verstretch>64</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>64</width>
+         <height>64</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
-         <width>200</width>
-         <height>16777215</height>
+         <width>64</width>
+         <height>64</height>
         </size>
        </property>
        <property name="styleSheet">
@@ -183,7 +213,7 @@ QPushButton:hover{
 }</string>
        </property>
        <property name="text">
-        <string>Return to Main Menu</string>
+        <string>menu</string>
        </property>
       </widget>
      </item>
@@ -545,10 +575,22 @@ QPushButton:hover{
       <layout class="QHBoxLayout" name="startButtonLayout">
        <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
         <widget class="QPushButton" name="startRoundButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
-           <width>200</width>
-           <height>50</height>
+           <width>400</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>400</width>
+           <height>100</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -579,17 +621,6 @@ background-color: rgb(61, 56, 70);</string>
           </size>
          </property>
         </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="showCountLabel">
-         <property name="styleSheet">
-          <string notr="true">font-size: 14pt; font-weight: bold;
-background-color: rgb(61, 56, 70);</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="chip1Button">

@@ -62,7 +62,7 @@ private:
     static constexpr int DECK_RIGHT_MARGIN = 10;
 
     /// @brief Deck Y margin from top edge (pixels).
-    static constexpr int DECK_TOP_MARGIN = 50;
+    static constexpr int DECK_TOP_MARGIN = 74;
 
     /// @brief Offset below deck for cut card display (pixels).
     static constexpr int CUT_CARD_OFFSET_Y = 30;

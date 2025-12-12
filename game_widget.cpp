@@ -82,10 +82,54 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     ui_->betDisplay100Button->setText("");
     ui_->betDisplay100Button->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
 
-    ui_->hitButton->setVisible(false);
-    ui_->standButton->setVisible(false);
-    ui_->showCountLabel->setVisible(false);
-    ui_->showCountButton->setVisible(false);
+    // Set up button icons for count, hint, and exit buttons (top right corner)
+
+    // Show count button
+    ui_->showCountButton->setIcon(QIcon(QPixmap(":images/count-button.png").scaled(
+        EXIT_ICON_SIZE, EXIT_ICON_SIZE, Qt::KeepAspectRatio)));
+    ui_->showCountButton->setIconSize(QSize(EXIT_ICON_SIZE, EXIT_ICON_SIZE));
+    ui_->showCountButton->setText("");
+    ui_->showCountButton->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    // Strategy chart button
+    ui_->strategyChartButton->setIcon(QIcon(QPixmap(":images/hint-button.png").scaled(
+        EXIT_ICON_SIZE, EXIT_ICON_SIZE, Qt::KeepAspectRatio)));
+    ui_->strategyChartButton->setIconSize(QSize(EXIT_ICON_SIZE, EXIT_ICON_SIZE));
+    ui_->strategyChartButton->setText("");
+    ui_->strategyChartButton->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    // Return to menu button
+    ui_->returnButton->setIcon(QIcon(QPixmap(":images/exit-button.png").scaled(
+        EXIT_ICON_SIZE, EXIT_ICON_SIZE, Qt::KeepAspectRatio)));
+    ui_->returnButton->setIconSize(QSize(EXIT_ICON_SIZE, EXIT_ICON_SIZE));
+    ui_->returnButton->setText("");
+    ui_->returnButton->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    ui_->hitButton->hide();
+    ui_->standButton->hide();
+
+    // Set up count label (programmatically, to avoid interfering with rest of layout)
+    countLabel_ = new QLabel(this);
+    countLabel_->setStyleSheet("font-size: 24pt; font-weight: bold; color: white; background-color: transparent;");
+    countLabel_->hide();
+
+    // Set up start round button
+    startRoundOnIconOne_ = true;
+    startRoundIconOne_ = QIcon(QPixmap(":images/begin-round-1.png").scaled(
+        4 * START_BUTTON_HEIGHT, START_BUTTON_HEIGHT, Qt::KeepAspectRatio));
+    startRoundIconTwo_ = QIcon(QPixmap(":images/begin-round-2.png").scaled(
+        4 * START_BUTTON_HEIGHT, START_BUTTON_HEIGHT, Qt::KeepAspectRatio));
+    ui_->startRoundButton->setIconSize(QSize(4 * START_BUTTON_HEIGHT, START_BUTTON_HEIGHT));
+    ui_->startRoundButton->setIcon(startRoundIconOne_);
+    ui_->startRoundButton->setText("");
+    ui_->startRoundButton->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+    flashAnimationTimer_ = new QTimer(this);
+    connect(flashAnimationTimer_, &QTimer::timeout, this, [this]() {
+        ui_->startRoundButton->setIcon(startRoundOnIconOne_ ? startRoundIconOne_ : startRoundIconTwo_);
+        startRoundOnIconOne_ = !startRoundOnIconOne_;
+    });
+    flashAnimationTimer_->setInterval(START_BUTTON_FLASH_DURATION);
+    flashAnimationTimer_->start();
 
     // Set up CardsView
     cardsView_ = new CardsView(this);
@@ -137,7 +181,7 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(game, &BlackjackGame::dealerCardDealt, this, &GameWidget::onDealerCardDealt);
 
     // Show Count
-    connect(ui_->showCountButton, &QPushButton::clicked, this, &GameWidget::displayCountingLabel);
+    connect(ui_->showCountButton, &QPushButton::clicked, this, &GameWidget::toggleCountingLabel);
 
     // Button presses.
     connect(ui_->hitButton, &QPushButton::clicked, game_, &BlackjackGame::playerHit);
@@ -209,11 +253,8 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
     }
 
     // Indicate results in bet label.
-    ui_->betLabel->setVisible(true);
+    ui_->betLabel->show();
     ui_->betLabel->setText(message);
-
-    // Make count label disappear for next round
-    ui_->showCountLabel->setVisible(false);
 
     // Only reset game after the LAST hand is processed
     if (handIndex == totalHands - 1) {
@@ -224,27 +265,26 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
 
 void GameWidget::beginBetStage() {
     // Show betting buttons
-    ui_->startRoundButton->setVisible(true);
+    ui_->startRoundButton->show();
     ui_->startRoundButton->setEnabled(false);
-    ui_->chip1Button->setVisible(true);
-    ui_->chip5Button->setVisible(true);
-    ui_->chip10Button->setVisible(true);
-    ui_->chip25Button->setVisible(true);
-    ui_->chip50Button->setVisible(true);
-    ui_->chip100Button->setVisible(true);
-    ui_->betAllButton->setVisible(true);
+    ui_->chip1Button->show();
+    ui_->chip5Button->show();
+    ui_->chip10Button->show();
+    ui_->chip25Button->show();
+    ui_->chip50Button->show();
+    ui_->chip100Button->show();
+    ui_->betAllButton->show();
     setChipButtonsEnabled();
 
     // Hide bet text (without shifting layout)
-    ui_->betLabel->setVisible(true);
+    ui_->betLabel->show();
     ui_->betLabel->setText("");
 
     // Hide gameplay buttons
-    ui_->hitButton->setVisible(false);
-    ui_->standButton->setVisible(false);
-    ui_->doubleButton->setVisible(false);
-    ui_->splitButton->setVisible(false);
-    ui_->showCountButton->setVisible(false);
+    ui_->hitButton->hide();
+    ui_->standButton->hide();
+    ui_->doubleButton->hide();
+    ui_->splitButton->hide();
 }
 
 void GameWidget::addChip(int value) {
@@ -258,33 +298,33 @@ void GameWidget::addChip(int value) {
     // Add button to view so players can remove chip from bet and show count
     switch (value) {
     case 1:
-        ui_->betDisplay1Button->setVisible(true);
-        ui_->betDisplay1CountLabel->setVisible(true);
+        ui_->betDisplay1Button->show();
+        ui_->betDisplay1CountLabel->show();
         ui_->betDisplay1CountLabel->setText("x" + QString::number(currentBet_[value]));
         break;
     case 5:
-        ui_->betDisplay5Button->setVisible(true);
-        ui_->betDisplay5CountLabel->setVisible(true);
+        ui_->betDisplay5Button->show();
+        ui_->betDisplay5CountLabel->show();
         ui_->betDisplay5CountLabel->setText("x" + QString::number(currentBet_[value]));
         break;
     case 10:
-        ui_->betDisplay10Button->setVisible(true);
-        ui_->betDisplay10CountLabel->setVisible(true);
+        ui_->betDisplay10Button->show();
+        ui_->betDisplay10CountLabel->show();
         ui_->betDisplay10CountLabel->setText("x" + QString::number(currentBet_[value]));
         break;
     case 25:
-        ui_->betDisplay25Button->setVisible(true);
-        ui_->betDisplay25CountLabel->setVisible(true);
+        ui_->betDisplay25Button->show();
+        ui_->betDisplay25CountLabel->show();
         ui_->betDisplay25CountLabel->setText("x" + QString::number(currentBet_[value]));
         break;
     case 50:
-        ui_->betDisplay50Button->setVisible(true);
-        ui_->betDisplay50CountLabel->setVisible(true);
+        ui_->betDisplay50Button->show();
+        ui_->betDisplay50CountLabel->show();
         ui_->betDisplay50CountLabel->setText("x" + QString::number(currentBet_[value]));
         break;
     case 100:
-        ui_->betDisplay100Button->setVisible(true);
-        ui_->betDisplay100CountLabel->setVisible(true);
+        ui_->betDisplay100Button->show();
+        ui_->betDisplay100CountLabel->show();
         ui_->betDisplay100CountLabel->setText("x" + QString::number(currentBet_[value]));
         break;
     default:
@@ -307,48 +347,48 @@ void GameWidget::removeChip(int value) {
     switch (value) {
     case 1:
         if (newChipCount == 0) {
-            ui_->betDisplay1Button->setVisible(false);
-            ui_->betDisplay1CountLabel->setVisible(false);
+            ui_->betDisplay1Button->hide();
+            ui_->betDisplay1CountLabel->hide();
         } else {
             ui_->betDisplay1CountLabel->setText("x" + QString::number(newChipCount));
         }
         break;
     case 5:
         if (newChipCount == 0) {
-            ui_->betDisplay5Button->setVisible(false);
-            ui_->betDisplay5CountLabel->setVisible(false);
+            ui_->betDisplay5Button->hide();
+            ui_->betDisplay5CountLabel->hide();
         } else {
             ui_->betDisplay5CountLabel->setText("x" + QString::number(newChipCount));
         }
         break;
     case 10:
         if (newChipCount == 0) {
-            ui_->betDisplay10Button->setVisible(false);
-            ui_->betDisplay10CountLabel->setVisible(false);
+            ui_->betDisplay10Button->hide();
+            ui_->betDisplay10CountLabel->hide();
         } else {
             ui_->betDisplay10CountLabel->setText("x" + QString::number(newChipCount));
         }
         break;
     case 25:
         if (newChipCount == 0) {
-            ui_->betDisplay25Button->setVisible(false);
-            ui_->betDisplay25CountLabel->setVisible(false);
+            ui_->betDisplay25Button->hide();
+            ui_->betDisplay25CountLabel->hide();
         } else {
             ui_->betDisplay25CountLabel->setText("x" + QString::number(newChipCount));
         }
         break;
     case 50:
         if (newChipCount == 0) {
-            ui_->betDisplay50Button->setVisible(false);
-            ui_->betDisplay50CountLabel->setVisible(false);
+            ui_->betDisplay50Button->hide();
+            ui_->betDisplay50CountLabel->hide();
         } else {
             ui_->betDisplay50CountLabel->setText("x" + QString::number(newChipCount));
         }
         break;
     case 100:
         if (newChipCount == 0) {
-            ui_->betDisplay100Button->setVisible(false);
-            ui_->betDisplay100CountLabel->setVisible(false);
+            ui_->betDisplay100Button->hide();
+            ui_->betDisplay100CountLabel->hide();
         } else {
             ui_->betDisplay100CountLabel->setText("x" + QString::number(newChipCount));
         }
@@ -381,18 +421,30 @@ void GameWidget::setChipButtonsEnabled() {
 
 void GameWidget::onStartButtonClicked() {
     // Hide start round button
-    ui_->startRoundButton->setVisible(false);
+    ui_->startRoundButton->hide();
 
     // Gameplay buttons will be shown by onTurnChanged signal
 
-    // remove betting buttons
-    ui_->chip1Button->setVisible(false);
-    ui_->chip5Button->setVisible(false);
-    ui_->chip10Button->setVisible(false);
-    ui_->chip25Button->setVisible(false);
-    ui_->chip50Button->setVisible(false);
-    ui_->chip100Button->setVisible(false);
-    ui_->betAllButton->setVisible(false);
+    // remove betting buttons and labels
+    ui_->chip1Button->hide();
+    ui_->chip5Button->hide();
+    ui_->chip10Button->hide();
+    ui_->chip25Button->hide();
+    ui_->chip50Button->hide();
+    ui_->chip100Button->hide();
+    ui_->betAllButton->hide();
+    ui_->betDisplay1Button->hide();
+    ui_->betDisplay1CountLabel->hide();
+    ui_->betDisplay5Button->hide();
+    ui_->betDisplay5CountLabel->hide();
+    ui_->betDisplay10Button->hide();
+    ui_->betDisplay10CountLabel->hide();
+    ui_->betDisplay25Button->hide();
+    ui_->betDisplay25CountLabel->hide();
+    ui_->betDisplay50Button->hide();
+    ui_->betDisplay50CountLabel->hide();
+    ui_->betDisplay100Button->hide();
+    ui_->betDisplay100CountLabel->hide();
 
     // Hide bet label
     ui_->betLabel->setText("");
@@ -411,10 +463,12 @@ void GameWidget::onStartButtonClicked() {
 
 void GameWidget::onPlayerCardDealt(Card card, int handIndex, bool isLastCard) {
     cardsView_->dealPlayerCard(card, handIndex, isLastCard);
+    updateCountingLabel();
 }
 
 void GameWidget::onDealerCardDealt(Card card) {
     cardsView_->dealDealerCard(card);
+    updateCountingLabel();
 }
 
 void GameWidget::resizeEvent(QResizeEvent* event) {
@@ -427,6 +481,9 @@ void GameWidget::resizeEvent(QResizeEvent* event) {
     if (strategyOverlay_ && strategyOverlay_->isVisible()) {
         strategyOverlay_->setGeometry(rect());
     }
+
+    // Resize balance label if necessary
+    updateCountingLabel();
 }
 
 void GameWidget::resetGame() {
@@ -444,18 +501,18 @@ void GameWidget::resetGame() {
     }
 
     // Hide chip buttons and count labels.
-    ui_->betDisplay1Button->setVisible(false);
-    ui_->betDisplay1CountLabel->setVisible(false);
-    ui_->betDisplay5Button->setVisible(false);
-    ui_->betDisplay5CountLabel->setVisible(false);
-    ui_->betDisplay10Button->setVisible(false);
-    ui_->betDisplay10CountLabel->setVisible(false);
-    ui_->betDisplay25Button->setVisible(false);
-    ui_->betDisplay25CountLabel->setVisible(false);
-    ui_->betDisplay50Button->setVisible(false);
-    ui_->betDisplay50CountLabel->setVisible(false);
-    ui_->betDisplay100Button->setVisible(false);
-    ui_->betDisplay100CountLabel->setVisible(false);
+    ui_->betDisplay1Button->hide();
+    ui_->betDisplay1CountLabel->hide();
+    ui_->betDisplay5Button->hide();
+    ui_->betDisplay5CountLabel->hide();
+    ui_->betDisplay10Button->hide();
+    ui_->betDisplay10CountLabel->hide();
+    ui_->betDisplay25Button->hide();
+    ui_->betDisplay25CountLabel->hide();
+    ui_->betDisplay50Button->hide();
+    ui_->betDisplay50CountLabel->hide();
+    ui_->betDisplay100Button->hide();
+    ui_->betDisplay100CountLabel->hide();
 
     beginBetStage();
 }
@@ -465,9 +522,9 @@ void GameWidget::onPlayerTurn(int handIndex, bool canDouble, bool canSplit) {
     currentHandIndex_ = handIndex;
 
     // Show gameplay buttons for player's turn
-    ui_->hitButton->setVisible(true);
-    ui_->standButton->setVisible(true);
-    ui_->showCountButton->setVisible(true);
+    ui_->hitButton->show();
+    ui_->standButton->show();
+    ui_->showCountButton->show();
 
     // Show double/split buttons based on game logic decision
     ui_->doubleButton->setVisible(canDouble);
@@ -476,18 +533,24 @@ void GameWidget::onPlayerTurn(int handIndex, bool canDouble, bool canSplit) {
 
 void GameWidget::onDealerTurnStarted() {
     // Hide all gameplay buttons during dealer's turn
-    ui_->hitButton->setVisible(false);
-    ui_->standButton->setVisible(false);
-    ui_->doubleButton->setVisible(false);
-    ui_->splitButton->setVisible(false);
+    ui_->hitButton->hide();
+    ui_->standButton->hide();
+    ui_->doubleButton->hide();
+    ui_->splitButton->hide();
 
-    // Disable chip buttons (but keep them visible)
-    ui_->betDisplay1Button->setEnabled(false);
-    ui_->betDisplay5Button->setEnabled(false);
-    ui_->betDisplay10Button->setEnabled(false);
-    ui_->betDisplay25Button->setEnabled(false);
-    ui_->betDisplay50Button->setEnabled(false);
-    ui_->betDisplay100Button->setEnabled(false);
+    // Hide chip buttons and labels
+    ui_->betDisplay1Button->hide();
+    ui_->betDisplay1CountLabel->hide();
+    ui_->betDisplay5Button->hide();
+    ui_->betDisplay5CountLabel->hide();
+    ui_->betDisplay10Button->hide();
+    ui_->betDisplay10CountLabel->hide();
+    ui_->betDisplay25Button->hide();
+    ui_->betDisplay25CountLabel->hide();
+    ui_->betDisplay50Button->hide();
+    ui_->betDisplay50CountLabel->hide();
+    ui_->betDisplay100Button->hide();
+    ui_->betDisplay100CountLabel->hide();
 
     // Flip hole card
     cardsView_->flipDealerHoleCard();
@@ -506,19 +569,10 @@ void GameWidget::onBetPlaced(int betAmount) {
     });
 }
 
-void GameWidget::displayCountingLabel() {
-    ui_->showCountLabel->setVisible(true);
-
-    std::string runningCount = std::to_string(game_->getRunningCount());
-    std::string trueCount = std::to_string(game_->getTrueCount());
-
-    QString labelText = QString("Running Count: ") +
-                        QString::fromStdString(runningCount) +
-                        QString("\n") +
-                        QString("True Count: ") +
-                        QString::fromStdString(trueCount);
-
-    ui_->showCountLabel->setText(labelText);
+void GameWidget::toggleCountingLabel() {
+    showingCountLabel_ = !showingCountLabel_;
+    countLabel_->setVisible(showingCountLabel_);
+    updateCountingLabel();
 }
 
 void GameWidget::onReturnToMainMenu() {
@@ -550,4 +604,21 @@ void GameWidget::onAllIn() {
 
 void GameWidget::onStrategyChartButtonClicked() {
     strategyOverlay_->showOverlay();
+}
+
+void GameWidget::updateCountingLabel() {
+    if (countLabel_->isVisible()) {
+        QString runningCount = QString::number(game_->getRunningCount());
+        QString trueCount = QString::number(std::round(game_->getTrueCount() * 100)/100); // Round to 2 decimal places
+
+        QString labelText = QString("Running Count: ") +
+                            runningCount +
+                            QString("\n") +
+                            QString("True Count: ") +
+                            trueCount;
+
+        countLabel_->setText(labelText);
+        countLabel_->adjustSize();  // Force Qt to calculate the label size based on text
+        countLabel_->move(width() - countLabel_->width() - 10, height() / 2 - countLabel_->height());
+    }
 }

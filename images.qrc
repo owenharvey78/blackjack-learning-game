@@ -10,5 +10,16 @@
         <file>chip-10.png</file>
         <file>chip-5.png</file>
         <file>chip-1.png</file>
+        <file>hit-button.png</file>
+        <file>game_widget.ui</file>
+        <file>count-button.png</file>
+        <file>hint-button.png</file>
+        <file>exit-button.png</file>
+        <file>surrender-button.png</file>
+        <file>stand-button.png</file>
+        <file>double-button.png</file>
+        <file>split-button.png</file>
+        <file>begin-round-2.png</file>
+        <file>begin-round-1.png</file>
     </qresource>
 </RCC>

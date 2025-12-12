@@ -56,8 +56,8 @@ float CardsView::calculateCardScale() const
 {
     // Reference dimensions (what card sizes are designed for)
     // TODO: design a cleaner implementation that doesn't need arbitrary reference dimensions
-    const float refWidth = 800.0;
-    const float refHeight = 450.0;
+    const float refWidth = 960.0;
+    const float refHeight = 540.0;
 
     // Calculate scale based on current scene size
     float scaleX = scene_->sceneRect().width() / refWidth;

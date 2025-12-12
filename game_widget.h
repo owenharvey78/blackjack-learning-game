@@ -56,9 +56,6 @@ public slots:
     /// @param betAmount The amount the player bet.
     void onBetPlaced(int betAmount);
 
-    /// @brief Displays the count of cards that have been dealt.
-    void displayCountingLabel();
-
 private slots:
     /// @brief During the betting stage, adds a chip of the given value to the
     /// current bet.
@@ -110,9 +107,27 @@ private slots:
     /// @brief Displays the strategy chart for the current ruleset.
     void onStrategyChartButtonClicked();
 
+    /// @brief Toggles whether the counting label is currently displayed.
+    void toggleCountingLabel();
+
 private:
+    /// @brief Updates the counting label with the new running and true count, resizing
+    /// as necessary.
+    void updateCountingLabel();
+
     /// @brief The size of the chip icons.
     static constexpr int CHIP_ICON_SIZE = 128;
+
+    /// @brief The size of the buttons in the top-right corner (exit, strategy
+    /// chart, and count).
+    static constexpr int EXIT_ICON_SIZE = 64;
+
+    /// @brief The height of the "start round" button. The width of the button is fixed
+    /// at 4x the height.
+    static constexpr int START_BUTTON_HEIGHT = 100;
+
+    /// @brief The duration between flashes of the start round button, in milliseconds.
+    static constexpr int START_BUTTON_FLASH_DURATION = 500;
 
     /// @brief The UI form associated with this widget.
     Ui::GameWidget* ui_;
@@ -154,8 +169,27 @@ private:
     /// @brief The strategy chart overlay widget.
     StrategyChartDialog* strategyOverlay_;
 
+    /// @brief The label showing the count.
+    QLabel* countLabel_;
+
     /// @brief The graphics view for displaying the cards.
     CardsView* cardsView_;
+
+    /// @brief Timer for controlling the flashing animation of the start round button.
+    QTimer* flashAnimationTimer_;
+
+    /// @brief First icon for start round button animation.
+    QIcon startRoundIconOne_;
+
+    /// @brief Second icon for start round button animation.
+    QIcon startRoundIconTwo_;
+
+    /// @brief Whether the start round button is currently on the first (true) or second
+    /// (false) frame of the animation.
+    bool startRoundOnIconOne_;
+
+    /// @brief Whether the count label is currently being displayed.
+    bool showingCountLabel_;
 };
 
 #endif // GAME_WIDGET_H
