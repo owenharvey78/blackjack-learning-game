@@ -11,7 +11,6 @@
 #include <QMessageBox>
 #include "blackjack_game.h"
 #include "card.h"
-#include "card_sprites.h"
 #include "strategy_chart_dialog.h"
 #include "cards_view.h"
 
@@ -112,6 +111,9 @@ private slots:
     void onStrategyChartButtonClicked();
 
 private:
+    /// @brief The size of the chip icons.
+    static constexpr int CHIP_ICON_SIZE = 128;
+
     /// @brief The UI form associated with this widget.
     Ui::GameWidget* ui_;
 

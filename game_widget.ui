@@ -207,14 +207,14 @@ QPushButton:hover{
       <widget class="QPushButton" name="betDisplay1Button">
        <property name="minimumSize">
         <size>
-         <width>80</width>
-         <height>80</height>
+         <width>150</width>
+         <height>150</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>80</width>
-         <height>80</height>
+         <width>150</width>
+         <height>150</height>
         </size>
        </property>
        <property name="visible">
@@ -232,14 +232,14 @@ QPushButton:hover{
       <widget class="QPushButton" name="betDisplay5Button">
        <property name="minimumSize">
         <size>
-         <width>80</width>
-         <height>80</height>
+         <width>150</width>
+         <height>150</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>80</width>
-         <height>80</height>
+         <width>150</width>
+         <height>150</height>
         </size>
        </property>
        <property name="visible">
@@ -257,14 +257,14 @@ QPushButton:hover{
       <widget class="QPushButton" name="betDisplay10Button">
        <property name="minimumSize">
         <size>
-         <width>80</width>
-         <height>80</height>
+         <width>150</width>
+         <height>150</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>80</width>
-         <height>80</height>
+         <width>150</width>
+         <height>150</height>
         </size>
        </property>
        <property name="visible">
@@ -282,14 +282,14 @@ QPushButton:hover{
       <widget class="QPushButton" name="betDisplay25Button">
        <property name="minimumSize">
         <size>
-         <width>80</width>
-         <height>80</height>
+         <width>150</width>
+         <height>150</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>80</width>
-         <height>80</height>
+         <width>150</width>
+         <height>150</height>
         </size>
        </property>
        <property name="visible">
@@ -307,14 +307,14 @@ QPushButton:hover{
       <widget class="QPushButton" name="betDisplay50Button">
        <property name="minimumSize">
         <size>
-         <width>80</width>
-         <height>80</height>
+         <width>150</width>
+         <height>150</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>80</width>
-         <height>80</height>
+         <width>150</width>
+         <height>150</height>
         </size>
        </property>
        <property name="visible">
@@ -332,14 +332,14 @@ QPushButton:hover{
       <widget class="QPushButton" name="betDisplay100Button">
        <property name="minimumSize">
         <size>
-         <width>80</width>
-         <height>80</height>
+         <width>150</width>
+         <height>150</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>80</width>
-         <height>80</height>
+         <width>150</width>
+         <height>150</height>
         </size>
        </property>
        <property name="visible">
@@ -451,14 +451,14 @@ background-color: rgb(61, 56, 70);</string>
         <widget class="QPushButton" name="chip1Button">
          <property name="minimumSize">
           <size>
-           <width>100</width>
-           <height>100</height>
+           <width>150</width>
+           <height>150</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>100</width>
-           <height>100</height>
+           <width>150</width>
+           <height>150</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -474,14 +474,14 @@ background-color: rgb(61, 56, 70);</string>
         <widget class="QPushButton" name="chip5Button">
          <property name="minimumSize">
           <size>
-           <width>100</width>
-           <height>100</height>
+           <width>150</width>
+           <height>150</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>100</width>
-           <height>100</height>
+           <width>150</width>
+           <height>150</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -497,14 +497,14 @@ background-color: rgb(61, 56, 70);</string>
         <widget class="QPushButton" name="chip10Button">
          <property name="minimumSize">
           <size>
-           <width>100</width>
-           <height>100</height>
+           <width>150</width>
+           <height>150</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>100</width>
-           <height>100</height>
+           <width>150</width>
+           <height>150</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -520,14 +520,14 @@ background-color: rgb(61, 56, 70);</string>
         <widget class="QPushButton" name="chip25Button">
          <property name="minimumSize">
           <size>
-           <width>100</width>
-           <height>100</height>
+           <width>150</width>
+           <height>150</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>100</width>
-           <height>100</height>
+           <width>150</width>
+           <height>150</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -543,14 +543,14 @@ background-color: rgb(61, 56, 70);</string>
         <widget class="QPushButton" name="chip50Button">
          <property name="minimumSize">
           <size>
-           <width>100</width>
-           <height>100</height>
+           <width>150</width>
+           <height>150</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>100</width>
-           <height>100</height>
+           <width>150</width>
+           <height>150</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -566,14 +566,14 @@ background-color: rgb(61, 56, 70);</string>
         <widget class="QPushButton" name="chip100Button">
          <property name="minimumSize">
           <size>
-           <width>100</width>
-           <height>100</height>
+           <width>150</width>
+           <height>150</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>100</width>
-           <height>100</height>
+           <width>150</width>
+           <height>150</height>
           </size>
          </property>
          <property name="styleSheet">

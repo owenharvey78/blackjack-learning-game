@@ -8,6 +8,80 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
 {
     ui_->setupUi(this);
 
+    // Set up chip button icons (bottom row) - full size with no button styling
+    ui_->chip1Button->setIcon(QIcon(QPixmap(":images/chip-1.png").scaled(CHIP_ICON_SIZE,
+        CHIP_ICON_SIZE, Qt::KeepAspectRatio)));
+    ui_->chip1Button->setIconSize(QSize(CHIP_ICON_SIZE, CHIP_ICON_SIZE));
+    ui_->chip1Button->setText("");
+    ui_->chip1Button->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    ui_->chip5Button->setIcon(QIcon(QPixmap(":images/chip-5.png").scaled(CHIP_ICON_SIZE,
+        CHIP_ICON_SIZE, Qt::KeepAspectRatio)));
+    ui_->chip5Button->setIconSize(QSize(CHIP_ICON_SIZE, CHIP_ICON_SIZE));
+    ui_->chip5Button->setText("");
+    ui_->chip5Button->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    ui_->chip10Button->setIcon(QIcon(QPixmap(":images/chip-10.png").scaled(CHIP_ICON_SIZE,
+        CHIP_ICON_SIZE, Qt::KeepAspectRatio)));
+    ui_->chip10Button->setIconSize(QSize(CHIP_ICON_SIZE, CHIP_ICON_SIZE));
+    ui_->chip10Button->setText("");
+    ui_->chip10Button->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    ui_->chip25Button->setIcon(QIcon(QPixmap(":images/chip-25.png").scaled(CHIP_ICON_SIZE,
+        CHIP_ICON_SIZE, Qt::KeepAspectRatio)));
+    ui_->chip25Button->setIconSize(QSize(CHIP_ICON_SIZE, CHIP_ICON_SIZE));
+    ui_->chip25Button->setText("");
+    ui_->chip25Button->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    ui_->chip50Button->setIcon(QIcon(QPixmap(":images/chip-50.png").scaled(CHIP_ICON_SIZE,
+        CHIP_ICON_SIZE, Qt::KeepAspectRatio)));
+    ui_->chip50Button->setIconSize(QSize(CHIP_ICON_SIZE, CHIP_ICON_SIZE));
+    ui_->chip50Button->setText("");
+    ui_->chip50Button->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    ui_->chip100Button->setIcon(QIcon(QPixmap(":images/chip-100.png").scaled(CHIP_ICON_SIZE,
+        CHIP_ICON_SIZE, Qt::KeepAspectRatio)));
+    ui_->chip100Button->setIconSize(QSize(CHIP_ICON_SIZE, CHIP_ICON_SIZE));
+    ui_->chip100Button->setText("");
+    ui_->chip100Button->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    // Set up bet display button icons (middle row) - full size with no button styling
+    ui_->betDisplay1Button->setIcon(QIcon(QPixmap(":images/chip-1.png").scaled(CHIP_ICON_SIZE,
+        CHIP_ICON_SIZE, Qt::KeepAspectRatio)));
+    ui_->betDisplay1Button->setIconSize(QSize(CHIP_ICON_SIZE, CHIP_ICON_SIZE));
+    ui_->betDisplay1Button->setText("");
+    ui_->betDisplay1Button->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    ui_->betDisplay5Button->setIcon(QIcon(QPixmap(":images/chip-5.png").scaled(CHIP_ICON_SIZE,
+        CHIP_ICON_SIZE, Qt::KeepAspectRatio)));
+    ui_->betDisplay5Button->setIconSize(QSize(CHIP_ICON_SIZE, CHIP_ICON_SIZE));
+    ui_->betDisplay5Button->setText("");
+    ui_->betDisplay5Button->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    ui_->betDisplay10Button->setIcon(QIcon(QPixmap(":images/chip-10.png").scaled(CHIP_ICON_SIZE,
+        CHIP_ICON_SIZE, Qt::KeepAspectRatio)));
+    ui_->betDisplay10Button->setIconSize(QSize(CHIP_ICON_SIZE, CHIP_ICON_SIZE));
+    ui_->betDisplay10Button->setText("");
+    ui_->betDisplay10Button->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    ui_->betDisplay25Button->setIcon(QIcon(QPixmap(":images/chip-25.png").scaled(CHIP_ICON_SIZE,
+        CHIP_ICON_SIZE, Qt::KeepAspectRatio)));
+    ui_->betDisplay25Button->setIconSize(QSize(CHIP_ICON_SIZE, CHIP_ICON_SIZE));
+    ui_->betDisplay25Button->setText("");
+    ui_->betDisplay25Button->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    ui_->betDisplay50Button->setIcon(QIcon(QPixmap(":images/chip-50.png").scaled(CHIP_ICON_SIZE,
+        CHIP_ICON_SIZE, Qt::KeepAspectRatio)));
+    ui_->betDisplay50Button->setIconSize(QSize(CHIP_ICON_SIZE, CHIP_ICON_SIZE));
+    ui_->betDisplay50Button->setText("");
+    ui_->betDisplay50Button->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    ui_->betDisplay100Button->setIcon(QIcon(QPixmap(":images/chip-100.png").scaled(CHIP_ICON_SIZE,
+        CHIP_ICON_SIZE, Qt::KeepAspectRatio)));
+    ui_->betDisplay100Button->setIconSize(QSize(CHIP_ICON_SIZE, CHIP_ICON_SIZE));
+    ui_->betDisplay100Button->setText("");
+    ui_->betDisplay100Button->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
     ui_->hitButton->setVisible(false);
     ui_->standButton->setVisible(false);
     ui_->showCountLabel->setVisible(false);
@@ -181,32 +255,25 @@ void GameWidget::addChip(int value) {
     // Enable "Start Round" button
     ui_->startRoundButton->setEnabled(true);
 
-    // Add button to view so players can remove chip from bet, and show number
-    // of chips of that value currently in bet
+    // Add button to view so players can remove chip from bet
     switch (value) {
     case 1:
         ui_->betDisplay1Button->setVisible(true);
-        ui_->betDisplay1Button->setText("$1 (" + QString::number(currentBet_[value]) + ")");
         break;
     case 5:
         ui_->betDisplay5Button->setVisible(true);
-        ui_->betDisplay5Button->setText("$5 (" + QString::number(currentBet_[value]) + ")");
         break;
     case 10:
         ui_->betDisplay10Button->setVisible(true);
-        ui_->betDisplay10Button->setText("$10 (" + QString::number(currentBet_[value]) + ")");
         break;
     case 25:
         ui_->betDisplay25Button->setVisible(true);
-        ui_->betDisplay25Button->setText("$25 (" + QString::number(currentBet_[value]) + ")");
         break;
     case 50:
         ui_->betDisplay50Button->setVisible(true);
-        ui_->betDisplay50Button->setText("$50 (" + QString::number(currentBet_[value]) + ")");
         break;
     case 100:
         ui_->betDisplay100Button->setVisible(true);
-        ui_->betDisplay100Button->setText("$100 (" + QString::number(currentBet_[value]) + ")");
         break;
     default:
         break;  // Should never run
@@ -224,43 +291,31 @@ void GameWidget::removeChip(int value) {
     currentBetTotal_ -= value;
     int newChipCount = --currentBet_[value];
 
-    // Update label on remove button
+    // Update visibility on remove button
     switch (value) {
     case 1:
         if (newChipCount == 0)
             ui_->betDisplay1Button->setVisible(false);
-        else
-            ui_->betDisplay1Button->setText("$1 (" + QString::number(newChipCount) + ")");
         break;
     case 5:
         if (newChipCount == 0)
             ui_->betDisplay5Button->setVisible(false);
-        else
-            ui_->betDisplay5Button->setText("$5 (" + QString::number(newChipCount) + ")");
         break;
     case 10:
         if (newChipCount == 0)
             ui_->betDisplay10Button->setVisible(false);
-        else
-            ui_->betDisplay10Button->setText("$10 (" + QString::number(newChipCount) + ")");
         break;
     case 25:
         if (newChipCount == 0)
             ui_->betDisplay25Button->setVisible(false);
-        else
-            ui_->betDisplay25Button->setText("$25 (" + QString::number(newChipCount) + ")");
         break;
     case 50:
         if (newChipCount == 0)
             ui_->betDisplay50Button->setVisible(false);
-        else
-            ui_->betDisplay50Button->setText("$50 (" + QString::number(newChipCount) + ")");
         break;
     case 100:
         if (newChipCount == 0)
             ui_->betDisplay100Button->setVisible(false);
-        else
-            ui_->betDisplay100Button->setText("$100 (" + QString::number(newChipCount) + ")");
         break;
     default:
         break;  // Should never run

@@ -4,5 +4,11 @@
         <file>cards.png</file>
         <file>h17_strategy_chart.png</file>
         <file>s17_strategy_chart.png</file>
+        <file>chip-100.png</file>
+        <file>chip-50.png</file>
+        <file>chip-25.png</file>
+        <file>chip-10.png</file>
+        <file>chip-5.png</file>
+        <file>chip-1.png</file>
     </qresource>
 </RCC>
