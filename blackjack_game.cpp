@@ -299,7 +299,11 @@ void BlackjackGame::processNextHandResult() {
             payout = betAmounts_[resultHandIndex_];
             break;
         case GameResult::Blackjack:
-            payout = static_cast<int>(betAmounts_[resultHandIndex_] * (1 + rules_.blackjackPayout));
+            if (playerHands_.size() == 1) { // only payout with multiplier for natural blackjack
+                payout = static_cast<int>(betAmounts_[resultHandIndex_] * (1 + rules_.blackjackPayout));
+            } else {
+                payout = betAmounts_[resultHandIndex_] * 2;
+            }
             break;
         default:
             // Lose: payout = 0
