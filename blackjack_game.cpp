@@ -103,7 +103,7 @@ void BlackjackGame::dealDealerCard() {
             }
             else {
                 // Player's turn - check if double/split allowed
-                emit playerTurn(0, canDouble(), canSplit());
+                emit playerTurn(0, canDouble(), canSplit(), canSurrender());
             }
         });
     }
@@ -389,7 +389,7 @@ void BlackjackGame::playerSurrender() {
 
     hasRoundStarted_ = false;
 
-    emit roundEnded(GameResult::Lose, refund, handIndex, playerHands_.size());
+    emit roundEnded(GameResult::Surrender, refund, handIndex, playerHands_.size());
 }
 
 void BlackjackGame::playerStand() {
@@ -398,7 +398,7 @@ void BlackjackGame::playerStand() {
         if (getHandValue(playerHands_[currentHandIndex_]) < 21 &&
             (rules_.hitSplitAces ||
             playerHands_[currentHandIndex_][0].rank == Card::Rank::Ace))
-            emit playerTurn(currentHandIndex_, canDouble(), canSplit());
+            emit playerTurn(currentHandIndex_, canDouble(), canSplit(), canSurrender());
     }
     else {
         dealerTurn();
@@ -435,7 +435,7 @@ void BlackjackGame::playerSplit() {
     }
     else {
         // Normal split: emit playerTurn for the first split hand
-        emit playerTurn(currentHandIndex_, canDouble(), canSplit());
+        emit playerTurn(currentHandIndex_, canDouble(), canSplit(), canSurrender());
     }
 }
 

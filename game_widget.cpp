@@ -16,8 +16,6 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     ui_->chip1Button->setText("");
     ui_->chip1Button->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
 
-    ui_->surrenderButton->setVisible(false);
-
     ui_->chip5Button->setIcon(QIcon(QPixmap(":images/chip-5.png").scaled(CHIP_ICON_SIZE,
         CHIP_ICON_SIZE, Qt::KeepAspectRatio)));
     ui_->chip5Button->setIconSize(QSize(CHIP_ICON_SIZE, CHIP_ICON_SIZE));
@@ -138,8 +136,18 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     ui_->splitButton->setText("");
     ui_->splitButton->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
 
+    // Surrender button
+    ui_->surrenderButton->setIcon(QIcon(QPixmap(":images/surrender-button.png").scaled(
+        GAMEPLAY_BUTTON_SIZE, GAMEPLAY_BUTTON_SIZE, Qt::KeepAspectRatio)));
+    ui_->surrenderButton->setIconSize(QSize(GAMEPLAY_BUTTON_SIZE, GAMEPLAY_BUTTON_SIZE));
+    ui_->surrenderButton->setText("");
+    ui_->surrenderButton->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
     ui_->hitButton->hide();
     ui_->standButton->hide();
+    ui_->doubleButton->hide();
+    ui_->splitButton->hide();
+    ui_->surrenderButton->hide();
 
     // Set up count label (programmatically, to avoid interfering with rest of layout)
     countLabel_ = new QLabel(this);
@@ -204,7 +212,6 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(ui_->betDisplay50Button, &QPushButton::clicked, this, [this]() { removeChip(50); });
     connect(ui_->betDisplay100Button, &QPushButton::clicked, this, [this]() { removeChip(100); });
 
-    // TODO: change the placement of the connect calls below this comment
     // Starting/ending game.
     connect(ui_->startRoundButton, &QPushButton::clicked, this, &GameWidget::onStartButtonClicked);
     connect(this, &GameWidget::beginRound, game_, &BlackjackGame::beginRound);
@@ -230,6 +237,7 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(ui_->doubleButton, &QPushButton::clicked, game_, &BlackjackGame::playerDouble);
     connect(ui_->splitButton, &QPushButton::clicked, game_, &BlackjackGame::playerSplit);
     connect(ui_->returnButton, &QPushButton::clicked, this, &GameWidget::onReturnToMainMenu);
+    connect(ui_->surrenderButton, &QPushButton::clicked, game_, &BlackjackGame::playerSurrender);
 
     // Tells QT to use the background color from the stylesheet
     setAttribute(Qt::WA_StyledBackground, true);
@@ -257,6 +265,9 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
         break;
     case BlackjackGame::GameResult::Blackjack:
         message = "Blackjack!";
+        break;
+    case BlackjackGame::GameResult::Surrender:
+        message = "Surrender";
         break;
     }
 
@@ -327,6 +338,7 @@ void GameWidget::beginBetStage() {
     ui_->standButton->hide();
     ui_->doubleButton->hide();
     ui_->splitButton->hide();
+    ui_->surrenderButton->hide();
 }
 
 void GameWidget::addChip(int value) {
@@ -558,7 +570,7 @@ void GameWidget::resetGame() {
     beginBetStage();
 }
 
-void GameWidget::onPlayerTurn(int handIndex, bool canDouble, bool canSplit) {
+void GameWidget::onPlayerTurn(int handIndex, bool canDouble, bool canSplit, bool canSurrender) {
     // Track which hand is active to support multi-hand logic
     currentHandIndex_ = handIndex;
 
@@ -570,6 +582,7 @@ void GameWidget::onPlayerTurn(int handIndex, bool canDouble, bool canSplit) {
     // Show double/split buttons based on game logic decision
     ui_->doubleButton->setVisible(canDouble);
     ui_->splitButton->setVisible(canSplit);
+    ui_->surrenderButton->setVisible(canSurrender);
 }
 
 void GameWidget::onDealerTurnStarted() {
@@ -578,6 +591,7 @@ void GameWidget::onDealerTurnStarted() {
     ui_->standButton->hide();
     ui_->doubleButton->hide();
     ui_->splitButton->hide();
+    ui_->surrenderButton->hide();
 
     // Hide chip buttons and labels
     ui_->betDisplay1Button->hide();

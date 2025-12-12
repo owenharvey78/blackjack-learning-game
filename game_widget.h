@@ -88,7 +88,8 @@ private slots:
     /// @param handIndex Index of the active hand.
     /// @param canDouble True if player can double on current hand.
     /// @param canSplit True if player can split current hand.
-    void onPlayerTurn(int handIndex, bool canDouble, bool canSplit);
+    /// @param canSurrender True if the player can surrender.
+    void onPlayerTurn(int handIndex, bool canDouble, bool canSplit, bool canSurrender);
 
     /// @brief Handles dealer's turn starting.
     void onDealerTurnStarted();

@@ -21,7 +21,8 @@ public:
         Win,
         Lose,
         Push,
-        Blackjack
+        Blackjack,
+        Surrender
     };
 
     /// @brief Change the ruleset of the game.
@@ -103,7 +104,8 @@ signals:
     /// @param handIndex Index of the active hand.
     /// @param canDouble True if player can double on current hand.
     /// @param canSplit True if player can split current hand.
-    void playerTurn(int handIndex, bool canDouble, bool canSplit);
+    /// @param canSurrender True if the player can surrender.
+    void playerTurn(int handIndex, bool canDouble, bool canSplit, bool canSurrender);
 
     /// @brief Emitted when it becomes the dealer's turn.
     void dealerTurnStarted();
