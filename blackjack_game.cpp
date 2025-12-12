@@ -362,6 +362,9 @@ void BlackjackGame::playerDouble() {
     if (!canDouble()) return;
 
     dealPlayerCard(currentHandIndex_, true);
+    balance_ -= betAmounts_[currentHandIndex_];
+    emit betPlaced(betAmounts_[currentHandIndex_]);
+    betAmounts_[currentHandIndex_] *= 2;
 
     // Wait a short delay before the dealer's turn
     QTimer::singleShot(500, this, &BlackjackGame::playerStand);

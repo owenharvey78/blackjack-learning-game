@@ -12,7 +12,6 @@ class BlackjackGame : public QObject {
     Q_OBJECT
 
 public:
-
     /// @brief
     explicit BlackjackGame(QObject *parent = nullptr);
 
@@ -74,8 +73,6 @@ public slots:
     void playerSurrender();
 
 signals:
-    // Signals used by game widget.
-
     /// @brief Emitted when a card is dealt to the player (for animation).
     /// @param card The card that is dealt.
     /// @param handIndex The hand that is dealt to the player.
@@ -93,8 +90,6 @@ signals:
     /// @param handIndex Which hand this result is for (0-based index).
     /// @param totalHands Total number of hands in this round.
     void roundEnded(BlackjackGame::GameResult result, int payout, int handIndex, int totalHands);
-
-    // Internal logic signals.
 
     /// @brief Emitted when a hand splits (to update UI hand count).
     /// @param handIndex The index of the hand that will be split.
@@ -123,7 +118,6 @@ private slots:
     void processNextHandResult();
 
 private:
-    // Internal helper methods.
     /// @brief Resets state and calls dealCards().
     void dealNewHand();
 
