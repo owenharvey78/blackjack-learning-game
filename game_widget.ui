@@ -89,6 +89,23 @@
       </layout>
      </item>
      <item>
+      <widget class="QPushButton" name="showCountButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font-size: 14pt; font-weight: bold;
+background-color: rgb(61, 56, 70);</string>
+       </property>
+       <property name="text">
+        <string>ShowCount</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="strategyChartButton">
        <property name="minimumSize">
         <size>
@@ -203,155 +220,293 @@ QPushButton:hover{
        </property>
       </spacer>
      </item>
-     <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
-      <widget class="QPushButton" name="betDisplay1Button">
-       <property name="minimumSize">
-        <size>
-         <width>150</width>
-         <height>150</height>
-        </size>
+     <item>
+      <layout class="QVBoxLayout" name="betDisplay1Layout">
+       <property name="spacing">
+        <number>5</number>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>150</width>
-         <height>150</height>
-        </size>
-       </property>
-       <property name="visible">
-        <bool>false</bool>
-       </property>
-       <property name="styleSheet">
-        <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
-       </property>
-       <property name="text">
-        <string>$1</string>
-       </property>
-      </widget>
+       <item>
+        <widget class="QPushButton" name="betDisplay1Button">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>150</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>150</width>
+           <height>150</height>
+          </size>
+         </property>
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
+         </property>
+         <property name="text">
+          <string>$1</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="betDisplay1CountLabel">
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font-size: 14pt; font-weight: bold; color: white;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
-     <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
-      <widget class="QPushButton" name="betDisplay5Button">
-       <property name="minimumSize">
-        <size>
-         <width>150</width>
-         <height>150</height>
-        </size>
+     <item>
+      <layout class="QVBoxLayout" name="betDisplay5Layout">
+       <property name="spacing">
+        <number>5</number>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>150</width>
-         <height>150</height>
-        </size>
-       </property>
-       <property name="visible">
-        <bool>false</bool>
-       </property>
-       <property name="styleSheet">
-        <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
-       </property>
-       <property name="text">
-        <string>$5</string>
-       </property>
-      </widget>
+       <item>
+        <widget class="QPushButton" name="betDisplay5Button">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>150</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>150</width>
+           <height>150</height>
+          </size>
+         </property>
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
+         </property>
+         <property name="text">
+          <string>$5</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="betDisplay5CountLabel">
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font-size: 14pt; font-weight: bold; color: white;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
-     <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
-      <widget class="QPushButton" name="betDisplay10Button">
-       <property name="minimumSize">
-        <size>
-         <width>150</width>
-         <height>150</height>
-        </size>
+     <item>
+      <layout class="QVBoxLayout" name="betDisplay10Layout">
+       <property name="spacing">
+        <number>5</number>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>150</width>
-         <height>150</height>
-        </size>
-       </property>
-       <property name="visible">
-        <bool>false</bool>
-       </property>
-       <property name="styleSheet">
-        <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
-       </property>
-       <property name="text">
-        <string>$10</string>
-       </property>
-      </widget>
+       <item>
+        <widget class="QPushButton" name="betDisplay10Button">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>150</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>150</width>
+           <height>150</height>
+          </size>
+         </property>
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
+         </property>
+         <property name="text">
+          <string>$10</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="betDisplay10CountLabel">
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font-size: 14pt; font-weight: bold; color: white;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
-     <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
-      <widget class="QPushButton" name="betDisplay25Button">
-       <property name="minimumSize">
-        <size>
-         <width>150</width>
-         <height>150</height>
-        </size>
+     <item>
+      <layout class="QVBoxLayout" name="betDisplay25Layout">
+       <property name="spacing">
+        <number>5</number>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>150</width>
-         <height>150</height>
-        </size>
-       </property>
-       <property name="visible">
-        <bool>false</bool>
-       </property>
-       <property name="styleSheet">
-        <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
-       </property>
-       <property name="text">
-        <string>$25</string>
-       </property>
-      </widget>
+       <item>
+        <widget class="QPushButton" name="betDisplay25Button">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>150</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>150</width>
+           <height>150</height>
+          </size>
+         </property>
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
+         </property>
+         <property name="text">
+          <string>$25</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="betDisplay25CountLabel">
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font-size: 14pt; font-weight: bold; color: white;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
-     <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
-      <widget class="QPushButton" name="betDisplay50Button">
-       <property name="minimumSize">
-        <size>
-         <width>150</width>
-         <height>150</height>
-        </size>
+     <item>
+      <layout class="QVBoxLayout" name="betDisplay50Layout">
+       <property name="spacing">
+        <number>5</number>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>150</width>
-         <height>150</height>
-        </size>
-       </property>
-       <property name="visible">
-        <bool>false</bool>
-       </property>
-       <property name="styleSheet">
-        <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
-       </property>
-       <property name="text">
-        <string>$50</string>
-       </property>
-      </widget>
+       <item>
+        <widget class="QPushButton" name="betDisplay50Button">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>150</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>150</width>
+           <height>150</height>
+          </size>
+         </property>
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
+         </property>
+         <property name="text">
+          <string>$50</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="betDisplay50CountLabel">
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font-size: 14pt; font-weight: bold; color: white;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
-     <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
-      <widget class="QPushButton" name="betDisplay100Button">
-       <property name="minimumSize">
-        <size>
-         <width>150</width>
-         <height>150</height>
-        </size>
+     <item>
+      <layout class="QVBoxLayout" name="betDisplay100Layout">
+       <property name="spacing">
+        <number>5</number>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>150</width>
-         <height>150</height>
-        </size>
-       </property>
-       <property name="visible">
-        <bool>false</bool>
-       </property>
-       <property name="styleSheet">
-        <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
-       </property>
-       <property name="text">
-        <string>$100</string>
-       </property>
-      </widget>
+       <item>
+        <widget class="QPushButton" name="betDisplay100Button">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>150</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>150</width>
+           <height>150</height>
+          </size>
+         </property>
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string>font-size: 12pt; font-weight: bold; background-color: #2b1f0e; color: #d4af37; border: 2px solid #d4af37; border-radius: 40px;</string>
+         </property>
+         <property name="text">
+          <string>$100</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="betDisplay100CountLabel">
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font-size: 14pt; font-weight: bold; color: white;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <spacer name="displayChipsRightSpacer">
@@ -424,17 +579,6 @@ background-color: rgb(61, 56, 70);</string>
           </size>
          </property>
         </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="showCountButton">
-         <property name="styleSheet">
-          <string notr="true">font-size: 14pt; font-weight: bold;
-background-color: rgb(61, 56, 70);</string>
-         </property>
-         <property name="text">
-          <string>ShowCount</string>
-         </property>
-        </widget>
        </item>
        <item>
         <widget class="QLabel" name="showCountLabel">

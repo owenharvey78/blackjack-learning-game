@@ -255,25 +255,37 @@ void GameWidget::addChip(int value) {
     // Enable "Start Round" button
     ui_->startRoundButton->setEnabled(true);
 
-    // Add button to view so players can remove chip from bet
+    // Add button to view so players can remove chip from bet and show count
     switch (value) {
     case 1:
         ui_->betDisplay1Button->setVisible(true);
+        ui_->betDisplay1CountLabel->setVisible(true);
+        ui_->betDisplay1CountLabel->setText("x" + QString::number(currentBet_[value]));
         break;
     case 5:
         ui_->betDisplay5Button->setVisible(true);
+        ui_->betDisplay5CountLabel->setVisible(true);
+        ui_->betDisplay5CountLabel->setText("x" + QString::number(currentBet_[value]));
         break;
     case 10:
         ui_->betDisplay10Button->setVisible(true);
+        ui_->betDisplay10CountLabel->setVisible(true);
+        ui_->betDisplay10CountLabel->setText("x" + QString::number(currentBet_[value]));
         break;
     case 25:
         ui_->betDisplay25Button->setVisible(true);
+        ui_->betDisplay25CountLabel->setVisible(true);
+        ui_->betDisplay25CountLabel->setText("x" + QString::number(currentBet_[value]));
         break;
     case 50:
         ui_->betDisplay50Button->setVisible(true);
+        ui_->betDisplay50CountLabel->setVisible(true);
+        ui_->betDisplay50CountLabel->setText("x" + QString::number(currentBet_[value]));
         break;
     case 100:
         ui_->betDisplay100Button->setVisible(true);
+        ui_->betDisplay100CountLabel->setVisible(true);
+        ui_->betDisplay100CountLabel->setText("x" + QString::number(currentBet_[value]));
         break;
     default:
         break;  // Should never run
@@ -291,31 +303,55 @@ void GameWidget::removeChip(int value) {
     currentBetTotal_ -= value;
     int newChipCount = --currentBet_[value];
 
-    // Update visibility on remove button
+    // Update visibility and count on remove button
     switch (value) {
     case 1:
-        if (newChipCount == 0)
+        if (newChipCount == 0) {
             ui_->betDisplay1Button->setVisible(false);
+            ui_->betDisplay1CountLabel->setVisible(false);
+        } else {
+            ui_->betDisplay1CountLabel->setText("x" + QString::number(newChipCount));
+        }
         break;
     case 5:
-        if (newChipCount == 0)
+        if (newChipCount == 0) {
             ui_->betDisplay5Button->setVisible(false);
+            ui_->betDisplay5CountLabel->setVisible(false);
+        } else {
+            ui_->betDisplay5CountLabel->setText("x" + QString::number(newChipCount));
+        }
         break;
     case 10:
-        if (newChipCount == 0)
+        if (newChipCount == 0) {
             ui_->betDisplay10Button->setVisible(false);
+            ui_->betDisplay10CountLabel->setVisible(false);
+        } else {
+            ui_->betDisplay10CountLabel->setText("x" + QString::number(newChipCount));
+        }
         break;
     case 25:
-        if (newChipCount == 0)
+        if (newChipCount == 0) {
             ui_->betDisplay25Button->setVisible(false);
+            ui_->betDisplay25CountLabel->setVisible(false);
+        } else {
+            ui_->betDisplay25CountLabel->setText("x" + QString::number(newChipCount));
+        }
         break;
     case 50:
-        if (newChipCount == 0)
+        if (newChipCount == 0) {
             ui_->betDisplay50Button->setVisible(false);
+            ui_->betDisplay50CountLabel->setVisible(false);
+        } else {
+            ui_->betDisplay50CountLabel->setText("x" + QString::number(newChipCount));
+        }
         break;
     case 100:
-        if (newChipCount == 0)
+        if (newChipCount == 0) {
             ui_->betDisplay100Button->setVisible(false);
+            ui_->betDisplay100CountLabel->setVisible(false);
+        } else {
+            ui_->betDisplay100CountLabel->setText("x" + QString::number(newChipCount));
+        }
         break;
     default:
         break;  // Should never run
@@ -407,13 +443,19 @@ void GameWidget::resetGame() {
         currentBet_[i.key()] = 0;
     }
 
-    // Hide chip buttons.
+    // Hide chip buttons and count labels.
     ui_->betDisplay1Button->setVisible(false);
+    ui_->betDisplay1CountLabel->setVisible(false);
     ui_->betDisplay5Button->setVisible(false);
+    ui_->betDisplay5CountLabel->setVisible(false);
     ui_->betDisplay10Button->setVisible(false);
+    ui_->betDisplay10CountLabel->setVisible(false);
     ui_->betDisplay25Button->setVisible(false);
+    ui_->betDisplay25CountLabel->setVisible(false);
     ui_->betDisplay50Button->setVisible(false);
+    ui_->betDisplay50CountLabel->setVisible(false);
     ui_->betDisplay100Button->setVisible(false);
+    ui_->betDisplay100CountLabel->setVisible(false);
 
     beginBetStage();
 }
