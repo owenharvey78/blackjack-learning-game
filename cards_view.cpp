@@ -5,8 +5,7 @@ CardsView::CardsView(QWidget* parent)
     : QWidget(parent), cardSprites_(":/images/cards.png", 1.0),
     deckItem_(nullptr), cutCardItem_(nullptr), holeCardItem_(nullptr),
     holeCard_(Card::Rank::Cut, Card::Suit::Cut), // Card doesn't matter
-    cardScale_(1.0)
-{
+    cardScale_(1.0) {
     // Create internal graphics view and scene
     view_ = new QGraphicsView(this);
     scene_ = new QGraphicsScene(this);
@@ -42,18 +41,15 @@ CardsView::CardsView(QWidget* parent)
     }
 }
 
-int CardsView::getDealerHandY() const
-{
+int CardsView::getDealerHandY() const {
     return static_cast<int>(scene_->sceneRect().height() * DEALER_Y_PERCENT);
 }
 
-int CardsView::getPlayerHandY() const
-{
+int CardsView::getPlayerHandY() const {
     return static_cast<int>(scene_->sceneRect().height() * PLAYER_Y_PERCENT);
 }
 
-float CardsView::calculateCardScale() const
-{
+float CardsView::calculateCardScale() const {
     // Reference dimensions (what card sizes are designed for)
     // TODO: design a cleaner implementation that doesn't need arbitrary reference dimensions
     const float refWidth = 960.0;
@@ -67,8 +63,7 @@ float CardsView::calculateCardScale() const
     return qMin(scaleX, scaleY);
 }
 
-void CardsView::scaleAllCards()
-{
+void CardsView::scaleAllCards() {
     // Scale deck and cut card
     if (deckItem_) {
         deckItem_->setScale(cardScale_);
@@ -90,8 +85,7 @@ void CardsView::scaleAllCards()
     }
 }
 
-void CardsView::updateDeckPosition()
-{
+void CardsView::updateDeckPosition() {
     // Calculate where we want the center of the scaled card to appear in scene coordinates
     float desiredCenterX = scene_->width() - DECK_RIGHT_MARGIN - (CARD_WIDTH * cardScale_ / 2.0);
     float desiredCenterY = DECK_TOP_MARGIN + (CARD_HEIGHT * cardScale_ / 2.0);
@@ -114,8 +108,7 @@ void CardsView::updateDeckPosition()
     }
 }
 
-QVector<int> CardsView::calculateHandBaseXPositions(int totalHands) const
-{
+QVector<int> CardsView::calculateHandBaseXPositions(int totalHands) const {
     if (totalHands == 0) return QVector<int>();
 
     QVector<int> basePositions;
@@ -130,8 +123,7 @@ QVector<int> CardsView::calculateHandBaseXPositions(int totalHands) const
     return basePositions;
 }
 
-QVector<int> CardsView::calculateRelativeCardPositions(int numCards) const
-{
+QVector<int> CardsView::calculateRelativeCardPositions(int numCards) const {
     if (numCards == 0) return QVector<int>();
 
     // Use scaled card dimensions
@@ -152,8 +144,7 @@ QVector<int> CardsView::calculateRelativeCardPositions(int numCards) const
     return relativePositions;
 }
 
-void CardsView::resizeEvent(QResizeEvent* event)
-{
+void CardsView::resizeEvent(QResizeEvent* event) {
     QWidget::resizeEvent(event);
 
     // Resize internal view to fill widget
@@ -175,8 +166,7 @@ void CardsView::resizeEvent(QResizeEvent* event)
     repositionAllHands();
 }
 
-void CardsView::repositionAllHands()
-{
+void CardsView::repositionAllHands() {
     // Reposition dealer hand (centered at dynamic Y position)
     if (!dealerHandCards_.isEmpty()) {
         QVector<int> newXPositions = calculateRelativeCardPositions(dealerHandCards_.size());
@@ -219,8 +209,7 @@ void CardsView::repositionAllHands()
     }
 }
 
-void CardsView::repositionHandCards(int handIndex, int duration)
-{
+void CardsView::repositionHandCards(int handIndex, int duration) {
     QVector<QGraphicsPixmapItem*> cards;
 
     if (handIndex == -1) {
@@ -304,8 +293,7 @@ void CardsView::repositionHandCards(int handIndex, int duration)
     }
 }
 
-void CardsView::flipCard(QGraphicsPixmapItem* item, const Card& card)
-{
+void CardsView::flipCard(QGraphicsPixmapItem* item, const Card& card) {
     // Animate shrinking card
     QVariantAnimation* shrink = new QVariantAnimation(this);
     shrink->setDuration(FLIP_DURATION);
@@ -335,8 +323,7 @@ void CardsView::flipCard(QGraphicsPixmapItem* item, const Card& card)
     shrink->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-void CardsView::dealPlayerCard(const Card& card, int handIndex, bool isLastCard)
-{
+void CardsView::dealPlayerCard(const Card& card, int handIndex, bool isLastCard) {
     // Create card item at deck position
     QPixmap backPix = cardSprites_.back();
     QGraphicsPixmapItem* item = scene_->addPixmap(backPix);
@@ -413,8 +400,7 @@ void CardsView::dealPlayerCard(const Card& card, int handIndex, bool isLastCard)
     drawCard->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-void CardsView::dealDealerCard(const Card& card)
-{
+void CardsView::dealDealerCard(const Card& card) {
     // Create card item at deck position
     QPixmap backPix = cardSprites_.back();
     QGraphicsPixmapItem* item = scene_->addPixmap(backPix);
@@ -487,15 +473,13 @@ void CardsView::dealDealerCard(const Card& card)
     drawCard->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-void CardsView::flipDealerHoleCard()
-{
+void CardsView::flipDealerHoleCard() {
     if (holeCardItem_) {
         flipCard(holeCardItem_, holeCard_);
     }
 }
 
-void CardsView::handleHandSplit(int handIndex)
-{
+void CardsView::handleHandSplit(int handIndex) {
     if (handIndex >= playerHandCards_.size() || playerHandCards_[handIndex].size() < 2) {
         return; // Invalid split
     }
@@ -513,8 +497,7 @@ void CardsView::handleHandSplit(int handIndex)
     }
 }
 
-void CardsView::drawCutCard()
-{
+void CardsView::drawCutCard() {
     // Create cut card item at deck position
     QPixmap cutCardPix = cardSprites_.cutCard();
     cutCardItem_ = scene_->addPixmap(cutCardPix);
@@ -553,8 +536,7 @@ void CardsView::drawCutCard()
     drawCut->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-void CardsView::cleanUp()
-{
+void CardsView::cleanUp() {
     // Clear the scene
     scene_->clear();
 
