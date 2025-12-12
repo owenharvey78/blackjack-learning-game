@@ -83,7 +83,7 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     // Button presses.
     connect(ui_->hitButton, &QPushButton::clicked, this, [this]{
         game_->playerHit();
-        ui_->surrenderButton->setVisible(false);
+        ui_->surrenderButton->setEnabled(false);
     });
     connect(ui_->standButton, &QPushButton::clicked, game_, &BlackjackGame::playerStand);
     connect(ui_->doubleButton, &QPushButton::clicked, game_, &BlackjackGame::playerDouble);
@@ -705,6 +705,7 @@ void GameWidget::onPlayerTurn(int handIndex, bool canDouble, bool canSplit) {
     ui_->standButton->setVisible(true);
     ui_->showCountButton->setVisible(true);
     ui_->surrenderButton->setVisible(true);
+    ui_->surrenderButton->setEnabled(true);
 
     // Show double/split buttons based on game logic decision
     ui_->doubleButton->setVisible(canDouble);
