@@ -143,6 +143,7 @@ void LearnWidget::updatePage(){
     // diable next button if we are on the last page
     ui_->nextButton->setDisabled(currentInstruction_ == headerList_.size() - 1);
 
+    // This if-else handles the style for the instruction label. 1st page looks wierd if we don't have this.
     if(currentInstruction_ != 0){
         ui_->instructionLabel->setStyleSheet(QString("QLabel { color: white; font-family: 'Georgia'; "
                                                      "font-size: 18px;"
@@ -154,7 +155,7 @@ void LearnWidget::updatePage(){
         ui_->instructionLabel->setStyleSheet(QString()); // This else feels redundant but helps. Trust
     }
 
-    // Set up count page
+    // Set up count page (pg 12)
     if(currentInstruction_ == 12){
         ui_->spinBox->setVisible(true);
         ui_->checkButton->setVisible(true);
@@ -189,8 +190,10 @@ void LearnWidget::startPracticeHand(){
     practiceHand_.append(practiceGame_->drawCardFromShoe());
     practiceHand_.append(practiceGame_->drawCardFromShoe());
 
+    // Draw card for dealer
     practiceDealerUpcard_ = practiceGame_->drawCardFromShoe();
 
+    // Draws the cards onto the graphics view
     drawPracticeHand();
 
     ui_->instructionLabel->setText(QString("Decide: Hit or Stand"));
@@ -202,6 +205,7 @@ void LearnWidget::startPracticeHand(){
 void LearnWidget::drawPracticeHand(){
     int x = 20;
 
+    // Place cards onto the graphics view
     for(const Card& c : practiceHand_){
         QPixmap face = cardSprites_.faceFor(c);
         QGraphicsPixmapItem* item = scene_->addPixmap(face);
@@ -209,6 +213,7 @@ void LearnWidget::drawPracticeHand(){
         x += 80;
     }
 
+    // Place dealer card onto the graphics view
     QPixmap dealerFace = cardSprites_.faceFor(practiceDealerUpcard_);
     QGraphicsPixmapItem* item = scene_->addPixmap(dealerFace);
     item->setPos(20, 150);
@@ -217,8 +222,10 @@ void LearnWidget::drawPracticeHand(){
 void LearnWidget::onPracticeHitClicked(){
     practiceHand_.append(practiceGame_->drawCardFromShoe());
 
+    // Redraw the cards
     drawPracticeHand();
 
+    // Check if user busts
     if(practiceGame_->isHandBust(practiceHand_)){
         ui_->instructionLabel->setText(QString("You busted! Try Again."));
 
@@ -235,6 +242,7 @@ void::LearnWidget::onPracticeStandClicked(){
     ui_->practiceStandButton->setVisible(false);
 }
 
+// Show counting cards is for the count example on pg 12
 void LearnWidget::showCountingExampleCards(){
     scene_->clear();
 
@@ -250,6 +258,7 @@ void LearnWidget::showCountingExampleCards(){
     int totalWidth = exampleCards.size() * width + (exampleCards.size() - 1) * gap;
     int startX = (400 - totalWidth) / 2;
 
+    // Draw cards onto the graphics view
     for(int i = 0; i < exampleCards.size(); i++){
         QPixmap face = cardSprites_.faceFor(exampleCards[i]);
         QGraphicsPixmapItem* item = scene_->addPixmap(face);

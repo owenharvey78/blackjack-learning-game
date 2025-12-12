@@ -25,12 +25,20 @@ public:
 
 private slots:
 
+    // onNext and on Prevf handle the user moving through the slides.
     void onNextButtonClicked();
     void onPrevButtonClicked();
+
+    /// @brief Handles the user input on page 12.
     void onCheckButtonClicked();
+
+    /// @brief takes the user back to the main menu.
     void onMainMenuClicked();
 
+    /// @brief called when the user presses the deal button on page 14.
     void startPracticeHand();
+
+    // handles the simple blackjack game buttons on page 14.
     void onPracticeHitClicked();
     void onPracticeStandClicked();
 
@@ -38,6 +46,8 @@ private slots:
     void drawPracticeHand();
 
 signals:
+
+    /// @brief signals the mainwindow that we pressed the main menu.
     void returnToMainMenu();
 
 private:
@@ -53,10 +63,10 @@ private:
     /// @brief Graphics scene for the learn page.
     QGraphicsScene* scene_;
 
-    CardSprites cardSprites_;
-
     /// @brief keeps track of where we are in the instructions/header
     int currentInstruction_;
+
+    CardSprites cardSprites_;
 
     /// @brief sets up the learning page and enables and disables buttons as needed
     void updatePage();
