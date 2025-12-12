@@ -99,7 +99,7 @@ void BlackjackGame::dealDealerCard() {
             if (playerHasBJ || dealerHasBJ) {
                 // Now that the animation is done, it is safe to flip the hole card
                 emit dealerTurnStarted();
-                checkCardsAndRound(0, determineWinner(playerHands_[0], dealerHand_));
+                checkCardsAndRound(0, determineWinner(playerHands_[0], dealerHand_, false));
             }
             else {
                 // Player's turn - check if double/split allowed
@@ -198,7 +198,7 @@ bool BlackjackGame::canSplit() const {
     return true;
 }
 
-BlackjackGame::GameResult BlackjackGame::determineWinner(QVector<Card>& playerHand, QVector<Card>& dealerHand) {
+BlackjackGame::GameResult BlackjackGame::determineWinner(QVector<Card>& playerHand, QVector<Card>& dealerHand, bool isSplitHand) {
     int playerValue = getHandValue(playerHand);
     int dealerValue = getHandValue(dealerHand);
 
@@ -210,8 +210,8 @@ BlackjackGame::GameResult BlackjackGame::determineWinner(QVector<Card>& playerHa
         return GameResult::Win;
     }
 
-    // Check Blackjacks if on first hand
-    bool pBJ = isBlackJack(playerHand);
+    // Check Blackjacks - only count as blackjack if not from a split
+    bool pBJ = !isSplitHand && isBlackJack(playerHand);
     bool dBJ = isBlackJack(dealerHand);
 
     if (pBJ && !dBJ) {
@@ -287,7 +287,8 @@ void BlackjackGame::processNextHandResult() {
     // Check if there are more hands to process
     if (resultHandIndex_ < playerHands_.size()) {
         // Determine result for current hand
-        GameResult result = determineWinner(playerHands_[resultHandIndex_], dealerHand_);
+        bool isSplitHand = playerHands_.size() > 1;
+        GameResult result = determineWinner(playerHands_[resultHandIndex_], dealerHand_, isSplitHand);
 
         // Calculate payout
         int payout = 0;
@@ -299,11 +300,7 @@ void BlackjackGame::processNextHandResult() {
             payout = betAmounts_[resultHandIndex_];
             break;
         case GameResult::Blackjack:
-            if (playerHands_.size() == 1) { // only payout with multiplier for natural blackjack
-                payout = static_cast<int>(betAmounts_[resultHandIndex_] * (1 + rules_.blackjackPayout));
-            } else {
-                payout = betAmounts_[resultHandIndex_] * 2;
-            }
+            payout = static_cast<int>(betAmounts_[resultHandIndex_] * (1 + rules_.blackjackPayout));
             break;
         default:
             // Lose: payout = 0

@@ -153,8 +153,9 @@ private:
     /// @brief determines the winner of the hand.
     /// @param playerHand vector holding player's hand.
     /// @param dealerHand vector holding dealer's hand.
+    /// @param isSplitHand true if this hand came from a split.
     /// @return game result.
-    static GameResult determineWinner(QVector<Card>& playerHand, QVector<Card>& dealerHand);
+    static GameResult determineWinner(QVector<Card>& playerHand, QVector<Card>& dealerHand, bool isSplitHand = false);
 
     /// @brief Inidicates dealer turn.
     void dealerTurn();
