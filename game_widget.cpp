@@ -146,6 +146,12 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     countLabel_->setStyleSheet("font-size: 24pt; font-weight: bold; color: white; background-color: transparent;");
     countLabel_->hide();
 
+    // Set up result label (programmatically, to avoid interfering with rest of layout)
+    resultLabel_ = new QLabel(this);
+    resultLabel_->setStyleSheet("font-size: 36pt; font-weight: bold; color: white; background-color: transparent;");
+    resultLabel_->setAlignment(Qt::AlignCenter);
+    resultLabel_->hide();
+
     // Set up start round button
     startRoundOnIconOne_ = true;
     startRoundIconOne_ = QIcon(QPixmap(":images/begin-round-1.png").scaled(
@@ -237,7 +243,33 @@ GameWidget::~GameWidget() {
 
 void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
                                int handIndex, int totalHands) {
+    QString message;
 
+    switch (result) {
+    case BlackjackGame::GameResult::Win:
+        message = "Win";
+        break;
+    case BlackjackGame::GameResult::Lose:
+        message = "Lose";
+        break;
+    case BlackjackGame::GameResult::Push:
+        message = "Push";
+        break;
+    case BlackjackGame::GameResult::Blackjack:
+        message = "Blackjack!";
+        break;
+    }
+
+    // Add hand number if multiple hands
+    if (totalHands > 1) {
+        message = QString("Hand %1: %2").arg(handIndex + 1).arg(message);
+    }
+
+    // Display result message
+    resultLabel_->setText(message);
+    resultLabel_->adjustSize();
+    resultLabel_->move((width() - resultLabel_->width()) / 2, (height() - resultLabel_->height()) / 2);
+    resultLabel_->show();
 
     updateBalance(payout, 1000, 500);
 
@@ -483,6 +515,11 @@ void GameWidget::resizeEvent(QResizeEvent* event) {
         strategyOverlay_->setGeometry(rect());
     }
 
+    // Reposition result label if visible
+    if (resultLabel_->isVisible()) {
+        resultLabel_->move((width() - resultLabel_->width()) / 2, (height() - resultLabel_->height()) / 2);
+    }
+
     // Resize balance label if necessary
     updateCountingLabel();
 }
@@ -514,6 +551,9 @@ void GameWidget::resetGame() {
     ui_->betDisplay50CountLabel->hide();
     ui_->betDisplay100Button->hide();
     ui_->betDisplay100CountLabel->hide();
+
+    // Hide result label
+    resultLabel_->hide();
 
     beginBetStage();
 }

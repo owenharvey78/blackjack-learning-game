@@ -180,6 +180,9 @@ private:
     /// @brief The label showing the count.
     QLabel* countLabel_;
 
+    /// @brief The label showing the round result.
+    QLabel* resultLabel_;
+
     /// @brief The graphics view for displaying the cards.
     CardsView* cardsView_;
 
