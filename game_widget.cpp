@@ -16,6 +16,8 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     ui_->chip1Button->setText("");
     ui_->chip1Button->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
 
+    ui_->surrenderButton->setVisible(false);
+
     ui_->chip5Button->setIcon(QIcon(QPixmap(":images/chip-5.png").scaled(CHIP_ICON_SIZE,
         CHIP_ICON_SIZE, Qt::KeepAspectRatio)));
     ui_->chip5Button->setIconSize(QSize(CHIP_ICON_SIZE, CHIP_ICON_SIZE));
@@ -214,7 +216,10 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(ui_->showCountButton, &QPushButton::clicked, this, &GameWidget::toggleCountingLabel);
 
     // Button presses.
-    connect(ui_->hitButton, &QPushButton::clicked, game_, &BlackjackGame::playerHit);
+    connect(ui_->hitButton, &QPushButton::clicked, this, [this]{
+        game_->playerHit();
+        ui_->surrenderButton->setEnabled(false);
+    });
     connect(ui_->standButton, &QPushButton::clicked, game_, &BlackjackGame::playerStand);
     connect(ui_->doubleButton, &QPushButton::clicked, game_, &BlackjackGame::playerDouble);
     connect(ui_->splitButton, &QPushButton::clicked, game_, &BlackjackGame::playerSplit);
@@ -222,40 +227,18 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
 
     // Tells QT to use the background color from the stylesheet
     setAttribute(Qt::WA_StyledBackground, true);
+
+    connect(ui_->surrenderButton, &QPushButton::clicked, game_, &BlackjackGame::playerSurrender);
 }
 
-GameWidget::~GameWidget()
-{
+GameWidget::~GameWidget() {
     delete ui_;
 }
 
 void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
                                int handIndex, int totalHands) {
-    // QString message;
 
-    // switch (result) {
-    // case BlackjackGame::GameResult::Win:
-    //     message = "Win";
-    //     break;
-    // case BlackjackGame::GameResult::Lose:
-    //     message = "Lose";
-    //     break;
-    // case BlackjackGame::GameResult::Push:
-    //     message = "Push";
-    //     break;
-    // case BlackjackGame::GameResult::Blackjack:
-    //     message = "Blackjack";
-    //     break;
-    // }
 
-    // // Add hand number if multiple hands
-    // if (totalHands > 1) {
-    //     message = QString("Hand %1: %2").arg(handIndex + 1).arg(message);
-    // }
-
-    // Update balance label.
-    // balance_ += payout;
-    // ui_->balanceLabel->setText("$" + QString::number(balance_));
     updateBalance(payout, 1000, 500);
 
     if (balance_ == 0) {
@@ -282,10 +265,6 @@ void GameWidget::onRoundEnded(BlackjackGame::GameResult result, int payout,
             }
         });
     }
-
-    // Indicate results in bet label.
-    // ui_->balanceUpdateLabel->show();
-    // ui_->balanceUpdateLabel->setText(message);
 
     // Only reset game after the LAST hand is processed
     if (handIndex == totalHands - 1) {

@@ -19,8 +19,7 @@ class GameWidget;
 }
 
 /// @brief The widget defining the view for the main blackjack gameplay.
-class GameWidget : public QWidget
-{
+class GameWidget : public QWidget {
     Q_OBJECT
 
 public:

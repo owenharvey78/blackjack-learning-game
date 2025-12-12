@@ -7,8 +7,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui_(new Ui::MainWindow)
-    , currentRules_()
-{
+    , currentRules_() {
     ui_->setupUi(this);
 
     // Create the stacked widget
@@ -44,12 +43,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(learnWidget_, &LearnWidget::returnToMainMenu, this, &MainWindow::onReturnToMainMenuClicked);
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui_;
 }
 
-void MainWindow::onLearnButtonClicked(){
+void MainWindow::onLearnButtonClicked() {
     stackedWidget_->setCurrentIndex(2);
 }
 
@@ -58,12 +56,11 @@ void MainWindow::onRulesetSaved() {
     currentRules_ = rulesetWidget_->getRuleset();
 }
 
-void MainWindow::onReturnToMainMenuClicked(){
+void MainWindow::onReturnToMainMenuClicked() {
     stackedWidget_->setCurrentWidget(menuWidget_);
 }
 
-void MainWindow::onPracticeButtonClicked()
-{
+void MainWindow::onPracticeButtonClicked() {
     // Create a new BlackjackGame
     BlackjackGame* game = new BlackjackGame(this);
     game->setRuleset(currentRules_);

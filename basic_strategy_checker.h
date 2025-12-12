@@ -7,8 +7,7 @@
 
 /// @brief Holds the BlackJack basic strategy plays for H17 and S17, allowing one to
 /// find the optimal play for a given hand and dealer upcard.
-class BasicStrategyChecker
-{
+class BasicStrategyChecker {
 public:
     /// @brief Defines the possible actions a player can take for a hand. One of the
     /// enumerations, SplitIfDas, is not a real action—this value indicates that the

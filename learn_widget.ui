@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft">
     <widget class="QPushButton" name="mainMenuButton">
@@ -166,6 +169,109 @@ QPushButton:hover{
       <string/>
      </property>
     </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QGraphicsView" name="graphicsView"/>
+   </item>
+   <item row="2" column="3">
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="1">
+      <widget class="QPushButton" name="practiceDealButton">
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #2b1f0e
+		stop:1 #8c6c26
+	);
+
+	color: white;
+	font-weight: bold;
+	border: 3px solid #d4af37;
+	border-radius: 15px;
+	padding: 10px;
+}
+
+QPushButton:hover{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #3b2f1c,
+		stop:1 #ad8c32
+	);
+}</string>
+       </property>
+       <property name="text">
+        <string>Deal</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="practiceHitButton">
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #2b1f0e
+		stop:1 #8c6c26
+	);
+
+	color: white;
+	font-weight: bold;
+	border: 3px solid #d4af37;
+	border-radius: 15px;
+	padding: 10px;
+}
+
+QPushButton:hover{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #3b2f1c,
+		stop:1 #ad8c32
+	);
+}</string>
+       </property>
+       <property name="text">
+        <string>Hit</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="practiceStandButton">
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #2b1f0e
+		stop:1 #8c6c26
+	);
+
+	color: white;
+	font-weight: bold;
+	border: 3px solid #d4af37;
+	border-radius: 15px;
+	padding: 10px;
+}
+
+QPushButton:hover{
+	background-color: qlineargradient(
+		spread:pad,
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #3b2f1c,
+		stop:1 #ad8c32
+	);
+}</string>
+       </property>
+       <property name="text">
+        <string>Stand</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

@@ -3,13 +3,11 @@
 
 RulesetWidget::RulesetWidget(QWidget *parent)
     : QWidget(parent)
-    , ui_(new Ui::ruleset_widget)
-{
+    , ui_(new Ui::ruleset_widget) {
     ui_->setupUi(this);
 }
 
-RulesetWidget::~RulesetWidget()
-{
+RulesetWidget::~RulesetWidget() {
     delete ui_;
 }
 
