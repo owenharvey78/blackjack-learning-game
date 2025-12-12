@@ -228,6 +228,10 @@ public:
     /// @return true if is soft hand.
     static bool isSoftHand(const QVector<Card>& hand);
 
+    /// @brief Gets the number of decks in the game.
+    /// @return double representing the number of cards in game.
+    double getDecksInGame();
+
 private:
 
     // Member variables.

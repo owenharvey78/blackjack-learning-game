@@ -88,6 +88,17 @@
        </item>
       </layout>
      </item>
+     <item alignment="Qt::AlignmentFlag::AlignRight">
+      <widget class="QPushButton" name="numberOfDecksButton">
+       <property name="styleSheet">
+        <string notr="true">font-size: 14pt; font-weight: bold;
+background-color: rgb(61, 56, 70);</string>
+       </property>
+       <property name="text">
+        <string>Decks</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QPushButton" name="showCountButton">
        <property name="sizePolicy">

@@ -16,6 +16,11 @@ void BlackjackGame::setShuffling(bool needsShuffling) {
     needsShuffling_ = needsShuffling;
 }
 
+double BlackjackGame::getDecksInGame(){
+
+    return static_cast<double>(shoe_->getSize() - 1) / 52.0;
+}
+
 // Game start and Animation
 
 void BlackjackGame::beginRound(int betAmount) {

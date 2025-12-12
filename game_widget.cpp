@@ -252,6 +252,8 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
         game_->playerSurrender();
     });
 
+    connect(ui_->numberOfDecksButton, &QPushButton::clicked, this, &GameWidget::showAmountOfDecksLeft);
+
     // Tells QT to use the background color from the stylesheet
     setAttribute(Qt::WA_StyledBackground, true);
 }
@@ -788,4 +790,20 @@ void GameWidget::updateBalance(int updateAmount, int updateDelay, int animationD
     });
 
     QTimer::singleShot(updateDelay, [labelUpdateAnimation] () { labelUpdateAnimation->start(QAbstractAnimation::DeleteWhenStopped); });
+}
+
+void GameWidget::showAmountOfDecksLeft(){
+    showingCountLabel_ = !showingCountLabel_;
+    countLabel_->setVisible(showingCountLabel_);
+
+    if (countLabel_->isVisible()) {
+        QString numberOfDecksInGame = QString::number(game_->getDecksInGame(), 'f', 2); // Round to 2 decimal places
+
+        QString labelText = QString("Number of Decks In Game: %1")
+                                .arg(numberOfDecksInGame);
+
+        countLabel_->setText(labelText);
+        countLabel_->adjustSize();  // Force Qt to calculate the label size based on text
+        countLabel_->move(width() - countLabel_->width() - 10, height() / 2 - countLabel_->height());
+    }
 }

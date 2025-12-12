@@ -107,6 +107,10 @@ private slots:
     /// @brief Toggles whether the counting label is currently displayed.
     void toggleCountingLabel();
 
+    /// @brief Shows the amount of decks still left in shoe.
+    void showAmountOfDecksLeft();
+
+
 private:
     /// @brief Updates the counting label with the new running and true count, resizing
     /// as necessary.
