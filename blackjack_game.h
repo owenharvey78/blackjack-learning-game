@@ -116,6 +116,9 @@ private:
     /// @brief Helper to resolve the round and emit roundEnded.
     void checkCardsAndRound(int handIndex, GameResult currentState);
 
+    /// @brief Resolves a player hand that reaches 21.
+    void resolve21(int handIndex);
+
     /// @brief Helper to draw card from shoe.
     Card drawCardFromShoe();
 

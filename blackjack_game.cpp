@@ -91,6 +91,8 @@ void BlackjackGame::dealDealerCard() {
             // Player's turn - check if double/split allowed
             emit playerTurn(0, canDouble(), canSplit());
         }
+
+        emit playerTurn(0, canDouble(), canSplit());
     }
 }
 
@@ -317,7 +319,22 @@ void BlackjackGame::playerHit() {
 
     if (isBust(playerHands_[currentHandIndex_])) {
         playerStand();
+        return;
     }
+
+    if (getHandValue(playerHands_[currentHandIndex_]) == 21 &&
+        !isBlackJack(playerHands_[currentHandIndex_])) {
+        resolve21(currentHandIndex_);
+        return;
+    }
+}
+
+void BlackjackGame::resolve21(int handIndex) {
+    int bet = betAmounts_[handIndex];
+    int payout = bet * 2;  // treat as a normal win
+    balance_ += payout;
+    hasRoundStarted_ = false;
+    emit roundEnded(GameResult::Win, payout, handIndex, playerHands_.size());
 }
 
 void BlackjackGame::playerDouble() {
@@ -421,6 +438,14 @@ void BlackjackGame::checkCardsAndRound(int handIndex, GameResult currentState) {
 }
 
 Card BlackjackGame::drawCardFromShoe() {
+    static int debugDrawCount = 0; debugDrawCount++;
+    if (debugDrawCount == 1) return Card(Card::Rank::Four, Card::Suit::Spades);
+    // 3rd draw
+    if (debugDrawCount == 2) return Card(Card::Rank::Four, Card::Suit::Hearts);
+
+    if (debugDrawCount == 3) return Card(Card::Rank::Ten, Card::Suit::Hearts);
+    if (debugDrawCount == 5) return Card(Card::Rank::Seven, Card::Suit::Hearts);
+
     Card c = shoe_->draw();
     if (c.rank == Card::Rank::Cut) {
         needsShuffling_ = true;
