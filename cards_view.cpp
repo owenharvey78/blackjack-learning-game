@@ -581,7 +581,7 @@ void CardsView::updateHandSelectionPosition() {
     int playerY = getPlayerHandY();
 
     // Place the selection under the hand
-    int selectionY = playerY + CARD_HEIGHT * 0.85 * cardScale_; // tweak offset?
+    int selectionY = playerY - CARD_HEIGHT * 0.85 * cardScale_; // tweak offset?
 
     handSelectionItem_->setPos(
         handCenterX - handSelectionItem_->boundingRect().width() / 2,
