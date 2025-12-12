@@ -43,6 +43,15 @@ public:
     /// on soft 17 in the current ruleset.
     bool dealerHitsSoft17() const;
 
+    /// @brief Helper to draw card from shoe.
+    Card drawCardFromShoe();
+
+    /// getter method for isBust.
+    bool isHandBust(QVector<Card> hand) const;
+
+    /// getter method for the hand value.
+    int playerHandValue(QVector<Card> hand) const;
+
 public slots:
     /// @brief Signals that the player's balance has changed, then starts a new
     /// round.
@@ -128,9 +137,6 @@ private:
 
     /// @brief Helper to resolve the round and emit roundEnded.
     void checkCardsAndRound(int handIndex, GameResult currentState);
-
-    /// @brief Helper to draw card from shoe.
-    Card drawCardFromShoe();
 
     /// @brief determines the winner of the hand.
     /// @param playerHand vector holding player's hand.

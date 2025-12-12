@@ -302,6 +302,14 @@ void BlackjackGame::processNextHandResult() {
     // All hands processed - UI will handle final reset
 }
 
+bool BlackjackGame::isHandBust(QVector<Card> hand) const{
+    return isBust(hand);
+}
+
+int BlackjackGame::playerHandValue(QVector<Card> hand) const{
+    return getHandValue(hand);
+}
+
 // Player Actions
 
 void BlackjackGame::playerHit() {
