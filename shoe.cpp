@@ -1,8 +1,9 @@
 #include "shoe.h"
+#include <QTime>
 
 Shoe::Shoe(int decks, float penetration, QObject* parent) :
     QObject{parent}, decks_(decks), penetration_(penetration),
-    cards_(), rng_() {
+    cards_(), rng_(QTime::currentTime().msecsSinceStartOfDay()) {
     shuffle();
 }
 
