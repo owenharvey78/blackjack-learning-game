@@ -122,6 +122,9 @@ private:
     /// chart, and count).
     static constexpr int EXIT_ICON_SIZE = 64;
 
+    /// @brief The size of the gameplay action buttons (hit, stand, double, split).
+    static constexpr int GAMEPLAY_BUTTON_SIZE = 100;
+
     /// @brief The height of the "start round" button. The width of the button is fixed
     /// at 4x the height.
     static constexpr int START_BUTTON_HEIGHT = 100;

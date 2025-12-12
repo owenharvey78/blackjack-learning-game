@@ -105,6 +105,36 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     ui_->returnButton->setText("");
     ui_->returnButton->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
 
+    // Set up gameplay action button icons (hit, stand, double, split)
+
+    // Hit button
+    ui_->hitButton->setIcon(QIcon(QPixmap(":images/hit-button.png").scaled(
+        GAMEPLAY_BUTTON_SIZE, GAMEPLAY_BUTTON_SIZE, Qt::KeepAspectRatio)));
+    ui_->hitButton->setIconSize(QSize(GAMEPLAY_BUTTON_SIZE, GAMEPLAY_BUTTON_SIZE));
+    ui_->hitButton->setText("");
+    ui_->hitButton->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    // Stand button
+    ui_->standButton->setIcon(QIcon(QPixmap(":images/stand-button.png").scaled(
+        GAMEPLAY_BUTTON_SIZE, GAMEPLAY_BUTTON_SIZE, Qt::KeepAspectRatio)));
+    ui_->standButton->setIconSize(QSize(GAMEPLAY_BUTTON_SIZE, GAMEPLAY_BUTTON_SIZE));
+    ui_->standButton->setText("");
+    ui_->standButton->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    // Double button
+    ui_->doubleButton->setIcon(QIcon(QPixmap(":images/double-button.png").scaled(
+        GAMEPLAY_BUTTON_SIZE, GAMEPLAY_BUTTON_SIZE, Qt::KeepAspectRatio)));
+    ui_->doubleButton->setIconSize(QSize(GAMEPLAY_BUTTON_SIZE, GAMEPLAY_BUTTON_SIZE));
+    ui_->doubleButton->setText("");
+    ui_->doubleButton->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
+    // Split button
+    ui_->splitButton->setIcon(QIcon(QPixmap(":images/split-button.png").scaled(
+        GAMEPLAY_BUTTON_SIZE, GAMEPLAY_BUTTON_SIZE, Qt::KeepAspectRatio)));
+    ui_->splitButton->setIconSize(QSize(GAMEPLAY_BUTTON_SIZE, GAMEPLAY_BUTTON_SIZE));
+    ui_->splitButton->setText("");
+    ui_->splitButton->setStyleSheet("QPushButton { background-color: transparent; border: none; }");
+
     ui_->hitButton->hide();
     ui_->standButton->hide();
 
