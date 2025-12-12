@@ -69,6 +69,9 @@ public slots:
     /// @brief The player doubles their current bet and draws only one more card.
     void playerDouble();
 
+    /// @brief Player surrenders: gives up the hand and gets half the bet back.
+    void playerSurrender();
+
 signals:
     // Signals used by game widget.
 
@@ -137,6 +140,9 @@ private:
 
     /// @brief Helper to resolve the round and emit roundEnded.
     void checkCardsAndRound(int handIndex, GameResult currentState);
+
+    /// @brief Resolves a player hand that reaches 21.
+    void resolve21(int handIndex);
 
     /// @brief determines the winner of the hand.
     /// @param playerHand vector holding player's hand.

@@ -21,6 +21,9 @@ void BlackjackGame::setShuffling(bool needsShuffling){
 void BlackjackGame::beginRound(int betAmount) {
     currentBetAmount_ = betAmount;
     balance_ -= betAmount;
+
+    hasRoundStarted_ = true;
+
     emit betPlaced(betAmount);
     dealNewHand();
 }
@@ -159,7 +162,19 @@ bool BlackjackGame::canDouble() const {
 }
 
 bool BlackjackGame::canSurrender() const {
-    return rules_.surrenderAllowed && playerHands_[currentHandIndex_].size() == 2;
+    // Surrender must be allowed in rules
+    if (!rules_.surrenderAllowed) return false;
+
+    if (!hasRoundStarted_) return false;
+
+    // Only allow on the initial hand, before any split
+    if (playerHands_.size() != 1) return false;
+    if (currentHandIndex_ != 0) return false;
+
+    // Only when this hand has exactly two cards (no hits yet)
+    if (playerHands_[0].size() != 2) return false;
+
+    return true;
 }
 
 bool BlackjackGame::canSplit() const {
@@ -289,6 +304,7 @@ void BlackjackGame::processNextHandResult() {
             break;
         }
 
+
         balance_ += payout;
         emit roundEnded(result, payout, resultHandIndex_, playerHands_.size());
 
@@ -297,6 +313,11 @@ void BlackjackGame::processNextHandResult() {
 
         // Schedule processing of next hand after delay (2 seconds)
         QTimer::singleShot(2000, this, &BlackjackGame::processNextHandResult);
+    }
+
+    else {
+        hasRoundStarted_ = false;
+
     }
     // All hands processed - UI will handle final reset
 }
@@ -318,7 +339,22 @@ void BlackjackGame::playerHit() {
 
     if (isBust(playerHands_[currentHandIndex_])) {
         playerStand();
+        return;
     }
+
+    if (getHandValue(playerHands_[currentHandIndex_]) == 21 &&
+        !isBlackJack(playerHands_[currentHandIndex_])) {
+        resolve21(currentHandIndex_);
+        return;
+    }
+}
+
+void BlackjackGame::resolve21(int handIndex) {
+    int bet = betAmounts_[handIndex];
+    int payout = bet * 2;  // treat as a normal win
+    balance_ += payout;
+    hasRoundStarted_ = false;
+    emit roundEnded(GameResult::Win, payout, handIndex, playerHands_.size());
 }
 
 void BlackjackGame::playerDouble() {
@@ -342,6 +378,23 @@ int BlackjackGame::getTrueCount(){
         return 0;
 
     return static_cast<double>(runningCount_) / floatingNumber;
+}
+
+void BlackjackGame::playerSurrender() {
+    // If surrender is not allowed at this moment, ignore the action.
+    if (!canSurrender()) return;
+
+    int handIndex = currentHandIndex_;
+    int bet = betAmounts_[handIndex];
+
+    // Late surrender: player gets half the bet back, loses the hand.
+    int refund = bet / 2;
+
+    balance_ += refund;
+
+    hasRoundStarted_ = false;
+
+    emit roundEnded(GameResult::Lose, refund, handIndex, playerHands_.size());
 }
 
 void BlackjackGame::playerStand() {
@@ -413,6 +466,8 @@ void BlackjackGame::checkCardsAndRound(int handIndex, GameResult currentState) {
     }
     balance_ += payout;
     emit roundEnded(currentState, payout, handIndex, playerHands_.size());
+
+    hasRoundStarted_ = false;
 }
 
 Card BlackjackGame::drawCardFromShoe() {

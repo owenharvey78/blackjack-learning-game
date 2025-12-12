@@ -89,6 +89,8 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
 
     // Tells QT to use the background color from the stylesheet
     setAttribute(Qt::WA_StyledBackground, true);
+
+    connect(ui_->surrenderButton, &QPushButton::clicked, game_, &BlackjackGame::playerSurrender);
 }
 
 GameWidget::~GameWidget()
