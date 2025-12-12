@@ -17,10 +17,12 @@ size_t Shoe::getSize() const {
 }
 
 void Shoe::shuffle() {
+    cards_.clear();
     for (int i = 0; i < decks_; ++i)
         addDeck();
     randomize(cards_, rng_);
-    cards_.insert(decks_ * penetration_, Card(Card::Rank::Cut, Card::Suit::Cut));
+    int cutCardPosition = static_cast<int>(cards_.size() * penetration_);
+    cards_.insert(cutCardPosition, Card(Card::Rank::Cut, Card::Suit::Cut));
 }
 
 void Shoe::addDeck() {

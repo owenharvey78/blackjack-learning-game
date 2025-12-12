@@ -118,6 +118,9 @@ signals:
     /// @brief Emitted when it becomes the dealer's turn.
     void dealerTurnStarted();
 
+    /// @brief Emitted when the cut card is drawn from the shoe.
+    void cutCardDrawn();
+
     /// @brief Signals that the player has placed a bet (either during the
     /// betting stage, by doubling, or by splitting).
     /// @param amount The total amount of the bet the player has placed.

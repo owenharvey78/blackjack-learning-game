@@ -505,14 +505,21 @@ void CardsView::drawCutCard() {
     cutCardItem_->setPos(deckPos_);
     cutCardItem_->setScale(cardScale_);
 
-    QPoint finalPosition(deckPos_.x(), deckPos_.y() + CUT_CARD_OFFSET_Y);
-    QPoint drawPoint(deckPos_.x(), deckPos_.y() + DECK_DRAW_OFFSET);
+    // Calculate scaled offsets for positioning
+    int scaledDrawOffset = static_cast<int>(DECK_DRAW_OFFSET * cardScale_ * CARD_WIDTH);
+    int scaledCardHeight = static_cast<int>(CARD_HEIGHT * cardScale_);
+    int scaledCutCardGap = static_cast<int>(CUT_CARD_OFFSET_Y * cardScale_);
 
-    // Animate draw from deck to drawPoint (slightly below deck) to display a
+    // Final position = deck position + card height + gap
+    QPoint finalPosition(deckPos_.x(), deckPos_.y() + scaledCardHeight + scaledCutCardGap);
+    QPoint drawPoint(deckPos_.x(), deckPos_.y() + scaledDrawOffset);
+
+    // Animate draw from deck to drawPoint (slightly below deck)
     QVariantAnimation* drawCut = new QVariantAnimation(this);
     drawCut->setDuration(DECK_DRAW_DURATION);
     drawCut->setStartValue(deckPos_);
     drawCut->setEndValue(drawPoint);
+    drawCut->setEasingCurve(QEasingCurve::InOutExpo);
 
     connect(drawCut, &QVariantAnimation::valueChanged, this, [this](const QVariant& v) {
         cutCardItem_->setPos(v.toPointF());
@@ -523,6 +530,7 @@ void CardsView::drawCutCard() {
     moveCut->setDuration(DEAL_TO_HAND_DURATION);
     moveCut->setStartValue(drawPoint);
     moveCut->setEndValue(finalPosition);
+    moveCut->setEasingCurve(QEasingCurve::InOutExpo);
 
     connect(moveCut, &QVariantAnimation::valueChanged, this, [this](const QVariant& v) {
         cutCardItem_->setPos(v.toPointF());

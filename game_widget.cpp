@@ -224,6 +224,7 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     // Card deals.
     connect(game, &BlackjackGame::playerCardDealt, this, &GameWidget::onPlayerCardDealt);
     connect(game, &BlackjackGame::dealerCardDealt, this, &GameWidget::onDealerCardDealt);
+    connect(game, &BlackjackGame::cutCardDrawn, cardsView_, &CardsView::drawCutCard);
 
     // Show Count
     connect(ui_->showCountButton, &QPushButton::clicked, this, &GameWidget::toggleCountingLabel);

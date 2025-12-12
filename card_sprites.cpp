@@ -98,8 +98,8 @@ QPixmap CardSprites::back() const {
 
 QPixmap CardSprites::cutCard() const {
 
-    // cut card in last column, e.g. hearts row
-    QRect r(13 * cardWidth_, cardHeight_, cardWidth_, cardHeight_);
+    // cut card in last column, third row (hearts row = row 2)
+    QRect r(13 * cardWidth_, 2 * cardHeight_, cardWidth_, cardHeight_);
     QPixmap pix = sheet_.copy(r);
     if (scale_ != 1.0) {
         return pix.scaled(pix.width() * scale_, pix.height() * scale_,
