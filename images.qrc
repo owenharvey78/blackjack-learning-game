@@ -21,5 +21,6 @@
         <file>split-button.png</file>
         <file>begin-round-2.png</file>
         <file>begin-round-1.png</file>
+        <file>handSelection.png</file>
     </qresource>
 </RCC>

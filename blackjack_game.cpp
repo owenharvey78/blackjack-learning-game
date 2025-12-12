@@ -390,14 +390,10 @@ void BlackjackGame::playerSurrender() {
 }
 
 void BlackjackGame::playerStand() {
-    if (currentHandIndex_ < playerHands_.size() - 1) {
-        currentHandIndex_++;
-        if (is21(playerHands_[currentHandIndex_]))
-            playerStand();
-        if (getHandValue(playerHands_[currentHandIndex_]) < 21 &&
-            (rules_.hitSplitAces ||
-            playerHands_[currentHandIndex_][0].rank == Card::Rank::Ace))
-            emit playerTurn(currentHandIndex_, canDouble(), canSplit(), canSurrender());
+    int nextHand = findNextPlayableHand(currentHandIndex_ + 1);
+    if (nextHand != -1) {
+        currentHandIndex_ = nextHand;
+        emit playerTurn(currentHandIndex_, canDouble(), canSplit(), canSurrender());
     }
     else {
         dealerTurn();
@@ -514,6 +510,21 @@ bool BlackjackGame::canMakeAction(BasicStrategyChecker::PlayerAction action) con
 bool BlackjackGame::dealerHitsSoft17() const {
     return rules_.dealerHitsSoft17;
 }
+
+int BlackjackGame::findNextPlayableHand(int startIndex) const {
+    for (int i = startIndex; i < playerHands_.size(); ++i) {
+        const QVector<Card>& hand = playerHands_[i];  // ← Explicit const ref
+        if (!BlackjackGame::isBust(const_cast<QVector<Card>&>(hand)) &&
+            BlackjackGame::getHandValue(const_cast<QVector<Card>&>(hand)) < 21 &&
+            !(BlackjackGame::getHandValue(const_cast<QVector<Card>&>(hand)) == 21 &&
+              !rules_.hitSplitAces &&
+              playerHands_[i][0].rank == Card::Rank::Ace)) {
+            return i;
+        }
+    }
+    return -1;  // No playable hands found
+}
+
 
 const QVector<Card>& BlackjackGame::getCurrentHand() const {
     return playerHands_[currentHandIndex_];
