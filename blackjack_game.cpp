@@ -438,14 +438,6 @@ void BlackjackGame::checkCardsAndRound(int handIndex, GameResult currentState) {
 }
 
 Card BlackjackGame::drawCardFromShoe() {
-    static int debugDrawCount = 0; debugDrawCount++;
-    if (debugDrawCount == 1) return Card(Card::Rank::Four, Card::Suit::Spades);
-    // 3rd draw
-    if (debugDrawCount == 2) return Card(Card::Rank::Four, Card::Suit::Hearts);
-
-    if (debugDrawCount == 3) return Card(Card::Rank::Ten, Card::Suit::Hearts);
-    if (debugDrawCount == 5) return Card(Card::Rank::Seven, Card::Suit::Hearts);
-
     Card c = shoe_->draw();
     if (c.rank == Card::Rank::Cut) {
         needsShuffling_ = true;
