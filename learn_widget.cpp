@@ -6,8 +6,7 @@ LearnWidget::LearnWidget(QWidget *parent)
     ui_(new Ui::LearnWidget),
     currentInstruction_(0),
     cardSprites_(":/images/cards.png", 2.0),
-    practiceDealerUpcard_(Card::Rank::Ace, Card::Suit::Clubs)
-{
+    practiceDealerUpcard_(Card::Rank::Ace, Card::Suit::Clubs) {
     ui_->setupUi(this);
 
     scene_ = new QGraphicsScene(this);
@@ -22,7 +21,8 @@ LearnWidget::LearnWidget(QWidget *parent)
     ui_->practiceHitButton->setVisible(false);
     ui_->practiceStandButton->setVisible(false);
 
-    headerList_ = {"Welcome to Blackjack!",
+    headerList_ = {
+        "Welcome to Blackjack!",
         "Basic Goal",
         "Card Values",
         "Blackjack",
@@ -39,8 +39,8 @@ LearnWidget::LearnWidget(QWidget *parent)
         "Practice Hit or Stand"
     };
 
-    instructionList_ = {"",
-
+    instructionList_ = {
+        "",
         "Your goal is simple, get as close to 21 without going over.\n "
         "Beat the dealer's cards to win!",
 
@@ -133,7 +133,7 @@ LearnWidget::LearnWidget(QWidget *parent)
     connect(ui_->practiceStandButton, &QPushButton::clicked, this, &LearnWidget::onPracticeStandClicked);
 }
 
-void LearnWidget::updatePage(){
+void LearnWidget::updatePage() {
     ui_->headerLabel->setText(headerList_[currentInstruction_]);
     ui_->instructionLabel->setText(instructionList_[currentInstruction_]);
 
@@ -144,23 +144,25 @@ void LearnWidget::updatePage(){
     ui_->nextButton->setDisabled(currentInstruction_ == headerList_.size() - 1);
 
     // This if-else handles the style for the instruction label. 1st page looks wierd if we don't have this.
-    if(currentInstruction_ != 0){
+    if(currentInstruction_ != 0) {
         ui_->instructionLabel->setStyleSheet(QString("QLabel { color: white; font-family: 'Georgia'; "
                                                      "font-size: 18px;"
                                                      "background-color: #003b16;"
                                                      "border-radius: 20px;"
                                                      "border: 3px solid #ffd700;"
                                                      "}"));
-    }else{
+    }
+    else {
         ui_->instructionLabel->setStyleSheet(QString()); // This else feels redundant but helps. Trust
     }
 
     // Set up count page (pg 12)
-    if(currentInstruction_ == 12){
+    if(currentInstruction_ == 12) {
         ui_->spinBox->setVisible(true);
         ui_->checkButton->setVisible(true);
         showCountingExampleCards();
-    }else{
+    }
+    else {
         ui_->spinBox->setVisible(false);
         ui_->checkButton->setVisible(false);
 
@@ -169,20 +171,21 @@ void LearnWidget::updatePage(){
     }
 
     // Set up practice on page 14
-    if(currentInstruction_ == 14){
+    if(currentInstruction_ == 14) {
         ui_->practiceDealButton->setVisible(true);
         ui_->practiceHitButton->setVisible(false);
         ui_->practiceStandButton->setVisible(false);
         ui_->graphicsView->setVisible(true);
         scene_->clear();
-    }else{
+    }
+    else {
         ui_->practiceDealButton->setVisible(false);
         ui_->practiceHitButton->setVisible(false);
         ui_->practiceStandButton->setVisible(false);
     }
 }
 
-void LearnWidget::startPracticeHand(){
+void LearnWidget::startPracticeHand() {
     scene_->clear();
     practiceHand_.clear();
 
@@ -202,11 +205,11 @@ void LearnWidget::startPracticeHand(){
     ui_->practiceStandButton->setVisible(true);
 }
 
-void LearnWidget::drawPracticeHand(){
+void LearnWidget::drawPracticeHand() {
     int x = 20;
 
     // Place cards onto the graphics view
-    for(const Card& c : practiceHand_){
+    for(const Card& c : practiceHand_) {
         QPixmap face = cardSprites_.faceFor(c);
         QGraphicsPixmapItem* item = scene_->addPixmap(face);
         item->setPos(x, 20);
@@ -219,14 +222,14 @@ void LearnWidget::drawPracticeHand(){
     item->setPos(20, 150);
 }
 
-void LearnWidget::onPracticeHitClicked(){
+void LearnWidget::onPracticeHitClicked() {
     practiceHand_.append(practiceGame_->drawCardFromShoe());
 
     // Redraw the cards
     drawPracticeHand();
 
     // Check if user busts
-    if(practiceGame_->isHandBust(practiceHand_)){
+    if(practiceGame_->isHandBust(practiceHand_)) {
         ui_->instructionLabel->setText(QString("You busted! Try Again."));
 
         ui_->practiceHitButton->setVisible(false);
@@ -234,7 +237,7 @@ void LearnWidget::onPracticeHitClicked(){
     }
 }
 
-void::LearnWidget::onPracticeStandClicked(){
+void::LearnWidget::onPracticeStandClicked() {
     int total = practiceGame_->playerHandValue(practiceHand_);
     ui_->instructionLabel->setText(QString("You stood on: ") + QString::number(total));
 
@@ -243,10 +246,10 @@ void::LearnWidget::onPracticeStandClicked(){
 }
 
 // Show counting cards is for the count example on pg 12
-void LearnWidget::showCountingExampleCards(){
+void LearnWidget::showCountingExampleCards() {
     scene_->clear();
 
-    QVector<Card> exampleCards{
+    QVector<Card> exampleCards {
         Card(Card::Rank::Ace, Card::Suit::Spades),
         Card(Card::Rank::Two, Card::Suit::Hearts),
         Card(Card::Rank::Six, Card::Suit::Clubs)
@@ -259,7 +262,7 @@ void LearnWidget::showCountingExampleCards(){
     int startX = (400 - totalWidth) / 2;
 
     // Draw cards onto the graphics view
-    for(int i = 0; i < exampleCards.size(); i++){
+    for(int i = 0; i < exampleCards.size(); i++) {
         QPixmap face = cardSprites_.faceFor(exampleCards[i]);
         QGraphicsPixmapItem* item = scene_->addPixmap(face);
         item->setPos(startX + i * (width + gap), 0);
@@ -268,32 +271,32 @@ void LearnWidget::showCountingExampleCards(){
     ui_->graphicsView->setVisible(true);
 }
 
-void LearnWidget::onCheckButtonClicked(){
-    if(ui_->spinBox->value() == 1){
+void LearnWidget::onCheckButtonClicked() {
+    if(ui_->spinBox->value() == 1) {
         ui_->instructionLabel->setText(QString("Correct! The Ace give us -1, 2 and 6 gives +1.\n So we end up with 1!"));
-    }else{
+    }
+    else {
         ui_->instructionLabel->setText(QString("Not quite since and Ace gives us -1, then 2 and 6 give +1.\n"
                                                "That then leaves us with 1.\n Good try tho"));
     }
 }
 
-void LearnWidget::onNextButtonClicked(){
+void LearnWidget::onNextButtonClicked() {
     if(currentInstruction_ != headerList_.size())
         currentInstruction_++;
     updatePage();
 }
 
-void LearnWidget::onPrevButtonClicked(){
+void LearnWidget::onPrevButtonClicked() {
     if(currentInstruction_ != 0)
         currentInstruction_--;
     updatePage();
 }
 
-void LearnWidget::onMainMenuClicked(){
+void LearnWidget::onMainMenuClicked() {
     emit returnToMainMenu();
 }
 
-LearnWidget::~LearnWidget()
-{
+LearnWidget::~LearnWidget() {
     delete ui_;
 }

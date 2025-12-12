@@ -15,8 +15,7 @@ class LearnWidget;
 }
 
 /// @brief This class represents the Learn page of our Blackjack education app
-class LearnWidget : public QWidget
-{
+class LearnWidget : public QWidget {
     Q_OBJECT
 
 public:

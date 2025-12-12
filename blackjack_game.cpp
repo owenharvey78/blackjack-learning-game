@@ -6,13 +6,13 @@ BlackjackGame::BlackjackGame(QObject *parent) : QObject{parent},
     rules_(), shoe_(new Shoe(rules_.numDecks, 0.2, this)),
     balance_(1000), currentBetAmount_(0), needsShuffling_(true), hasRoundStarted_(false),
     currentHandIndex_(0), resultHandIndex_(0), strategyChecker_(rules_.dealerHitsSoft17)
-{ }
+{}
 
 void BlackjackGame::setRuleset(Ruleset rules) {
     rules_ = rules;
 }
 
-void BlackjackGame::setShuffling(bool needsShuffling){
+void BlackjackGame::setShuffling(bool needsShuffling) {
     needsShuffling_ = needsShuffling;
 }
 
@@ -85,7 +85,7 @@ void BlackjackGame::dealDealerCard() {
     dealerHand_.append(c);
     emit dealerCardDealt(c);
 
-    if(dealerHand_.size() == 1){
+    if(dealerHand_.size() == 1) {
         // Add Hi-Lo Count to running count
         runningCount_ += c.getHiLoValue();
     }
@@ -100,7 +100,8 @@ void BlackjackGame::dealDealerCard() {
                 // Now that the animation is done, it is safe to flip the hole card
                 emit dealerTurnStarted();
                 checkCardsAndRound(0, determineWinner(playerHands_[0], dealerHand_));
-            } else {
+            }
+            else {
                 // Player's turn - check if double/split allowed
                 emit playerTurn(0, canDouble(), canSplit());
             }
@@ -254,7 +255,8 @@ void BlackjackGame::dealerTurn() {
     // Only continue drawing if at least one player hand is alive
     if (allHandsBusted()) {
         dealerStand();
-    } else {
+    }
+    else {
         continueDealerTurn();
     }
 }
@@ -314,19 +316,17 @@ void BlackjackGame::processNextHandResult() {
         // Schedule processing of next hand after delay (2 seconds)
         QTimer::singleShot(2000, this, &BlackjackGame::processNextHandResult);
     }
-
     else {
         hasRoundStarted_ = false;
-
     }
     // All hands processed - UI will handle final reset
 }
 
-bool BlackjackGame::isHandBust(QVector<Card> hand) const{
+bool BlackjackGame::isHandBust(QVector<Card> hand) const {
     return isBust(hand);
 }
 
-int BlackjackGame::playerHandValue(QVector<Card> hand) const{
+int BlackjackGame::playerHandValue(QVector<Card> hand) const {
     return getHandValue(hand);
 }
 
@@ -367,11 +367,11 @@ void BlackjackGame::playerDouble() {
     QTimer::singleShot(500, this, &BlackjackGame::playerStand);
 }
 
-int BlackjackGame::getRunningCount(){
+int BlackjackGame::getRunningCount() {
     return runningCount_;
 }
 
-int BlackjackGame::getTrueCount(){
+int BlackjackGame::getTrueCount() {
     double floatingNumber = static_cast<double>(shoe_->getSize()) / 52.0;
 
     if(floatingNumber == 0)
@@ -437,7 +437,8 @@ void BlackjackGame::playerSplit() {
     if (isLastCard) {
         // Stand after a short delay
         QTimer::singleShot(500, this, &BlackjackGame::playerStand);
-    } else {
+    }
+    else {
         // Normal split: emit playerTurn for the first split hand
         emit playerTurn(currentHandIndex_, canDouble(), canSplit());
     }

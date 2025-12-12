@@ -5,8 +5,7 @@
 GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     : QWidget(parent), ui_(new Ui::GameWidget), game_(game),
     cardSprites_(":/images/cards.png", 2.0), balance_(1000),
-    currentBetTotal_(0), holeCard_(Card::Rank::Cut, Card::Suit::Cut)
-{
+    currentBetTotal_(0), holeCard_(Card::Rank::Cut, Card::Suit::Cut) {
     ui_->setupUi(this);
 
     ui_->hitButton->setVisible(false);
@@ -93,8 +92,7 @@ GameWidget::GameWidget(BlackjackGame* game, QWidget *parent)
     connect(ui_->surrenderButton, &QPushButton::clicked, game_, &BlackjackGame::playerSurrender);
 }
 
-GameWidget::~GameWidget()
-{
+GameWidget::~GameWidget() {
     delete ui_;
 }
 
@@ -460,7 +458,8 @@ void GameWidget::onDealerCardDealt(Card card) {
             // Save hole card for later flip
             holeCard_ = card;
             holeCardItem_ = item;
-        } else {
+        }
+        else {
             // Flip regular dealer card
             flipCard(item, card);
         }

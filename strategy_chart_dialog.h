@@ -9,8 +9,7 @@ class StrategyChartDialog;
 }
 
 /// @brief An overlay widget for showing the basic strategy chart.
-class StrategyChartDialog : public QWidget
-{
+class StrategyChartDialog : public QWidget {
     Q_OBJECT
 
 public:

@@ -5,8 +5,7 @@
 
 StrategyChartDialog::StrategyChartDialog(bool dealerHitsSoft17, QWidget* parent)
     : QWidget(parent),
-      ui_(new Ui::StrategyChartDialog)
-{
+      ui_(new Ui::StrategyChartDialog) {
     ui_->setupUi(this);
 
     QString imagePath = dealerHitsSoft17
@@ -20,13 +19,11 @@ StrategyChartDialog::StrategyChartDialog(bool dealerHitsSoft17, QWidget* parent)
     hide();
 }
 
-StrategyChartDialog::~StrategyChartDialog()
-{
+StrategyChartDialog::~StrategyChartDialog() {
     delete ui_;
 }
 
-void StrategyChartDialog::showOverlay()
-{
+void StrategyChartDialog::showOverlay() {
     if (parentWidget()) {
         setGeometry(parentWidget()->rect());
     }
@@ -56,25 +53,23 @@ void StrategyChartDialog::showOverlay()
     setFocus();
 }
 
-void StrategyChartDialog::hideOverlay()
-{
+void StrategyChartDialog::hideOverlay() {
     hide();
 }
 
-void StrategyChartDialog::resizeEvent(QResizeEvent* event)
-{
+void StrategyChartDialog::resizeEvent(QResizeEvent* event) {
     QWidget::resizeEvent(event);
     if (isVisible()) {
         showOverlay();  // Already resizes the content on its own
     }
 }
 
-void StrategyChartDialog::mousePressEvent(QMouseEvent* event)
-{
+void StrategyChartDialog::mousePressEvent(QMouseEvent* event) {
     // Check if click is outside chart widget
     if (!ui_->chartWidget->geometry().contains(event->pos())) {
         hideOverlay();
-    } else {
+    }
+    else {
         QWidget::mousePressEvent(event);
     }
 }

@@ -9,8 +9,7 @@ class ruleset_widget;
 }
 
 /// @brief the widget defining the view for the rule selection menu.
-class RulesetWidget : public QWidget
-{
+class RulesetWidget : public QWidget {
     Q_OBJECT
 
 public:
