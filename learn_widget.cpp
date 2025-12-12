@@ -5,15 +5,22 @@ LearnWidget::LearnWidget(QWidget *parent)
     : QWidget(parent),
     ui_(new Ui::LearnWidget),
     currentInstruction_(0),
-    cardSprites_(":/images/cards.png", 2.0)
+    cardSprites_(":/images/cards.png", 2.0),
+    practiceDealerUpcard_(Card::Rank::Ace, Card::Suit::Clubs)
 {
     ui_->setupUi(this);
 
     scene_ = new QGraphicsScene(this);
     ui_->graphicsView->setScene(scene_);
+    practiceGame_ = new BlackjackGame(this);
 
+
+    /// Hide items
     ui_->spinBox->setVisible(false);
     ui_->checkButton->setVisible(false);
+    ui_->practiceDealButton->setVisible(false);
+    ui_->practiceHitButton->setVisible(false);
+    ui_->practiceStandButton->setVisible(false);
 
     headerList_ = {"Welcome to Blackjack!",
         "Basic Goal",
@@ -28,7 +35,8 @@ LearnWidget::LearnWidget(QWidget *parent)
         "Basic Strategies",
         "Card Counting,",
         "What's The Count?",
-        "Strategies:"
+        "Strategies:",
+        "Practice Hit or Stand"
     };
 
     instructionList_ = {"",
@@ -100,7 +108,12 @@ LearnWidget::LearnWidget(QWidget *parent)
         "- Double Down on 10 against a dealer having a (2-9).\n"
         "- Always split Aces and 8's.\n"
         "- Never Split 5's or 10's, two 5's make 10, which is better to double down.\n"
-        "Two 10's give you a stong 20."
+        "Two 10's give you a stong 20.",
+
+        "Here you will be dealt a hand.\n"
+        "Decide wether you should hit or stand.\n\n"
+        "This is not a full Blackjack game; just practice for you.\n\n"
+        "Your cards on on the top row."
     };
 
     updatePage();
@@ -112,6 +125,12 @@ LearnWidget::LearnWidget(QWidget *parent)
     connect(ui_->mainMenuButton, &QPushButton::clicked, this, &LearnWidget::returnToMainMenu);
 
     connect(ui_->checkButton, &QPushButton::clicked, this, &LearnWidget::onCheckButtonClicked);
+
+    connect(ui_->practiceDealButton, &QPushButton::clicked, this, &LearnWidget::startPracticeHand);
+
+    connect(ui_->practiceHitButton, &QPushButton::clicked, this, &LearnWidget::onPracticeHitClicked);
+
+    connect(ui_->practiceStandButton, &QPushButton::clicked, this, &LearnWidget::onPracticeStandClicked);
 }
 
 void LearnWidget::updatePage(){
@@ -135,6 +154,7 @@ void LearnWidget::updatePage(){
         ui_->instructionLabel->setStyleSheet(QString()); // This else feels redundant but helps. Trust
     }
 
+    // Set up count page
     if(currentInstruction_ == 12){
         ui_->spinBox->setVisible(true);
         ui_->checkButton->setVisible(true);
@@ -146,6 +166,73 @@ void LearnWidget::updatePage(){
         ui_->graphicsView->setVisible(false);
         scene_->clear();
     }
+
+    // Set up practice on page 14
+    if(currentInstruction_ == 14){
+        ui_->practiceDealButton->setVisible(true);
+        ui_->practiceHitButton->setVisible(false);
+        ui_->practiceStandButton->setVisible(false);
+        ui_->graphicsView->setVisible(true);
+        scene_->clear();
+    }else{
+        ui_->practiceDealButton->setVisible(false);
+        ui_->practiceHitButton->setVisible(false);
+        ui_->practiceStandButton->setVisible(false);
+    }
+}
+
+void LearnWidget::startPracticeHand(){
+    scene_->clear();
+    practiceHand_.clear();
+
+    // Draw two cards for the user
+    practiceHand_.append(practiceGame_->drawCardFromShoe());
+    practiceHand_.append(practiceGame_->drawCardFromShoe());
+
+    practiceDealerUpcard_ = practiceGame_->drawCardFromShoe();
+
+    drawPracticeHand();
+
+    ui_->instructionLabel->setText(QString("Decide: Hit or Stand"));
+
+    ui_->practiceHitButton->setVisible(true);
+    ui_->practiceStandButton->setVisible(true);
+}
+
+void LearnWidget::drawPracticeHand(){
+    int x = 20;
+
+    for(const Card& c : practiceHand_){
+        QPixmap face = cardSprites_.faceFor(c);
+        QGraphicsPixmapItem* item = scene_->addPixmap(face);
+        item->setPos(x, 20);
+        x += 80;
+    }
+
+    QPixmap dealerFace = cardSprites_.faceFor(practiceDealerUpcard_);
+    QGraphicsPixmapItem* item = scene_->addPixmap(dealerFace);
+    item->setPos(20, 150);
+}
+
+void LearnWidget::onPracticeHitClicked(){
+    practiceHand_.append(practiceGame_->drawCardFromShoe());
+
+    drawPracticeHand();
+
+    if(practiceGame_->isHandBust(practiceHand_)){
+        ui_->instructionLabel->setText(QString("You busted! Try Again."));
+
+        ui_->practiceHitButton->setVisible(false);
+        ui_->practiceStandButton->setVisible(false);
+    }
+}
+
+void::LearnWidget::onPracticeStandClicked(){
+    int total = practiceGame_->playerHandValue(practiceHand_);
+    ui_->instructionLabel->setText(QString("You stood on: ") + QString::number(total));
+
+    ui_->practiceHitButton->setVisible(false);
+    ui_->practiceStandButton->setVisible(false);
 }
 
 void LearnWidget::showCountingExampleCards(){
