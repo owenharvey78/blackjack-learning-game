@@ -150,10 +150,6 @@ private:
     /// @brief Helper to resolve the round and emit roundEnded.
     void checkCardsAndRound(int handIndex, GameResult currentState);
 
-    /// @brief Helper to resolve a player hand that reaches 21.
-    /// @param Current player hand
-    void resolve21(int handIndex);
-
     /// @brief determines the winner of the hand.
     /// @param playerHand vector holding player's hand.
     /// @param dealerHand vector holding dealer's hand.
