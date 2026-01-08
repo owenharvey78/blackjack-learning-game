@@ -2,10 +2,11 @@
 
 A Blackjack learning application designed to teach users the fundamentals of the game, optimal strategy, and card counting mechanics.
 
+Developed as a group project using the Scrum/Agile Mehtodologies. 
 
-## ℹ️ Overview
+## Overview
 
-Our blackjack application is centered around learning the game. It is approachable for those who have never played and for those looking to learn more advanced stragies such as card counting. User will be walked through interactive scenarios to practice different aspects of the game. 
+Our blackjack application is centered around learning the game. It caters to those who have never played as well as players looking to learn more advanced stragies such as card counting. Users will be walked through interactive scenarios to practice different aspects of the game and given a no risk environment to practice. 
 
 ### Key Features
 * **Basic Training:** A step-by-step walkthrough of Blackjack rules for beginners.
@@ -14,14 +15,20 @@ Our blackjack application is centered around learning the game. It is approachab
 * **Interactive Tutorials:** Tests you on hitting, standing, splitting, doubling down, current count,etc.
 * **Card Counting Trainer:** Includes a toggleable UI to show the "Running Count" and "True Count" using the Hi-Lo System.
 
-### ✍️ Authors
+### Development Process
 
-Mention who you are and link to your GitHub or organization's website.
 
+### Authors
+
+Owen Harvey
+Saeed Vasquez
+Bryan Alvarez
+Carter Elgie
+Sungyun Kim
 
 ## 🚀 Usage
 
-*Show off what your software looks like in action! Try to limit it to one-liners if possible and don't delve into API specifics.*
+
 
 ```py
 >>> import mypackage
