@@ -1,1 +1,50 @@
-Project developed using the scrum framework.
+# Agile Blackjack Teacher
+
+A Blackjack learning application designed to teach users the fundamentals of the game, optimal strategy, and card counting mechanics.
+
+
+## ℹ️ Overview
+
+Our blackjack application is centered around learning the game. It is approachable for those who have never played and for those looking to learn more advanced stragies such as card counting. User will be walked through interactive scenarios to practice different aspects of the game. 
+
+### Key Features
+* **Basic Training:** A step-by-step walkthrough of Blackjack rules for beginners.
+* **Practice Mode:** Fully playable with betting and feedback when you make a poor decision.
+* **Customizable Ruleset:** Allows custumizing amount of decks, dealer hit on soft 17, and other common variations.
+* **Interactive Tutorials:** Tests you on hitting, standing, splitting, doubling down, current count,etc.
+* **Card Counting Trainer:** Includes a toggleable UI to show the "Running Count" and "True Count" using the Hi-Lo System.
+
+### ✍️ Authors
+
+Mention who you are and link to your GitHub or organization's website.
+
+
+## 🚀 Usage
+
+*Show off what your software looks like in action! Try to limit it to one-liners if possible and don't delve into API specifics.*
+
+```py
+>>> import mypackage
+>>> mypackage.do_stuff()
+'Oh yeah!'
+```
+
+
+## ⬇️ Installation
+
+Simple, understandable installation instructions!
+
+```bash
+pip install my-package
+```
+
+And be sure to specify any other minimum requirements like Python versions or operating systems.
+
+*You may be inclined to add development instructions here, don't.*
+
+
+## 💭 Feedback and Contributing
+
+Add a link to the Discussions tab in your repo and invite users to open issues for bugs/feature requests.
+
+This is also a great place to invite others to contribute in any ways that make sense for your project. Point people to your DEVELOPMENT and/or CONTRIBUTING guides if you have them.
