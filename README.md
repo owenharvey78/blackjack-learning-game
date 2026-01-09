@@ -2,7 +2,7 @@
 
 A Blackjack learning application designed to teach users the fundamentals of the game, optimal strategy, and card counting mechanics.
 
-Developed as a group project using the Scrum/Agile Mehtodologies. 
+Developed as a group project using the Scrum/Agile Methodologies. 
 
 ## Overview
 
@@ -11,30 +11,31 @@ Our blackjack application is centered around learning the game. It caters to tho
 ### Key Features
 * **Basic Training:** A step-by-step walkthrough of Blackjack rules for beginners.
 * **Practice Mode:** Fully playable with betting and feedback when you make a poor decision.
-* **Customizable Ruleset:** Allows custumizing amount of decks, dealer hit on soft 17, and other common variations.
-* **Interactive Tutorials:** Tests you on hitting, standing, splitting, doubling down, current count,etc.
+* **Customizable Ruleset:** Allows customizing deck count, dealer hit on soft 17, and other common variations.
+* **Interactive Tutorials:** Tests you on hitting, standing, splitting, doubling down, current count, etc..
 * **Card Counting Trainer:** Includes a toggleable UI to show the "Running Count" and "True Count" using the Hi-Lo System.
+
+<img width="1573" height="950" alt="image" src="https://github.com/user-attachments/assets/e9fd1a69-6439-4cb6-acfc-017eaf1b2a34" />
 
 ### Development Process
 
+This project was built over 2 sprints using the **Scrum** framework. Our team focused on iterative delivery and maintaining a high-quality codebase. It was each of our first times following the scrum framework so the project served as a trial run to learn the Agile processes.
 
+* **Workflow:** We utilized a project board, held Daily Stand-ups, and conducted Sprint Retrospectives to improve team velocity.
+* **Collaboration:** Managed via Git with a Feature-Branch workflow and Peer Code Reviews.
+
+### My Specific Contributions
+* **[Contribution 1]:** Backend logic for the bulk of the practice mode. 
+* **[Contribution 2]:** Implemented rulset menu to allow for customize rule configuration. 
+* **[Contribution 3]:** Debugging various issues such as splitting and blackjack payout.
+  
 ### Authors
 
-Owen Harvey
-Saeed Vasquez
-Bryan Alvarez
-Carter Elgie
-Sungyun Kim
-
-## 🚀 Usage
-
-
-
-```py
->>> import mypackage
->>> mypackage.do_stuff()
-'Oh yeah!'
-```
+* Owen Harvey
+* Saeed Vasquez
+* Bryan Alvarez
+* Carter Elgie
+* Sungyun Kim
 
 
 ## ⬇️ Installation
@@ -47,11 +48,3 @@ pip install my-package
 
 And be sure to specify any other minimum requirements like Python versions or operating systems.
 
-*You may be inclined to add development instructions here, don't.*
-
-
-## 💭 Feedback and Contributing
-
-Add a link to the Discussions tab in your repo and invite users to open issues for bugs/feature requests.
-
-This is also a great place to invite others to contribute in any ways that make sense for your project. Point people to your DEVELOPMENT and/or CONTRIBUTING guides if you have them.
