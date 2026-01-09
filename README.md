@@ -8,6 +8,8 @@ Developed as a group project using the Scrum/Agile Methodologies.
 
 Our blackjack application is centered around learning the game. It caters to those who have never played as well as players looking to learn more advanced stragies such as card counting. Users will be walked through interactive scenarios to practice different aspects of the game and given a no risk environment to practice. 
 
+The project was built with QT Creator and written primarily in C++. We chose QT to leverage the powerful signal and slot system for real time updates. QT Designer allowed us to easily design our UI.
+
 ### Key Features
 * **Basic Training:** A step-by-step walkthrough of Blackjack rules for beginners.
 * **Practice Mode:** Fully playable with betting and feedback when you make a poor decision.
@@ -43,14 +45,4 @@ This project was built over 2 sprints using the **Scrum** framework. Our team fo
 * Carter Elgie
 * Sungyun Kim
 
-
-## ⬇️ Installation
-
-Simple, understandable installation instructions!
-
-```bash
-pip install my-package
-```
-
-And be sure to specify any other minimum requirements like Python versions or operating systems.
 
