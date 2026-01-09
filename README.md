@@ -15,7 +15,13 @@ Our blackjack application is centered around learning the game. It caters to tho
 * **Interactive Tutorials:** Tests you on hitting, standing, splitting, doubling down, current count, etc..
 * **Card Counting Trainer:** Includes a toggleable UI to show the "Running Count" and "True Count" using the Hi-Lo System.
 
+
 <img width="1573" height="950" alt="image" src="https://github.com/user-attachments/assets/e9fd1a69-6439-4cb6-acfc-017eaf1b2a34" />
+<img width="1572" height="948" alt="image" src="https://github.com/user-attachments/assets/3da1a6ed-6199-4028-a38d-55b4eaf6b634" />
+<img width="1575" height="952" alt="image" src="https://github.com/user-attachments/assets/ddd91411-db82-4c78-b899-c0b148252f5a" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/f0d8ff5e-a7ef-4c70-8e50-ea11f0f4ecd3" />
+
+
 
 ### Development Process
 
