@@ -43,6 +43,6 @@ This project was built over 2 sprints using the **Scrum** framework. Our team fo
 * Saeed Vasquez
 * Bryan Alvarez
 * Carter Elgie
-* Sungyun Kim
+* Sungkyun Kim
 
 
